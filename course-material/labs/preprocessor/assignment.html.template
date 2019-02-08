@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Preprocessor</div>
+    </header>
+    <div id="contents">
+      <div class="message">
+        Use CTRL + M inside a code editor box to toggle full screen mode.
+      </div>
+
+      <%= interpretation <<-END
+            #include <iostream>
+            #include <string>
+            
+            #define FOO
+  
+            int main()
+            {
+              #ifndef FOO
+              int x = 10;
+              #else
+              std::string x = "qux";
+              #endif
+              
+              std::cout << x << std::endl;
+
+              return 0;
+            }
+          END
+      %>
+
+      <%= interpretation <<-END
+            #include <iostream>
+            
+            #define INIT 100
+  
+            int main()
+            {
+              std::cout << INIT << std::endl;
+            }
+          END
+      %>
+
+      <%= interpretation(<<-END, input:'80 100')
+            #include <iostream>
+
+            #define unless(x)              if (!(x))
+            #define down_to(i, from, to)   for ( int i = from; i >= to; --i )
+
+            int foo(int, int);
+
+            int main()
+            {
+              int a, b;
+              std::cin >> a >> b;
+
+              std::cout << foo(a, b) << std::endl;
+            }
+
+            int foo(int a, int b)
+            {
+                down_to(i, a, 1)
+                {
+                    unless (a % i || b % i) return i;
+                }
+            }
+          END
+      %>
+
+      <%= interpretation(<<-END, input:'80 100')
+            #include <iostream>
+
+            #define unless(x)              if (!x)
+            #define down_to(i, from, to)   for ( int i = from; i >= to; --i )
+
+            int foo(int, int);
+
+            int main()
+            {
+              int a, b;
+              std::cin >> a >> b;
+
+              std::cout << foo(a, b) << std::endl;
+            }
+
+            int foo(int a, int b)
+            {
+              down_to(i, a, 1)
+              {
+                unless (a % i || b % i) return i;
+              }
+            }
+          END
+      %>
+
+      <div data-revealer="Show hint" class="hint">
+        <p>
+          First, look for the difference with the previous exercise.
+        </p>
+        <div data-revealer="Show further hint" class="hint">
+          <p>
+            The definition for <code>unless</code> differs.
+            Edit the code above to simulate what
+            happens during preprocessing.
+          </p>
+        </div>
+      </div>
+                                        
+      <%= interpretation(<<-END)
+            #ifndef FOO
+            #define FOO
+
+            #include __FILE__
+
+            #include <iostream>
+
+            #ifndef N
+            #define N 1000
+            #endif
+
+            int main()
+            {
+                std::cout << N << std::endl;
+                std::cin.get();
+            }
+
+            #else
+
+            #define N 5
+
+            #endif      
+          END
+      %>
+
+      <div data-revealer="Show hint" class="hint">
+        <p>
+          Ask yourself what <code>#include __FILE__</code> does.
+          Use the ability to modify code in the code editor above to simulate what happens
+          during preprocessing.
+        </p>
+      </div>
+
+      <%= format_exercise do
+          <<-END
+              <p>
+                Open the <code>split-in-files</code> solution.
+                All code has been grouped within a single file named <code>app.cpp</code>.
+                Split it up so that each function receives its own <code>.cpp</code> file.
+                Also create the necessary header files and add the appropriate <code>#include</code>s.
+              </p>
+          END
+        end
+      %>
+
+      <%= format_exercise do
+          <<-END
+              <p>
+                Open the <code>string-switch</code> solution.
+                Add macro definitions to <code>app.cpp</code> so as to make
+                the code compile and behave as intended.
+              </p>
+          END
+        end
+      %>
+             
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
