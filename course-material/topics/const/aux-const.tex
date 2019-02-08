@@ -1,0 +1,214 @@
+\usepackage{ucll-code}
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{Const}
+\author{Fr\'ed\'eric Vogels}
+
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Current State of Affairs}
+  \code[language=c++14]{int-parameter.cpp}
+  \structure{When By Value}
+  \begin{itemize}
+    \item When \texttt{foo} needs the value of \texttt{x}
+    \item But does not need to be able to write to \texttt{x}
+  \end{itemize}
+  \vskip2mm
+  \structure{When By Pointer}
+  \begin{itemize}
+    \item When \texttt{foo} needs to be able to write to \texttt{x}
+    \item \texttt{foo} can also read \texttt{x}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Current State of Affairs}
+  \code[language=c++14]{vector-parameter.cpp}
+  \structure{When By Value}
+  \begin{itemize}
+    \item Inefficient! Whole vector needs to be copied
+  \end{itemize}
+  \vskip2mm
+  \structure{When By Pointer}
+  \begin{itemize}
+    \item Gives \texttt{foo} read \emph{and} write access to \texttt{xs}
+    \item Efficient
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Current State of Affairs}
+  \begin{itemize}
+    \item Passing \texttt{std::vector} by value is seldom done
+          \begin{itemize}
+            \item Very inefficient (in most cases)
+          \end{itemize}
+    \item To keep things fast, we pass \texttt{std::vector}s by pointer
+    \item But then we also give write access!
+    \item Maybe we don't want that
+    \item How to give \emph{readonly} access without sacrificing performance?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\cpp's Solution}
+  \begin{itemize}
+    \item We can add \texttt{const} to a type: \texttt{const T}
+    \item Expresses that you get only read access
+  \end{itemize}
+  \vskip5mm
+  \code[language=c++14]{const-vector-parameter.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example Usage: Constants}
+  \code[language=c++14]{constants.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example Usage: Immutable Vector}
+  \code[language=c++14]{immutable-vector.cpp}
+  \begin{itemize}
+    \item Only functions not requiring write access can be called
+    \item How does compiler know?
+          \begin{itemize}
+            \item Discussed later
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example Usage: Passing Parameters}
+  \code[language=c++14]{sum.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{When To Use What}
+  \begin{center}
+    \begin{tabular}{ccc}
+      & \textbf{Read} & \textbf{Read+Write} \\
+      \toprule
+      \textbf{Small} & \texttt{T} & \texttt{T*} \\
+      \textbf{Large} & \texttt{const T*} & \texttt{T*} \\
+    \end{tabular}
+  \end{center}
+  \structure{Pass By Value}
+  \begin{itemize}
+    \item Readonly access for small values (\texttt{int}, \texttt{bool}, \dots)
+  \end{itemize}
+  \vskip2mm
+  \structure{Pass By Pointer}
+  \begin{itemize}
+    \item Read + write access
+  \end{itemize}
+  \vskip2mm
+  \structure{Pass By Const Pointer}
+  \begin{itemize}
+    \item Readonly access for large values
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Const}
+  \begin{itemize}
+    \item Adding {\tt const} to type gives a readonly version
+    \item {\tt const T} can be seen as supertype of {\tt T}
+      \begin{itemize}
+        \item You can give a {\tt T} to someone asking for a {\tt const T}:
+              you have read+write access, so you can give read access
+        \item You can't give a {\tt const T} to someone asking for a {\tt T}:
+              you only have read access, but you have to give both read and write access
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Common Misunderstanding}
+  \code[language=c++14]{misunderstanding.cpp}
+  \begin{center}
+    \visible<2->{Both are ok}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Common Misunderstanding}
+  \code[language=c++14]{int-to-constint.cpp}
+  \begin{itemize}
+    \item Calling \texttt{foo(x)} requires read access to \texttt{x}
+    \item \texttt{x} is a ``normal'' \texttt{int}
+    \item This means you have both read and write access
+    \item You clearly have the necessary permissions to call \texttt{foo}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Common Misunderstanding}
+  \code[language=c++14]{constint-to-int.cpp}
+  \begin{itemize}
+    \item Calling \texttt{foo(x)} requires read \emph{and} write access to \texttt{x}
+    \item \texttt{x} is a \texttt{const int}
+    \item This means you have only read
+    \item You don't have the necessary permissions to call \texttt{foo}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nuances: \texttt{const std::vector}}
+  \code[language=c++14]{const-vector.cpp}
+  \begin{itemize}
+    \item \texttt{const std::vector} works on two levels
+          \begin{itemize}
+            \item The vector itself cannot be modified
+            \item The items inside the vector cannot be modified either
+          \end{itemize}
+    \item Can you have an \emph{immutable} vector of \emph{mutable} items?
+    \item This cannot be expressed using \texttt{const}
+    \item \texttt{const} is an all or nothing affair
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nuances: Constant Pointers vs Constant Pointees}
+  \code[language=c++14]{const-int-pointer.cpp}
+  \begin{itemize}
+    \item \texttt{const int*} means ``pointer to constant \texttt{int}''
+    \item The pointer itself it not constant!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nuances: Constant Pointers vs Constant Pointees}
+  \code[language=c++14]{const-pointer.cpp}
+  \begin{itemize}
+    \item \texttt{int* const} is a constant pointer to an \texttt{int}
+    \item The pointer itself is readonly, the \texttt{int} isn't
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nuances: Constant Pointers vs Constant Pointees}
+  \code[language=c++14]{const-const.cpp}
+  \begin{itemize}
+    \item Constancy on both levels
+          \begin{itemize}
+            \item Pointer cannot be redirected
+            \item Pointee cannot be modified
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "const"
+%%% End:
