@@ -1,0 +1,199 @@
+\begin{frame}
+  \frametitle{Example}
+  \begin{center}
+    \begin{tikzpicture}[scale=.25,transform shape,remember picture]
+      \draw (0,0) grid (40,1);
+      \node[anchor=east,font=\Huge] at (0,0) {$\cdots$};
+      \node[anchor=west,font=\Huge] at (40,0) {$\cdots$};
+
+      \foreach \i in {0,...,39} {
+        \node[anchor=west,rotate=90] at ($ (\i,1) + (.5,0) $) {
+          \tikzmath{
+            int \address;
+            \address = hex(1000 + \i);
+             print {\tt0x\address};
+          }
+        };
+      }
+
+      \only<2->{
+        \draw[fill=red!50,opacity=.9] (7,0) rectangle ++(4,1);
+      }
+      \node (x) at (9,0.5) {
+        \only<2-3>{5}\only<4->{6}
+      };
+
+      \only<3->{
+        \draw[fill=red!50,opacity=.9] (20,0) rectangle ++(4,1);
+      }
+      \node (p) at (22,0.5) {\only<3->{\texttt{0x3ef}}};
+    \end{tikzpicture}
+  \end{center}
+  \vskip5mm
+  \code[frame=lines,language=c++14]{example1.cpp}
+  \begin{overprint}
+    \onslide<2>
+    \begin{center}
+      \texttt{x} is allocated somewhere in memory \\
+      (we ignore the static/stack/heap stuff)
+    \end{center}
+    \codeunderlinex{example 1 line 1}
+
+    \onslide<3>
+    \begin{center}
+      \texttt{p} is allocated somewhere in memory \\
+      It is initialised with \texttt{x}'s address \texttt{0x3ef}
+    \end{center}
+    \codeunderlinex{example 1 line 2}
+
+    \onslide<4>
+    \begin{center}
+      We increment \texttt{x}
+    \end{center}
+    \codeunderlinex{example 1 line 3}
+
+    \onslide<5>
+    \begin{center}
+      We print the value that \texttt{p} points at, i.e.~we
+      read \texttt{p}, get an address, and then read what lies at this address
+    \end{center}
+
+    \codeoverlinex{example 1 dereference}
+    \begin{tikzpicture}[overlay,remember picture]
+      \draw[-latex,thick] (example 1 dereference) -- (p.south);
+      \draw[-latex,thick] (p.west) -- (x.east);
+    \end{tikzpicture}
+
+    \onslide<6>
+    \begin{center}
+      Output: 6
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example}
+  \begin{center}
+    \begin{tikzpicture}[scale=.25,transform shape,remember picture]
+      \draw (0,0) grid (40,1);
+      \node[anchor=east,font=\Huge] at (0,0) {$\cdots$};
+      \node[anchor=west,font=\Huge] at (40,0) {$\cdots$};
+
+      \foreach \i in {0,...,39} {
+        \node[anchor=west,rotate=90] at ($ (\i,1) + (.5,0) $) {
+          \tikzmath{
+            int \address;
+            \address = hex(2100 + \i);
+             print {\tt0x\address};
+          }
+        };
+      }
+
+      \only<2->{
+        \draw[fill=red!50,opacity=.9] (19,0) rectangle ++(8,1);
+      }
+      \node (x) at (23,0.5) {
+        \only<2-3>{18.0}\only<4->{36.0}
+      };
+
+      \only<3->{
+        \draw[fill=red!50,opacity=.9] (2,0) rectangle ++(4,1);
+      }
+      \node (p) at (4,0.5) {\only<3->{\texttt{0x847}}};
+    \end{tikzpicture}
+  \end{center}
+  \vskip5mm
+  \code[frame=lines,language=c++14]{example2.cpp}
+  \begin{overprint}
+    \onslide<2>
+    \begin{center}
+      \texttt{x} is allocated somewhere in memory \\
+    \end{center}
+
+    \onslide<3>
+    \begin{center}
+      \texttt{p} is allocated somewhere in memory \\
+      It is initialised with \texttt{x}'s address \texttt{0x847}
+    \end{center}
+
+    \onslide<4>
+    \begin{center}
+      We double the value pointed to by \texttt{p}, i.e.~we read \texttt{p},
+      find out it points to \texttt{x}, and double \texttt{x}
+    \end{center}
+
+    \onslide<5>
+    \begin{center}
+      Output: 36
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Pointers}
+  \code[language=c++14,width=.4\linewidth]{equiv.cpp}
+  \begin{itemize}
+    \item \texttt{*p} signifies ``value pointed to by \texttt{p}''
+    \item \texttt{*p} is just another way to mean \texttt{x}
+    \item E.g.~\texttt{x++} is equivalent to \texttt{(*p)++}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example}
+  \code[frame=lines,language=c++14]{example3.cpp}
+  \visible<2>{
+    \begin{center}
+      Compiler error: cannot convert {\tt bool*} to {\tt int*}
+    \end{center}
+    \codeunderlinex{example 3 line 2}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example}
+  \begin{center}
+    \begin{tikzpicture}[scale=.25,transform shape,remember picture]
+      \draw (0,0) grid (40,1);
+      \node[anchor=east,font=\Huge] at (0,0) {$\cdots$};
+      \node[anchor=west,font=\Huge] at (40,0) {$\cdots$};
+
+      \foreach \i in {0,...,39} {
+        \node[anchor=west,rotate=90] at ($ (\i,1) + (.5,0) $) {
+          \tikzmath{
+            int \address;
+            \address = hex(4500 + \i);
+             print {\tt0x\address};
+          }
+        };
+      }
+
+      \draw[fill=red!50,opacity=.9] (1,0) rectangle ++(4,1);
+      \node (x) at (3,0.5) {5};
+      \draw[|-|] (1,-0.5) -- ++(4,0) node[midway,below] {x};
+      
+      \draw[fill=red!50,opacity=.9] (7,0) rectangle ++(4,1);
+      \node (p) at (9,0.5) {\texttt{0x1195}};
+      \draw[|-|] (7,-0.5) -- ++(4,0) node[midway,below] {p};
+
+      \draw[fill=red!50,opacity=.9] (14,0) rectangle ++(4,1);
+      \node (p) at (16,0.5) {\texttt{0x119b}};
+      \draw[|-|] (14,-0.5) -- ++(4,0) node[midway,below] {q};
+
+      \draw[fill=red!50,opacity=.9] (27,0) rectangle ++(4,1);
+      \node (p) at (29,0.5) {\texttt{0x11a2}};
+      \draw[|-|] (27,-0.5) -- ++(4,0) node[midway,below] {r};
+    \end{tikzpicture}
+  \end{center}
+  \vskip5mm
+  \code[frame=lines,language=c++14]{example5.cpp}
+  \begin{center}
+    \texttt{++***r}
+  \end{center}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "pointers"
+%%% End:

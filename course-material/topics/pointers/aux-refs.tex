@@ -1,0 +1,141 @@
+\begin{frame}
+  \frametitle{Argument Passing in Java}
+  \code[language=java,font=\small]{pass-int.java}
+  \begin{itemize}
+    \item Primitive types are passed by value
+    \item All of \texttt{x}'s bits are copied to the stack
+    \item \texttt{foo} is unable to modify \texttt{x}'s value
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Argument Passing in Java}
+  \code[language=java,font=\small]{pass-int-array.java}
+  \begin{itemize}
+    \item Objects are passed by reference
+    \item \texttt{foo} can modify the array
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Why This Inconsistency?}
+  \begin{itemize}
+    \item Primitives: by value
+    \item Objects: by reference
+    \item Why not everything the same way?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reason \#1: Efficiency}
+  \begin{itemize}
+    \item Say objects are passed by value
+    \item In case of array, all elements would have to be copied
+    \item Uses a lot of time and memory
+    \item References have constant size: 32 or 64 bit
+    \item Fit in register
+    \item You can give access to arbitrarily large data structures using a single reference
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reason \#2: Sharing}
+  \begin{itemize}
+    \item References allow you to ``share'' objects
+    \item If objects were always passed by value, you could not pass the \emph{same} object to two different objects
+  \end{itemize}
+
+  \begin{center}
+    \begin{tikzpicture}[person/.style={fill=white,drop shadow,draw,minimum width=2cm,minimum height=.75cm},scale=.75,transform shape]
+      \begin{scope}
+        \node[person] (parent1) at (-1.5,2) {parent};
+        \node[person] (parent2) at (1.5,2) {parent};
+        \node[person] (son) at (-1.5,0) {son};
+        \node[person] (daughter) at (1.5,0) {daughter};
+        \draw[-latex] (son) -- (parent1);
+        \draw[-latex] (daughter) -- (parent2);
+      \end{scope}
+
+      \node at (3.5,1) {vs};
+
+      \begin{scope}[xshift=6.5cm]
+        \node[person] (parent) at (0,2) {parent};
+        \node[person] (son) at (-1.5,0) {son};
+        \node[person] (daughter) at (1.5,0) {daughter};
+        \draw[-latex] (son) -- (parent);
+        \draw[-latex] (daughter) -- (parent);
+      \end{scope}
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reason \#3: Recursion and \texttt{null}}
+  \code[language=java]{person.java}
+  \begin{itemize}
+    \item Without references, no recursive data structures
+    \item \texttt{Person} would be infinitely large
+    \item Thanks to references, a \texttt{Person} is only 64/128 bit large
+    \item \texttt{null} can be used to end chains
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reason \#4: Giving Access}
+  \code[language=java]{this.java}
+  \begin{itemize}
+    \item Without references, functions would never be able to modify their arguments
+    \item Without references, \texttt{this} would be a copy
+    \item Methods would never be able to modify the object's fields
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{References in Java}
+  \begin{itemize}
+    \item Whether \texttt{T x} is a reference, depends on the type \texttt{T}
+          \begin{itemize}
+            \item If \texttt{T} is primitive, then it's not a reference
+            \item If \texttt{T} is a class, then it's a reference
+          \end{itemize}
+    \item No extra syntax needed to discern references from values
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{ccc}
+        & \textbf{primitive} & \textbf{class} \\
+      \toprule
+      \textbf{value} & yes & not supported \\
+      \textbf{reference} & not supported & yes \\
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Pointers in \cpp}
+  \begin{center}
+    \begin{tabular}{ccc}
+        & \textbf{primitive} & \textbf{class} \\
+      \toprule
+      \textbf{value} & yes & yes \\
+      \textbf{pointer} & yes & yes \\
+    \end{tabular}
+  \end{center}
+  \begin{itemize}
+    \item \cpp\ provides \emph{pointers}
+    \item Fulfill same role as references as in Java
+    \item \cpp\ do not treat primitives and classes differently
+          \begin{itemize}
+            \item Java does not allow reference to primitive
+            \item \cpp\ allows pointer to primitive
+          \end{itemize}
+    \item How to know if you want pointer or not?
+    \item Extra syntax needed!
+    \item Value: \texttt{T x}
+    \item Pointer: \texttt{T* x}
+  \end{itemize}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "pointers"
+%%% End:

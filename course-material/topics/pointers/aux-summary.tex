@@ -1,0 +1,41 @@
+\begin{frame}
+  \frametitle{Summary}
+  \begin{center}
+    \begin{tabular}{ll}
+      \textbf{Syntax}  & \textbf{Description} \\
+      \toprule
+      {\it type}*      & Pointer to a {\it type} \\
+      \&{\it variable} & Address of {\it variable} \\
+      *{\it pointer}   & Dereference pointer \\
+    \end{tabular}
+  \end{center}
+  \structure{Typical Usage}
+  \begin{enumerate}
+    \item Introduce some variable \texttt{x} of type \texttt{T}
+    \item Take the address of \texttt{x} using \texttt{\&x}
+    \item Save the address of \texttt{x} in a pointer variable \texttt{p} of type \texttt{T*}
+    \item You can access \texttt{x} using \texttt{*p}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Summary: Use Cases}
+  \structure{Use Pointers When\dots}
+  \begin{itemize}
+    \item You need to pass large objects
+    \item When you want to give write-access to functions
+    \item When you need nontrivial data structures
+  \end{itemize}
+  \vskip1cm
+  \begin{center}
+    \textbf{Remember} \\
+    In Java references are used all the time \\
+    There's no use trying to avoid pointers in \cpp \\
+    They're a necessary evil
+  \end{center}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "pointers"
+%%% End:
