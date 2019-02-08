@@ -1,0 +1,70 @@
+\usepackage{ucll-code}
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{\texttt{sizeof}}
+\author{Fr\'ed\'eric Vogels}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{\texttt{sizeof}}
+  \begin{itemize}
+    \item \texttt{sizeof} probably does not do what you think it does
+    \item \texttt{sizeof} return size of data structure in bytes
+    \item Was needed in C
+          \begin{itemize}
+            \item In C, you allocate heap memory using \texttt{malloc}
+            \item \texttt{malloc} needed to be told how many bytes to allocate
+          \end{itemize}
+  \end{itemize}
+  \code[language=c++14,width=.9\linewidth]{malloc.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What \texttt{sizeof} Is Not}
+  \begin{itemize}
+    \item \texttt{sizeof} does not count the number of items in a container
+    \item Do not use \texttt{sizeof}!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What \texttt{sizeof} Does}
+  \code[language=c++14]{vector.cpp}
+  \begin{itemize}
+    \item \texttt{sizeof} tells you the size of the object
+    \item \texttt{sizeof(vec)} equals 32 + 32 + 32 = 96 (assuming 32 bit)
+          \begin{itemize}
+            \item Will always be 96, regardless of actual number of items
+            \item Memory pointed to by \texttt{items} not counted by \texttt{sizeof}
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cake Points!}
+  \code[language=c++14,width=.4\linewidth,font=\small]{alignment.cpp}
+  \vskip-5mm
+  \begin{itemize}
+    \item \texttt{sizeof(Foo) == 12}
+    \item \texttt{sizeof(Bar) == 8}
+    \item How come?
+          \begin{itemize}
+            \item \texttt{char} is 1 byte long! 4+1+1 = 6! Why 8 or 12?
+            \item Why does order matter?
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "sizeof"
+%%% End:
