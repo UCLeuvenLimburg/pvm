@@ -1,0 +1,311 @@
+\usepackage{ucll-code}
+
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{Containers}
+\author{Fr\'ed\'eric Vogels}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{\texttt{std::vector}}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{\texttt{std::vector}}
+  \begin{itemize}
+    \item Equivalent of Java's \texttt{ArrayList}
+    \item \texttt{\#include <vector>}
+    \item Is a template class (similar to Java generics)
+    \item \link{http://www.cplusplus.com/reference/vector/vector/}{Official documentation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java vs \cpp: Creation}
+  \structure{Java}
+  \code[language=java,font=\small,width=.95\linewidth]{arraylist-creation.java}
+  \vskip2mm
+  \structure{\cpp}
+  \code[language=c++14,font=\small,width=.95\linewidth]{vector-creation.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java vs \cpp: Indexing}
+  \structure{Java}
+  \code[language=java,font=\small,width=.95\linewidth]{arraylist-indexing.java}
+  \vskip2mm
+  \structure{\cpp}
+  \code[language=c++14,font=\small,width=.95\linewidth]{vector-indexing.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java vs \cpp: Setting}
+  \structure{Java}
+  \code[language=java,font=\small,width=.95\linewidth]{arraylist-setting.java}
+  \vskip2mm
+  \structure{\cpp}
+  \code[language=c++14,font=\small,width=.95\linewidth]{vector-setting.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java vs \cpp: Size}
+  \structure{Java}
+  \code[language=java,font=\small,width=.95\linewidth]{arraylist-size.java}
+  \vskip2mm
+  \structure{\cpp}
+  \code[language=c++14,font=\small,width=.95\linewidth]{vector-size.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java vs \cpp: Iterating}
+  \structure{Java}
+  \code[language=java,font=\small,width=.95\linewidth]{arraylist-iterating.java}
+  \vskip2mm
+  \structure{\cpp}
+  \code[language=c++14,font=\small,width=.95\linewidth]{vector-iterating.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{More Functionality}
+  \begin{center}
+    \begin{tabular}{ll}
+      \textbf{Member function} & \textbf{Effect} \\
+      \toprule
+      \texttt{v.front()}       & First element \\
+      \texttt{v.back()}        & Last element \\
+      \texttt{v.data()}        & Returns underlying array (fragile!) \\
+      \texttt{v.push\_back(x)} & Add to end \\
+      \texttt{v.pop\_back()}   & Remove last \\
+      \texttt{v.clear()}       & Remove all \\
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+
+\section{Other Containers}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{List}
+  \begin{itemize}
+    \item Doubly linked list
+    \item \texttt{\#include <list>}
+    \item \link{http://www.cplusplus.com/reference/list/list/}{Official documentation}
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{ll}
+      \textbf{Member function} & \textbf{Effect} \\
+      \toprule
+      \texttt{lst.front()}        & First element \\
+      \texttt{lst.back()}         & Last element \\
+      \texttt{lst.push\_front(x)} & Add to beginning \\
+      \texttt{lst.pop\_front()}   & Remove first \\
+      \texttt{lst.pop\_back()}    & Remove last \\
+      \texttt{lst.push\_back(x)}  & Add to end \\
+      \texttt{lst.pop\_back()}    & Remove last \\
+      \texttt{lst.clear()}        & Remove all \\
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sets}
+  \structure{Set}
+  \begin{itemize}
+    \item Uses binary search tree (i.e.~no hashing)
+    \item \texttt{\#include <set>}
+    \item Cannot contain same element more than once
+    \item \link{http://www.cplusplus.com/reference/set/set/}{Official documentation}
+  \end{itemize}
+  \vskip5mm
+  \structure{Multiset}
+  \begin{itemize}
+    \item Uses binary search tree
+    \item \texttt{\#include <set>}
+    \item Can contain some element more than once
+    \item \link{http://www.cplusplus.com/reference/set/multiset/}{Official documentation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Maps}
+  \structure{Map}
+  \begin{itemize}
+    \item Uses binary search tree
+    \item \texttt{\#include <map>}
+    \item Associates one value with one key
+    \item \link{http://www.cplusplus.com/reference/map/map/}{Official documentation}
+  \end{itemize}
+  \vskip5mm
+  \structure{Multimap}
+  \begin{itemize}
+    \item Uses binary search tree
+    \item \texttt{\#include <multimap>}
+    \item Associates multiple values with one key
+    \item \link{http://www.cplusplus.com/reference/map/multimap/}{Official documentation}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Strings}
+  \begin{itemize}
+    \item Type of strings: \texttt{std::string}
+    \item Strings also acts as containers
+    \item \texttt{\#include <string>}
+    \item \link{http://www.cplusplus.com/reference/string/basic_string/}{Official documentation}
+  \end{itemize}
+\end{frame}
+
+
+\section{Iterators}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Iterators}
+  \begin{itemize}
+    \item \link{https://en.wikipedia.org/wiki/Iterator_pattern}{Iterator design pattern}
+    \item Is an object that points to element of container
+    \item It can be used to read and write to that location
+          \begin{itemize}
+            \item \texttt{x = *it} reads element at that position
+            \item \texttt{*it = x} overwrites element at that position
+          \end{itemize}
+    \item It can be moved around
+          \begin{itemize}
+            \item \texttt{it++} moves to next element in container
+            \item \texttt{it--} moves to previous element in container
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Why Iterators?}
+  \begin{itemize}
+    \item Iterators abstract away the container specifics
+    \item You can use vector, list, set, \dots iterators in the same way
+    \item Iterators smart enough to know how to deal with the underlying container
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{How To Get An Iterator}
+  \begin{itemize}
+    \item Container classes offer \texttt{begin()} and \texttt{end()}
+    \item \texttt{begin()} gives iterator pointing to first element
+    \item \texttt{end()} gives iterator pointing \emph{one past} last element
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Zeroing Elements}
+  \begin{itemize}
+    \item You want to write \texttt{zero({\itshape container}<int>*)}
+    \item Overwrites each integer in container with \texttt{0}
+    \item You don't write it once for each container
+          \begin{itemize}
+            \item zero(\texttt{std::vector<int>*})
+            \item zero(\texttt{std::list<int>*})
+            \item zero(\texttt{std::set<int>*})
+            \item \dots
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Zeroing Elements}
+  \code[language=c++14,font=\small]{zero.cpp}
+  \begin{itemize}
+    \item \texttt{template} is \cpp's version of generics, but more flexible
+    \item Basically says ``Give me \texttt{start} and \texttt{end} of \emph{any} type that
+          \begin{itemize}
+            \item can be compared using \texttt{!=}
+            \item can be dereferenced using \texttt{*}
+            \item can be increment with \texttt{++}
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Zeroing Elements}
+  \code[language=c++14,font=\small]{zero-usage.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Why Not Inheritance?}
+  \begin{itemize}
+    \item Same could be achieved using subtyping
+          \begin{itemize}
+            \item \texttt{Iterator} superclass
+            \item Each container defines own subclass
+          \end{itemize}
+    \item Using templates is more efficient
+          \begin{itemize}
+            \item More information at compile time
+            \item Compiler can optimise better
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algoritms}
+  \begin{itemize}
+    \item Standard library provides functions on iterators
+    \item \texttt{\#include <algorithm>}
+    \item \link{http://www.cplusplus.com/reference/algorithm/}{Official documentation}
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{ll}
+      \textbf{Function} & \textbf{Effect} \\
+      \toprule
+      \texttt{all\_of}          & Checks if all elements satisfy condition \\
+      \texttt{any\_of}          & Checks if any element satisfies condition \\
+      \texttt{none\_of}         & Checks if no element satisfies condition \\
+      \texttt{find\_if}         & Finds first element that satisfies condition \\
+      \texttt{find\_if\_not}    & Finds first element that does not satisfy condition \\
+      \texttt{count\_if}        & Counts elements that satisfy condition \\
+      \texttt{count\_if\_not}   & Counts elements that do not satisfy condition \\
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example}
+  \code[language=c++14]{all.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example}
+  \code[language=c++14]{any.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example}
+  \code[language=c++14]{count_if.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reverse Iterators}
+  \begin{itemize}
+    \item Useful for iterating backwards
+    \item Use \texttt{xs.rbegin()} and \texttt{xs.rend()} to get them
+    \item Use \texttt{it.base()} to turn it back into a forward iterator
+  \end{itemize}
+  \code[language=c++14,width=.9\linewidth]{reverse-iterators.cpp}
+\end{frame}
+
+\end{document}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "containers"
+%%% End:
