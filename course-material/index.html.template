@@ -1,0 +1,214 @@
+<% require 'Settings' %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM</title>
+    <link rel="stylesheet" href="<%= Settings::SHARED_URL %>/ucll.css">
+    <script src="<%= Settings::SHARED_URL %>/jquery.js"></script>
+    <script src="<%= Settings::SHARED_URL %>/underscore.js"></script>
+    <style>
+      .center {
+        margin-left: auto;
+        margin-right: auto;
+      }      
+
+      #link-table {
+        width: 75%;
+        border: 1px solid black;
+        padding: 10px;
+        box-shadow: 10px 10px 5px #AAAAAA;
+        margin-bottom: 50px;
+      }
+
+      #link-table th {
+        padding: 10px;
+        width: 40%;
+      }
+      
+      #link-table tr {
+        text-align: center;
+      }
+      
+      #link-table tr.header {
+        font-size: 2em;
+        background: #AAAAAA;
+        font-weight: bold;
+      }
+
+      #course-material {
+        width: 70%;
+      }
+
+      #course-material th {
+        background: #AAAAAA;
+        width: 50%;
+      }
+
+      #course-material td {
+        text-align: center;
+      }
+
+      #course-material tr:nth-child(odd) {
+        background: #DDDDDD;
+      }
+
+      a.handout {
+        font-size: 0.5em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">PVM</div>
+    </header>
+
+    <div id="contents">
+      <section>      
+        <table id="course-material" class="center" style="margin-top: 50px;">
+          <tr>
+            <th style="width: 10%;">Week</th>
+            <th>Slides</th>
+            <th>Lab Assignments</th>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><%= topic('pvm', 'Course Introduction') %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><%= topic('cpp-intro', 'C++ Introduction', handouts: true) %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><%= topic('declarations', 'Declarations', handouts: true) %></td>
+            <td><%= lab('declarations', 'Declarations') %></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><%= topic('preprocessor', 'The Preprocessor', handouts: true) %></td>
+            <td><%= lab('preprocessor', 'The Preprocessor') %></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><%= topic('allocation-methods', 'Allocation Methods', handouts: true) %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><%= topic('pointers', 'Pointers', handouts: true) %></td>
+            <td><%= lab('pointers', 'Pointers') %></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><%= topic('heap-allocation', 'Heap Allocation', handouts: true) %></td>
+            <td><%= lab('heap-allocation', 'Heap Allocation') %></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><%= topic('arrays', 'Arrays', handouts: true) %></td>
+            <td><%= lab('arrays', 'Arrays') %></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><%= topic('containers', 'Containers', handouts: true) %></td>
+            <td><%= lab('containers', 'Containers') %></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><%= topic('const', 'Const', handouts: true) %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td></td>
+            <td><%= lab('types', 'Types') %></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><%= topic('references', 'References', handouts: true) %></td>
+            <td><%= lab('references', 'References') %></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><%= topic('classes-overview', 'Classes (overview)', handouts: true) %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><%= topic('constructors', 'Constructors', handouts: true) %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><%= topic('structs', 'Structs', handouts: true) %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><%= topic('sizeof', 'sizeof', handouts: true) %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><%= topic('const-correctness', 'Const Correctness', handouts: true) %></td>
+            <td><%= lab('types-2', 'Types 2') %></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td></td>
+            <td><%= lab('classes', 'Classes') %></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><%= topic('default-parameter-values', 'Default Parameter Values', handouts: true) %></td>
+            <td><%= lab('default-parameter-values', 'Default Parameter Values') %></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><%= topic('operator-overloading', 'Operator Overloading', handouts: true) %></td>
+            <td><%= lab('operator-overloading', 'Operator Overloading') %></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><%= topic('raii', 'RAII', handouts: true) %></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><%= topic('smart-pointers', 'Smart Pointers', handouts: true) %></td>
+            <td><%= lab('smart-pointers', 'Smart Pointers') %></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><%= topic('inheritance', 'Inheritance', handouts: true) %></td>
+            <td><%= lab('inheritance', 'Inheritance') %></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><%= topic('templates', 'Templates', handouts: true) %></td>
+            <td><%= lab('templates', 'Templates') %></td>
+          </tr> 
+          <tr>
+            <td>8</td>
+            <td><%= topic('casts', 'Casting', handouts: true) %></td>
+            <td><%= lab('casts', 'Casts') %></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><%= topic('performance', 'Performance', handouts: true) %></td>
+            <td><%= lab('performance', 'Performance') %></td>
+          </tr> 
+         <tr>
+            <td>9</td>
+            <td><%= topic('technical-details', 'Technical Details', handouts: false) %></td>
+            <td></td>
+          </tr>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,300 @@
+p { text-align: justify; }
+
+body {
+    background-color: white;
+    font-family: Verdana;
+}
+
+#contents {
+    margin-top: 10em;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
+    background-color: white;
+}
+
+#toc {
+    left-margin: 50px;
+    width: 50%;
+    border: 1px solid black;
+    box-shadow: 10px 10px gray;
+    margin-top: 120px;
+    margin-left: 50px;
+}
+
+#toc span {
+    display: block;
+    background: black;
+    color: white;
+    padding: 5px;
+}
+
+body > header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 2em;
+    background: black;
+    color: white;
+    font-size: 3em;
+    z-index: 99;
+    text-transform: uppercase;
+}
+
+div.center-vertically {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+}
+
+body > header > h1 {
+    background: white;
+    font-size: 600%;
+    text-align: center;
+}
+
+section h1 {
+    background: black;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 250%;
+    text-transform: uppercase;
+    font-variant: small-caps;
+}
+
+h2 {
+    background: black;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 180%;
+    text-transform: uppercase;
+    font-variant: small-caps;
+    border-radius: 5px;
+}
+
+h3 {
+    margin-top: 20px;
+    padding: 5px;
+    background: #DDD;
+}
+
+h4 {
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+
+p {
+    padding-left: 5px;
+}
+
+code {
+    font-size: 120%;
+}
+
+div.code {
+    font-size: 100%;
+    width: 80%;
+    margin: 10px auto;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+a.minilink {
+    font-size: 50%;
+}
+
+table.center {
+    margin: 5px auto;
+}
+
+.git-milestone {
+    background: #FAA;
+    font-size: 80%;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+    margin: 20px auto;
+}
+
+pre span.highlight {
+    color: red;
+    font-weight: bold;
+}
+
+span.sidenote {
+    position: relative;
+}
+
+aside.sidenote {
+    position: absolute;
+    right: 20px;
+    width: 160px;
+    color: red;
+    text-align: right;
+}
+
+.task-container {
+    margin: 20px auto;
+    width: 80%;
+    border: solid 1px black;
+    box-shadow: 10px 10px gray;
+}
+
+.task-container > header {
+    color: white;
+    background: black;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 200%;
+}
+
+.task-container > table {
+    width: 100%;
+    min-height: 125px;    
+}
+
+.task-container .task-label {
+    background: black;
+    color: white;
+    padding: 5px;
+    width: 40px;
+}
+
+.task-container .task-header {
+    background: #AAA;
+    width: 100%;
+    height: 30px;
+}
+
+.task-container .task-difficulty {
+    float: right;
+}
+
+.task-container .task-label span {
+    display: block;
+    transform: rotate(-90deg);
+    font-size: 200%;
+    text-transform: uppercase;
+    font-variant: small-caps;
+}
+
+.task-container .task-text {
+    width: 100%;
+}
+
+.task-container .task-tag {
+    float: right;
+    margin: 5px;
+    padding: 2px 10px;
+    text-transform: uppercase;
+    font-variant: small-caps;
+    font-size: 80%;
+    background: #DDD;
+    border-radius: 5px;
+}
+
+.task-container .task-git {
+    float: left;
+    margin: 5px 5px;
+    padding: 2px 10px;
+    text-transform: uppercase;
+    font-variant: small-caps;
+    font-size: 80%;
+    background: #FAA;
+    border-radius: 5px;
+}
+
+.task-container .task-caption {
+    float: left;
+    margin: 5px 5px;
+    padding: 2px 10px;
+    text-transform: uppercase;
+    font-variant: small-caps;
+    font-size: 80%;
+    border-radius: 5px;    
+}
+
+.task-container .task-difficulty {
+    padding: 0px 10px;
+    margin: 5px;
+}
+
+.math {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input.quiz {
+    text-align: center;
+}
+
+.quiz.correct {
+    background: #AFA;
+}
+
+.quiz.incorrect {
+    background: #FAA;
+}
+
+select.quiz.correct {
+    background: #AFA;
+}
+
+select.quiz.incorrect {
+    background: #FAA;
+}
+
+.diagram {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+}
+
+img.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+}
+
+div.todo {
+    background: #FAA;
+    padding: 10px;
+    border: solid 1px red;
+    width: 80%;
+    margin: 10px auto;
+}
+
+video {
+    display: block;
+    margin: 10px auto;
+}
+
+span.line-number {
+    background: #BBB;
+    margin-right: 10px;
+    padding: 2px;
+}
+
+.highlight .n {
+    color: #008;
+}
+
+.highlight .nb {
+    color: #080;
+}
+
+.highlight .k {
+    font-weight: bold;
+}

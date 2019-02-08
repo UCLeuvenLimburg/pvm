@@ -1,0 +1,241 @@
+p { text-align: justify; }
+
+body {
+    background-color: white;
+    font-family: Verdana;
+}
+
+#contents {
+    margin-top: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
+    background-color: white;
+}
+
+#toc {
+    left-margin: 50px;
+    width: 50%;
+    border: 1px solid black;
+    box-shadow: 10px 10px gray;
+    margin-top: 120px;
+    margin-left: 50px;
+}
+
+#toc span {
+    display: block;
+    background: black;
+    color: white;
+    padding: 5px;
+}
+
+body > header {
+    width: 100%;
+    height: 2em;
+    background: black;
+    color: white;
+    font-size: 3em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 2em;
+}
+
+body > header > h1 {
+    background: white;
+    font-size: 600%;
+    text-align: center;
+}
+
+section h1 {
+    background: black;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 250%;
+    text-transform: uppercase;
+    font-variant: small-caps;
+}
+
+h2 {
+    background: black;
+    color: white;
+    padding: 5px 5px;
+    text-align: center;
+    margin-top: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+    font-size: 150%;
+    text-transform: uppercase;
+    font-variant: small-caps;
+    border-radius: 5px;
+}
+
+h3 {
+    margin-top: 20px;
+    padding: 5px;
+    background: #DDD;
+}
+
+h4 {
+    margin-top: 10px;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+
+p {
+    padding-left: 5px;
+}
+
+code {
+    font-size: 120%;
+}
+
+div.code {
+    font-size: 100%;
+    width: 80%;
+    margin: 10px auto;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.source-editor {
+    height: 200px;
+    font-size: 100%;
+    width: 80%;
+    margin: 10px auto;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.fullscreen .fullscreen-editor {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    height: auto!important;
+    width: auto!important;
+}
+
+.fullscreen {
+    overflow: hidden;
+}
+
+input {
+    width: 100px;
+}
+
+input.correct {
+    background: #AFA;
+}
+
+input.incorrect {
+    background: #FAA;
+}
+
+.revealer {
+    border: 1px solid black;
+    padding: 10px;
+    width: 25%;
+    margin: 20px auto;
+    text-align: center;
+    cursor: help;
+    box-shadow: 10px 10px 5px #AAA;
+}
+
+.explanation {
+    border: 1px solid black;
+    box-shadow: 5px 5px 5px #AAA;
+    padding: 10px;
+    width: 90%;
+    margin: 10px auto;
+}
+
+.message {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    width: 75%;
+    margin: 100px auto;
+    padding: 20px;
+    background: #F44;
+    box-shadow: 0px 0px 50px 30px #F44;
+}
+
+.quiz-feedback.hidden {
+    display: none;
+}
+
+table.type-inference {
+    margin: 10px auto;
+    border-collapse: collapse;
+}
+
+table.type-inference tr:nth-child(1) {
+    background: #AAA;
+}
+
+table.type-inference th {
+    min-width: 10em;
+}
+
+table.type-inference td {
+    text-align: center;
+    padding: 0.2em 1em;
+}
+
+table.type-inference input {
+    width: 10em;
+    text-align: center;
+}
+
+table.memory-layout {
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table.memory-layout td {
+    width: 1em;
+    height: 1em;
+    border: 1px solid black;
+}
+
+table.memory-layout td.byte0 {
+    background: #DDD;
+}
+
+table.memory-layout td.byte1 {
+    background: #FAA;
+}
+
+table.memory-layout td.byte2 {
+    background: #AFA;
+}
+
+table.memory-layout td.byte3 {
+    background: #AAF;
+}
+
+table.memory-layout td.byte4 {
+    background: #AFF;
+}
+
+table.lz77 {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.lz77.decoding {
+    border-collapse: collapse;
+}
+
+table.lz77.decoding td {
+    width: 5em;
+    border: 1px solid black;
+    text-align: center;
+}
