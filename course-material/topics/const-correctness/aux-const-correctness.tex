@@ -1,0 +1,137 @@
+\usepackage{ucll-code}
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{Const Correctness}
+\author{Fr\'ed\'eric Vogels}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Const: A Friendly Reminder}
+  \begin{itemize}
+    \item Type {\tt const T} = readonly view of {\tt T}
+    \item Forbids write operations
+  \end{itemize}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<handout:1|1>
+    \code[language=c++14]{const-int.cpp}
+
+    \onslide<handout:2|2->
+    \code[language=c++14]{const-vector.cpp}
+  \end{overprint}
+  \vskip5mm
+  \visible<handout:2|3->{
+    \begin{center}
+      How does compiler know which members are ok to call?
+    \end{center}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Defining {\tt const} members}
+  \code[font=\small,language=c++14]{example.cpp}
+  \onslide<1>{
+    \codeunderlinex{oiltank getContents}
+    \codeunderlinex{oiltank getCapacity}
+    \codeunderlinex{oiltank getFreeCapacityLeft}
+  }
+  \onslide<2>{
+    \codeunderlinex{oiltank fill}
+    \codeunderlinex{oiltank drain}
+    \codeunderlinex{oiltank transfer}
+  }
+  \begin{overprint}
+    \onslide<1>
+    \begin{center}
+      These member functions do not modify the object
+      and \\ therefore should be callable on a \texttt{const Oiltank}
+    \end{center}
+
+    \onslide<2>
+    \begin{center}
+      These member functions do modify the object
+      and \\ therefore should be not callable on a \texttt{const Oiltank}
+    \end{center}
+
+    \onslide<3>
+    \begin{center}
+      Non-modifying functions should be suffixed with \texttt{const},\\
+      telling the compiler these do not change the object
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\tt const} members}
+  \begin{itemize}
+    \item Suffixing a function with {\tt const} means it's readonly
+          \begin{itemize}
+            \item In non{\tt const} method: {\tt this} has type {\tt T*}
+            \item In {\tt const} method: {\tt this} has type {\tt const T*}
+          \end{itemize}
+    \item Compiler enfores \texttt{const}ness
+          \begin{itemize}
+            \item Trying to modify fields in {\tt const} method $\rightarrow$ error
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overloading}
+  \begin{itemize}
+    \item Possible to define a {\tt const} and non{\tt const} version of a method
+    \item {\tt const} version called if accessed through {\tt const} variable
+    \item non{\tt const} version called if through non{\tt const} variable
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overloading: Example}
+  \code[font=\small,language=c++14]{overload.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overloading: Usage}
+  \code[language=c++14,font=\small,width=.9\linewidth]{container.cpp}
+  \begin{overprint}
+    \onslide<handout:1|1>
+    \begin{center}
+      {\tt at} is non{\tt const} and hence cannot be called
+      on {\tt const int\_array}
+    \end{center}
+
+    \onslide<handout:2|2>
+    \begin{center}
+      {\tt at} is {\tt const}, so sees {\tt ns} as {\tt const int*} \\
+      Cannot return non{\tt const int\&}
+    \end{center}
+
+    \onslide<handout:3|3>
+    \begin{center}
+      Compiles, but now there is no way to write to {\tt int\_array}s
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overloading: Usage}
+  \code[language=c++14,font=\small,width=.9\linewidth]{container2.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overloading: Usage}
+  \code[language=c++14,font=\small,width=.9\linewidth]{container3.cpp}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "const-correctness"
+%%% End:
