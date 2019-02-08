@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Types</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             int main()
+             {
+               int* x, y;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'x', 'int*' ],
+                                  [ 'y', 'int' ] )}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 This is a weird syntactic thing inherited from C.
+                 <code>int *x, y</code> declares a pointer-to-<code>int</code> <code>x</code>
+                 and an <code>int</code> <code>y</code>. If you want both
+                 <code>x</code> and <code>y</code> to be pointers,
+                 you have to repeat the asterisk: <code>int *x, *y;</code>.
+               </p>
+               <p>
+                 It is therefore safer to declare each variable on its own line.
+                 You will be less astonished as a result.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             int main()
+             {
+               auto foo = new int;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'foo',      'int*' ],
+                                  [ 'foo[1]',   'int' ],
+                                  [ '&foo',     'int**' ],
+                                  [ '2 **foo',  'int' ] ) }
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             struct Foo
+             {
+               int x;
+             };
+             
+             int main()
+             {
+               auto foo = new Foo;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'foo',      'Foo*' ],
+                                  [ '*foo',     'Foo' ],
+                                  [ '(*foo).x', 'int' ],
+                                  [ 'foo->x',   'int' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             struct Foo
+             {
+               int x;
+             };
+             
+             int main()
+             {
+               const Foo foo;
+               auto p = &foo;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'foo',        'const Foo' ],
+                                  [ 'p',          'const Foo*' ],
+                                  [ 'foo->x',     'const int' ],
+                                  [ '&(foo->x)',  'const int*' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             int main()
+             {
+               std::vector<int> ns {1, 2, 3};
+               const std::vector<int>& ms = ns;
+
+               auto x = ns[0];
+               auto y = &ms[0];
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'x', 'int' ],
+                                  [ 'y', 'const int*' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             int main()
+             {
+               const int x = 5;
+               auto y = x;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'x', 'const int' ],
+                                  [ 'y', 'int' ],
+                                  [ '&x', 'const int*' ],
+                                  [ '&y', 'int*' ],
+                                  [ 'x *y', 'int' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             int main()
+             {
+               const bool* x;
+               auto y = *x;
+               auto z = &x;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'x', 'const bool*' ],
+                                  [ 'y', 'bool' ],
+                                  [ 'z', 'const bool**' ],
+                                  [ '!*x', 'bool' ],
+                                  [ '**z&&*x', 'bool' ],
+                                  [ '!!!!!*x', 'bool' ],
+                                  [ 'y ?! y:y', 'bool' ],
+                                  [ '**z ? 1 : 2', 'int' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             struct Node {
+               Node* next;
+             };
+
+             Node* create(int n) {
+               if ( n == 0 )
+               {
+                 return nullptr;
+               }
+               else
+               {
+                 Node* node = new Node;
+                 node->next = create(n-1);
+                 return node;
+               }
+             }
+
+             int main()
+             {
+               auto p = create(10);
+               auto q = *(p->next->next->next->next);
+               auto r = &(p->next);
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'p', 'Node*' ],
+                                  [ 'q', 'Node' ],
+                                  [ 'r', 'Node**' ] )}
+           END
+         end
+      %>
+
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
