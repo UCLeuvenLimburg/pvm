@@ -1,0 +1,214 @@
+
+!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+
+    <style>
+      table.codebook {
+        margin-left: auto;
+        margin-right: auto;
+        border-collapse: collapse;
+      }
+
+      table.codebook td {
+        text-align: center;
+      }
+
+      table.codebook th {
+        padding: 0em 1em;
+      }
+
+      table.codebook tr {
+        border-top: 1px black solid;
+        border-bottom: 1px black solid;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Huffman</div>
+    </header>
+    <div id="contents">
+      <p>
+        Since there's generally more than one way to build the Huffman tree, it is rather
+        difficult to provide you with automatically validated exercises. The only
+        guarantee is that in the end, all Huffman encoding of a specific string
+        will count the same amount of bits.
+      </p>
+      <p> 
+        To allow you to practice at will, a Huffman implementation has been included in the Git repository,
+        in the same folder as this html (<code>/labs/huffman/code</code>). You can use it to verify your solutions to your own exercises.
+      </p>
+      <p>
+        Below are a few exercises, but the validation is rather limited.
+      </p>
+      <%=
+         exercise(Lib::Numerical) do
+           <<-END
+             <p>
+               Compute the Huffman encoding of the given strings and enter how many bits the encoding counts.
+             </p>
+             <ul>
+               <li>
+                 <code>ab</code>: #{show_input_field(2, 0)} bits
+               </li>
+               <li>
+                 <code>abab</code>: #{show_input_field(4, 0)} bits
+               </li>
+               <li>
+                 <code>abcabc</code>: #{show_input_field(10, 0)} bits
+               </li>
+               <li>
+                 <code>aabaaababaaccbd</code>: #{show_input_field(25, 0)} bits
+               </li>
+               <li>
+                 <code>abacadadbcbadabcabcabdadaabccc</code>: #{show_input_field(60, 0)} bits
+               </li>
+               <li>
+                 <code>AaaAAaaAAaaAAaaAAaaA</code>: #{show_input_field(20, 0)} bits
+               </li>
+             </ul>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::Numerical) do
+           <<-END
+             <p>
+               Huffman does not need to work on a per-byte basis. For example,
+               you can take pairs of bytes as "units of data". Say
+               your input data is <code>ABBAABBA</code>. Grouping
+               these characters into pairs yields <code>AB BA AB BA</code>.
+               There are only two different pairs: <code>AB</code> and <code>BA</code>,
+               each with frequency 2. This means you can represent each pair using
+               one bit, for example <code>AB</code> as <code>0</code>
+               and <code>BA</code> as <code>1</code>, resulting
+               in <code>0101</code> as final Huffman encoding.
+             </p>
+             <p>
+               Perform the same calculations as in the previous exercise,
+               but with different "units of data".             
+             </p>
+             <ul>
+               <li>
+                 <code>abba</code>, group size = 2 bytes: #{show_input_field(2, 0)} bits
+               </li>
+               <li>
+                 <code>abcxyzabcxyz</code>, group size = 3 bytes: #{show_input_field(4, 0)} bits
+               </li>
+               <li>
+                 <code>abaababb</code>, group size = 2 bytes: #{show_input_field(8, 0)} bits
+               </li>
+               <li>
+                 <code>73NVZ073NVNVtsNV737373Z0737373</code>, group size = 2 bytes: #{show_input_field(25, 0)} bits
+               </li>
+               <li>
+                 <code>4;#710LMNVWH4;#VWHVWH4;#4;#4;#VWH4;#4;#LMN4;#</code>, group size = 3 bytes: #{show_input_field(25, 0)} bits
+               </li>
+             </ul>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           extend SourceCodeMixin
+
+           self.source = <<-END
+             0100110100000101000100111111110001000110010010111011011101011101110111110011110001
+           END
+         
+           <<-END
+             <table class="codebook">
+               <tbody>
+                 <tr>
+                   <th>Character</th><th>Encoding</th>
+                 </tr>
+                 <tr><td><code>.</code></td><td><code>1001</code></td></tr>
+                 <tr><td><code>/</code></td><td><code>1000</code></td></tr>
+                 <tr><td><code>4</code></td><td><code>1011</code></td></tr>
+                 <tr><td><code>9</code></td><td><code>1010</code></td></tr>
+                 <tr><td><code>Q</code></td><td><code>001</code></td></tr>
+                 <tr><td><code>W</code></td><td><code>11101</code></td></tr>
+                 <tr><td><code>X</code></td><td><code>11100</code></td></tr>
+                 <tr><td><code>b</code></td><td><code>11111</code></td></tr>
+                 <tr><td><code>c</code></td><td><code>11110</code></td></tr>
+                 <tr><td><code>d</code></td><td><code>11001</code></td></tr>
+                 <tr><td><code>e</code></td><td><code>11000</code></td></tr>
+                 <tr><td><code>g</code></td><td><code>11011</code></td></tr>
+                 <tr><td><code>o</code></td><td><code>11010</code></td></tr>
+                 <tr><td><code>t</code></td><td><code>0101</code></td></tr>
+                 <tr><td><code>u</code></td><td><code>000</code></td></tr>
+                 <tr><td><code>w</code></td><td><code>011</code></td></tr>
+                 <tr><td><code>y</code></td><td><code>0100</code></td></tr>
+               </tbody>
+             </table>
+             <p>
+               Given the Huffman encoding above, decode the following:
+             </p>
+             #{show_source_editor}
+             <p>
+               Decoding: #{Quiz.validated_input { verbatim 'as if I would give it away so easily' }}
+             </p>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           extend SourceCodeMixin
+
+           self.source = <<-END
+             011111011000010000010011111111110100011000110101110001101010111011100110110010101001
+           END
+         
+           <<-END
+             <table class="codebook">
+               <tbody>
+                 <tr>
+                   <th>Character</th><th>Encoding</th>
+                 </tr>
+                  <tr><td><code>.</code></tr><tr><td><code>1001</code></td></tr>
+                  <tr><td><code>/</code></tr><tr><td><code>1000</code></td></tr>
+                  <tr><td><code>5</code></tr><tr><td><code>1011</code></td></tr>
+                  <tr><td><code>9</code></tr><tr><td><code>1010</code></td></tr>
+                  <tr><td><code>D</code></tr><tr><td><code>11101</code></td></tr>
+                  <tr><td><code>J</code></tr><tr><td><code>11100</code></td></tr>
+                  <tr><td><code>M</code></tr><tr><td><code>001</code></td></tr>
+                  <tr><td><code>b</code></tr><tr><td><code>11111</code></td></tr>
+                  <tr><td><code>e</code></tr><tr><td><code>11110</code></td></tr>
+                  <tr><td><code>h</code></tr><tr><td><code>11001</code></td></tr>
+                  <tr><td><code>l</code></tr><tr><td><code>11000</code></td></tr>
+                  <tr><td><code>o</code></tr><tr><td><code>11011</code></td></tr>
+                  <tr><td><code>r</code></tr><tr><td><code>11010</code></td></tr>
+                  <tr><td><code>s</code></tr><tr><td><code>0101</code></td></tr>
+                  <tr><td><code>t</code></tr><tr><td><code>0100</code></td></tr>
+                  <tr><td><code>u</code></tr><tr><td><code>000</code></td></tr>
+                  <tr><td><code>y</code></tr><tr><td><code>0111</code></td></tr>
+                  <tr><td><code>z</code></tr><tr><td><code>0110</code></td></tr>
+               </tbody>
+             </table>
+             <p>
+               Given the Huffman encoding above, decode the following:
+             </p>
+             #{show_source_editor}
+             <p>
+               Decoding: #{Quiz.validated_input { verbatim 'sorry, you have to deserve it' }}
+             </p>
+           END
+         end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
