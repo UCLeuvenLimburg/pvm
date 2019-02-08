@@ -1,0 +1,218 @@
+\usepackage{ucll-code}
+\usepackage{emerald}
+\usepackage[T1]{fontenc}
+
+\usetikzlibrary{shadows}
+
+\title{Declarations and Definitions}
+\author{Fr\'ed\'eric Vogels}
+
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Problem: Fitting Everything in RAM}
+  \begin{itemize}
+    \item Compiling requires a lot of RAM
+    \item Not only did computers have little RAM\dots
+    \item \dots they had very little RAM
+    \item Cannot even keep one entire source file and corresponding data in RAM
+    \item They wanted single pass compilation
+      \begin{itemize}
+        \item Read in a bit of code
+        \item Check the code for correctness (syntax, types, \dots)
+        \item Produce assembly code
+        \item Forget as much as possible (freeing up RAM)
+        \item Proceed to next bit of code
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Problem: Forward References}
+  \code[width=5cm]{forward-reference.cpp}
+  \begin{itemize}
+    \item Cannot compile {\tt foo} without knowing {\tt bar}'s type signature
+          \begin{itemize}
+            \item Is it true that {\tt bar} does not require arguments?
+            \item Is it true that {\tt bar} returns a {\tt double}?
+          \end{itemize}
+    \item Definition of {\tt bar} only appears later
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Solution}
+  \begin{center}
+    Put {\tt bar}'s definition before {\tt foo}'s
+  \end{center}
+  \vskip5mm
+  \code[width=5cm]{forward-reference-solution.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Problem: Cyclical References}
+  \begin{overprint}
+    \onslide<1|handout:0>
+    \code[width=5cm]{cyclical.cpp}
+    \onslide<2|handout:1>
+    \code[width=5cm]{cyclical2.cpp}
+  \end{overprint}
+  \begin{itemize}
+    \item No ordering possible
+    \item What to do now?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Forward Declarations}
+  \code[width=5cm]{cyclical.cpp}
+  \begin{itemize}
+    \item What does compiler need to compile {\tt foo}?
+          \begin{itemize}
+            \item<2-> {\tt bar}'s arity (number of parameters)
+            \item<3-> Parameter types
+            \item<4-> Return type
+          \end{itemize}
+    \item<5-> What does compiler \emph{not} need to compile {\tt foo}?
+          \begin{itemize}
+            \item Function body
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Forward Declarations}
+  \begin{overprint}
+    \onslide<1|handout:0>
+    \code[width=8cm]{forward-declaration.cpp}
+    \onslide<2|handout:0>
+    \code[width=8cm]{forward-declaration2.cpp}
+    \onslide<3|handout:1>
+    \code[width=8cm]{forward-declaration3.cpp}
+  \end{overprint}
+  \begin{itemize}
+    \item Forward declaration: provide the compiler with minimal though sufficient information
+    \item For a function: name + parameter types + return type
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Declarations and Definitions}
+  \begin{itemize}
+    \item A declaration provides \emph{partial} information
+    \item A definition provides \emph{all} information
+    \item All that is \emph{declared} should be \emph{defined} at some later point
+    \item A declaration is a promise
+  \end{itemize}
+  \begin{center} \it
+    ``I'll fill you in on the details later, but this is a quick summary''
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Declarations and Definitions}
+  \code{class.cpp}
+  Which information is necessary?
+  \begin{itemize}
+    \item<2-> Existence of type {\tt Person}
+    \item<3-> Type signature of constructor
+    \item<4-> Size of {\tt Person} (how much memory needs to be allocated?)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Declarations and Definitions}
+  \code{class-with-decl.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Forward Declarations}
+  \code{class2.cpp}
+  Which information is necessary?
+  \begin{itemize}
+    \item<2-> Existence of type {\tt Person}
+    \item<3-> Nothing more
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Declarations and Definitions}
+  \code{class2-with-decl.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Declarations and Definitions}
+  \begin{itemize}
+    \item Rules for classes are more complex
+    \item Multiple possible ways to declare classes
+    \item Provide different amount of information
+    \item Once you define internals of a class, you must list them all
+    \item I.e.\ you are not allowed to add fields/methods afterwards
+    \item Method bodies can (often) be deferred
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example}
+  \begin{overprint}
+    \onslide<1|handout:1>
+    \code[font=\small]{class-example.cpp}
+    \onslide<2|handout:2>
+    \code[font=\small]{class-example2.cpp}
+    \onslide<3|handout:3>
+    \code[font=\small]{class-example3.cpp}
+    \onslide<4|handout:4>
+    \code[font=\small]{class-example4.cpp}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exceptions}
+  \begin{itemize}
+    \item Member functions can refer to other member functions
+          from the same class that have not been declared yet
+  \end{itemize}
+  \code[width=8cm]{class-no-decl.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exceptions}
+  \begin{itemize}
+    \item Some weird rules
+    \item Code below fails because compiler expects 0 parameters
+    \item Solution: use {\tt ::foo(5)}
+  \end{itemize}
+  \code[width=8cm]{class-weird.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Summary}
+  \begin{itemize}
+    \item Code gets compiled in single pass
+    \item Compiler needs to be able to verify your code and generate correct results without having to look ahead
+    \item Partial information (i.e.\ declarations) will often do
+  \end{itemize}
+  \vskip5mm
+  \structure{Examples}
+  \begin{itemize}
+    \item Calling a function: requires signature to be known
+    \item Manipulating a variable of type {\tt T}: requires {\tt class T}
+    \item Calling member functions on object of class {\tt T}: requires declarations of all members of {\tt T}
+    \item Instantiating a class {\tt T}: requires declarations of all members of {\tt T}
+  \end{itemize}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "declarations"
+%%% End:
