@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Smart Pointers</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               Foo()           { std::cout << "D"; }
+               Foo(const Foo&) { std::cout << "C"; }
+               ~Foo()          { std::cout << "X"; }
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = std::make_unique<Foo>();
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+      
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               Foo()           { std::cout << "D"; }
+               Foo(const Foo&) { std::cout << "C"; }
+               ~Foo()          { std::cout << "X"; }
+             };
+
+             void bar(std::unique_ptr<Foo> p)
+             {
+               std::cout << "!";
+             }
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = std::make_unique<Foo>();
+               bar(p);
+               std::cout << "]";
+             }
+           END
+
+           self.output = 'DNC'
+           
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>bar(p)</code> is invalid: you're passing a <code>std::unique_ptr&lt;Foo&gt;</code> by value,
+                 meaning a copy is made. Two <code>unique_ptr</code>s to the same object is forbidden.
+               </p>
+               <p>
+                 Ways around this are:
+               </p>
+               <ul>
+                 <li>
+                   Let <code>bar</code> accept a <code>std::unique_ptr&lt;Foo&gt;&amp;</code>. <code>bar</code> would then not
+                   call <code>p</code>'s destructor. It is a bit weird though to use this approach.
+                 </li>
+                 <li>
+                   Let <code>bar</code> accept a <code>Foo*</code>, and call <code>bar</code> with <code>bar(p.get())</code>.
+                   The <code>get</code> method gives access to the internal raw pointer. By letting <code>bar</code> receive
+                   a <code>Foo*</code>, you make it clear that <code>bar</code> has no ownership over the <code>Foo</code>-object
+                   and is therefore under no obligation to free it.
+                 </li>
+                 <li>
+                   Let <code>bar</code> still accept a <code>std::unique_ptr&lt;Foo&gt;</code> but call <code>bar</code>
+                   using <code>bar(std::move(p))</code>, thereby transferring ownership from <code>main</code> to <code>bar</code>.
+                   <code>bar</code> will then deallocate the <code>Foo</code> object as it ends.
+                 </li>
+               </ul>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               Foo()           { std::cout << "D"; }
+               Foo(const Foo&) { std::cout << "C"; }
+               ~Foo()          { std::cout << "X"; }
+             };
+
+             void bar(std::unique_ptr<Foo> p)
+             {
+               std::cout << "!";
+             }
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = std::make_unique<Foo>();
+               bar(std::move(p));
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               Foo()           { std::cout << "D"; }
+               Foo(const Foo&) { std::cout << "C"; }
+               ~Foo()          { std::cout << "X"; }
+             };
+
+             void bar(std::unique_ptr<Foo>& p)
+             {
+               std::cout << "!";
+             }
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = std::make_unique<Foo>();
+               bar(p);
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               Foo()           { std::cout << "D"; }
+               Foo(const Foo&) { std::cout << "C"; }
+               ~Foo()          { std::cout << "X"; }
+             };
+
+             void bar(Foo* p)
+             {
+               std::cout << "!";
+             }
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = std::make_unique<Foo>();
+               bar(&*p);
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               int x;
+               
+               Foo(int x) : x(x) { std::cout << "D"; }
+               Foo(const Foo&)   { std::cout << "C"; }
+               ~Foo()            { std::cout << "X"; }
+             };
+
+             void bar(std::unique_ptr<Foo> p)
+             {
+               p->x++;
+             }
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = std::make_unique<Foo>(5);
+               bar(std::move(p));
+               std::cout << p->x;
+               std::cout << "]";
+             }
+           END
+
+           self.output = '???'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <code>bar</code> receives ownership over the <code>Foo</code> object, meaning <code>main</code>'s own <code>p</code>
+               gets reset to <code>nullptr</code> during the transfer. When <code>main</code> prints <code>p-&gt;x</code>, <code>p</code> is <code>nullptr</code>.
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               Foo()             { std::cout << "D"; }
+               Foo(const Foo&)   { std::cout << "C"; }
+               ~Foo()            { std::cout << "X"; }
+             };
+
+             void bar(std::shared_ptr<Foo> p)
+             {
+               std::cout << "!";
+             }
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = std::make_shared<Foo>();
+               bar(p);
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               std::shared_ptr<Foo> other;
+               
+               Foo()             { std::cout << "D"; }
+               Foo(const Foo&)   { std::cout << "C"; }
+               ~Foo()            { std::cout << "X"; }
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = std::make_shared<Foo>();
+               auto q = std::make_shared<Foo>();
+
+               p->other = q;
+               q->other = p;
+               
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               The two <code>Foo</code> objects keep each other alive. If you make a cycle of shared pointers, you have
+               two remove one link somewhere yourself lest you have a memory leak.
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               int x;
+               
+               Foo() : x(0)      { std::cout << "D"; }
+               Foo(const Foo&)   { std::cout << "C"; }
+               ~Foo()            { std::cout << "X"; }
+             };
+
+             std::shared_ptr<Foo> bar()
+             {
+               return std::make_shared<Foo>();
+             }
+
+             int main()
+             {
+               std::cout << "[";
+               auto p = bar();
+               std::cout << p->x;
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+               Foo()             { std::cout << "FD"; }
+               Foo(const Foo&)   { std::cout << "FC"; }
+               ~Foo()            { std::cout << "FX"; }
+             };
+
+             struct Bar
+             {
+               std::shared_ptr<Foo> foo;
+               
+               Bar() : foo(std::make_shared<Foo>())  { std::cout << "BD"; }
+               Bar(const Bar&)                       { std::cout << "BC"; }
+               ~Bar()                                { std::cout << "BX"; }
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               Bar bar;
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          <<-END
+            <p>
+              Write the <code>Train</code> class and make the tests pass.
+            </p>
+            <p>
+              A train is built out of a list of wagons, each wagon pointing to the next (singly linked list).
+              Each wagon has a capacity and an occupancy.
+            </p>
+            <p>
+              Look at the code and tests for more information about which methods to implement.
+            </p>
+          END
+        end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
