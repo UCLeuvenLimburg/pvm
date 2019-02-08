@@ -1,0 +1,44 @@
+\section{Literals}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{\texttt{Duration}}
+  \begin{itemize}
+    \item Say you have class \texttt{Duration}
+    \item It represents time durations
+          \begin{itemize}
+            \item E.g.~5 seconds, 5 hours, \dots
+          \end{itemize}
+    \item How to create \texttt{Duration} objects?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Constructors}
+  \code{duration-constructor.cpp}
+  \begin{itemize}
+    \item Bad idea
+    \item Is it 20 seconds? 20 days?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Static Factory Methods}
+  \code[font=\small,width=.9\linewidth]{duration-factory.cpp}
+  \begin{itemize}
+    \item Much clearer
+    \item Rather verbose usage
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Literals}
+  \code[font=\small,width=.9\linewidth]{duration-literals.cpp}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "operator-overloading"
+%%% End:

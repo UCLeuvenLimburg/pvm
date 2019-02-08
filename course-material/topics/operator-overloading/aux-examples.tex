@@ -1,0 +1,75 @@
+\section{Examples}
+\subsection{Indexing}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{\tt Indexing}
+  \begin{itemize}
+    \item Indexing \texttt{[]} only defined on pointers/arrays
+    \item However, you can overload \texttt{[]} for your own containers
+    \item For example, \texttt{std::vector} overloads \texttt{[]}
+  \end{itemize}
+  \code[font=\small]{vector.cpp}
+\end{frame}
+
+\subsection{\texttt{toString}}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{\texttt{toString} in \cpp}
+  \code{cout.cpp}
+  \begin{itemize}
+    \item How to make this work?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\texttt{toString} in \cpp}
+  \code[font=\small,width=.9\linewidth]{cout-sol.cpp}
+  \begin{itemize}
+    \item Solution: overload \texttt{<<} on \texttt{std::ostream}
+  \end{itemize}
+\end{frame}
+
+\subsection{Assignment}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Assignment}
+  \code{assignment.cpp}
+  \begin{itemize}
+    \item By default, assignment \emph{between objects} overwrites the fields of the left operand
+          with the values of the fields of the right operand
+    \item \texttt{x} and \texttt{y} are still distinct objects after assignment
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment}
+  \begin{itemize}
+    \item Do not confuse with assignment in Java!
+    \item Java assignment operates on pointers
+  \end{itemize}
+  \code[width=.9\linewidth]{assignment-comparison.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment}
+  \code{intlist-assignment.cpp}
+  \begin{itemize}
+    \item Default behaviour is not always what we want
+    \item \texttt{xs} and \texttt{ys} would share same internal array
+    \item We need \texttt{xs} and \texttt{ys} to have separate internal arrays
+    \item We need to redefine \texttt{=} on \texttt{IntList}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment}
+  \code[font=\small,width=.9\linewidth]{intlist-assignment-corrected.cpp}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "operator-overloading"
+%%% End:

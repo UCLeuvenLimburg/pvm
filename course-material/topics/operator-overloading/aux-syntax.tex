@@ -1,0 +1,105 @@
+\section{Syntax}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Unary Operators}
+  \code[font=\small]{unary-operator.cpp}
+  \vskip-5mm
+  \begin{itemize}
+    \item You can overload operators in two ways
+          \begin{itemize}
+            \item Defined as member functions
+            \item Defined as global functions
+          \end{itemize}
+    \item Either as member or global, but not as both!
+          \begin{itemize}
+            \item Otherwise definitions would clash
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Binary Operators}
+  \code[font=\small]{binary-operator.cpp}
+  \begin{itemize}
+    \item Any type combination possible
+          \begin{itemize}
+            \item \texttt{Foo + Bar} can yield \texttt{Qux}
+          \end{itemize}
+    \item You cannot change existing type combinations
+          \begin{itemize}
+            \item E.g.~you cannot redefine \texttt{int + int}
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Member Function vs Global Function}
+  \begin{itemize}
+    \item Most of the time you can choose
+          \begin{itemize}
+            \item Matter of preference
+          \end{itemize}
+    \item Sometimes only member function will work
+    \item Somes only global function will work
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Only As Member Function}
+  \begin{itemize}
+    \item These can only be implemented as member functions:
+          \begin{itemize}
+            \item Assignment operator \texttt{=}
+            \item Function call operator \texttt{()}
+            \item Indexing operator \texttt{[]}
+            \item Arrow operator \texttt{operator ->}
+          \end{itemize}
+    \item More information about these later
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Only as Global Function}
+  \begin{itemize}
+    \item When defined as member of \texttt{T}, left operand is always a \texttt{T}
+    \item What if you want left operand of other type?
+  \end{itemize}
+  \code[font=\small]{constant-times-vector2d.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Only as Global Function}
+  \begin{itemize}
+    \item \texttt{double * Vector2D} only possible as global function
+  \end{itemize}
+  \code[font=\small,width=.9\linewidth]{constant-times-vector2d-solved.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Problem With Global Functions}
+  \begin{itemize}
+    \item What if
+          \begin{itemize}
+            \item operator \emph{must} be global, and
+            \item operator needs access to private members?
+          \end{itemize}
+    \item Are we stuck?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Friend functions}
+  \begin{itemize}
+    \item A class can give access to its private parts
+    \item It can declare functions to be {\tt friend}s
+  \end{itemize}
+  \code[font=\small,width=\linewidth]{friend.cpp}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "operator-overloading"
+%%% End:

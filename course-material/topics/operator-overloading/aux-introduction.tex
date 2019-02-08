@@ -1,0 +1,66 @@
+\section{Introduction}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Comparison}
+  \code[language=cobol,title={Cobol code}]{quad.cobol}
+  \begin{center}
+    What does this compute?
+  \end{center}
+  \visible<2->{
+    \code[title={\cpp\ code}]{quad.cpp}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Operator Overloading}
+  \begin{itemize}
+    \item Overloading = giving multiple meanings to same symbol
+    \item Abundant in mathematics
+          \begin{itemize}
+            \item E.g.~symbol $+$ denotes addition of naturals, integers, rationals, reals, complex numbers, matrices, \dots
+          \end{itemize}
+    \item In Java: {\tt +} works on {\tt int}, {\tt double}, {\tt String}
+    \item Same symbol, but different internal implementation
+    \item Operator overloading: to be able to define meaning of {\tt +}
+          for your own types
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Simple Example}
+  \code[width=.5\linewidth]{vector2d.cpp}
+  \begin{itemize}
+    \item We want to be able to
+          \begin{itemize}
+            \item add vectors
+            \item multiply vectors with a \texttt{double}
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Without Operator Overloading}
+  \code[width=.95\linewidth,font=\small]{vector2d-without-operators.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Without Operator Overloading}
+  \code[width=.6\linewidth,font=\small]{vector2d-without-operators-usage.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{With Operator Overloading}
+  \code[width=.95\linewidth,font=\small]{vector2d-with-operators.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{With Operator Overloading}
+  \code[width=.6\linewidth,font=\small]{vector2d-with-operators-usage.cpp}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "operator-overloading"
+%%% End:
