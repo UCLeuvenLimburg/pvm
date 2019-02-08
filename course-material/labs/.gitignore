@@ -1,0 +1,7 @@
+*.html
+*.exe
+*.obj
+temp*.cpp
+*-output.txt
+.vs
+x64
