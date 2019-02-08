@@ -1,0 +1,110 @@
+\begin{frame}
+  \frametitle{Garbage Collection}
+  \begin{center}
+    \begin{tikzpicture}[language/.style={fill=red!50},box/.style={fill=blue!50,drop shadow},inner sep=5mm,scale=.8,transform shape]
+      \node[anchor=south,box] at (0,.5) {\parbox{8cm}{\centering Memory allocation is too important to be left in the hands of machines}};
+      \node at (0,0) {$\updownarrow$};
+      \node[anchor=north,box] at (0,-.5) {\parbox{8cm}{\centering Memory allocation is too important to be left in the hands of humans}};
+
+      \visible<2->{
+        \node[language,anchor=south] at (0,2) {\cpp};
+      }
+
+      \visible<3->{
+        \node[language,anchor=north] at (0,-2) {Java};
+      }
+
+      \visible<4->{
+        \node[language,anchor=south] at (-2,2) {C};
+      }
+
+      \visible<5->{
+        \node[language,anchor=south] at (2,2) {Pascal};
+      }
+
+      \visible<6->{
+        \node[language,anchor=south] at (-4,2) {Cobol};
+      }
+
+      \visible<7->{
+        \node[language,anchor=south] at (4,2) {PLI};
+      }
+
+      \visible<8->{
+        \node[language,anchor=north] at (-2,-2) {C$\sharp$};
+      }
+
+      \visible<9->{
+        \node[language,anchor=north] at (2,-2) {Python};
+      }
+
+      \visible<10->{
+        \node[language,anchor=north] at (-4,-2) {Ruby};
+      }
+
+      \visible<11->{
+        \node[language,anchor=north] at (4,-2) {Haskell};
+      }
+
+      \visible<12->{
+        \node[language,anchor=north] at (0,-3) {Prolog};
+      }
+
+      \visible<13->{
+        \node[language,anchor=north] at (-2,-3) {Lisp};
+      }
+
+      \visible<14->{
+        \node[language,anchor=north] at (2,-3) {Basic};
+      }
+
+      \visible<15->{
+        \node[language,anchor=north] at (-4,-3) {Perl};
+      }
+
+      \visible<16->{
+        \node[language,anchor=north] at (4,-3) {Oz};
+      }
+
+      \visible<17->{
+        \node[language,anchor=north] at (-1,-2.5) {F$\sharp$};
+      }
+
+      \visible<18->{
+        \node[language,anchor=north] at (1,-2.5) {JavaScript};
+      }
+
+      \visible<19->{
+        \node[language,anchor=north] at (-3,-2.5) {Clojure};
+      }
+
+      \visible<20->{
+        \node[language,anchor=north] at (3,-2.5) {Erlang};
+      }
+
+      \visible<21->{
+        \node[language,anchor=north] at (-5,-2.5) {Eiffel};
+      }
+
+      \visible<22->{
+        \node[language,anchor=north] at (5,-2.5) {Smalltalk};
+      }
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Garbage Collection}
+  \begin{itemize}
+    \item Abstraction of memory
+    \item Tries to make it look as if there's an infinite amount of RAM
+    \item Recycles unreachable memory
+    \item Reduces memory leaks (but does not eliminate them)
+    \item Many different techniques
+  \end{itemize}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "allocation-methods"
+%%% End:

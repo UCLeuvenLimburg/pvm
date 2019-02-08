@@ -1,0 +1,265 @@
+\usepackage{fourier}
+\usepackage{bbding}
+\usepackage{ucll-code}
+
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{Allocation Methods}
+\author{Fr\'ed\'eric Vogels}
+
+
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Overview}
+  \begin{itemize}
+    \item Different ways to deal with RAM
+    \item Trade flexibility for speed
+          \begin{itemize}
+            \item Flexible but slow
+            \item Rigid but fast
+          \end{itemize}
+    \item In most languages abstracted away as much as possible
+    \item In \cpp: crucial to know about the details
+  \end{itemize}
+\end{frame}
+
+\input{aux-static.tex}
+\input{aux-stack.tex}
+\input{aux-heap.tex}
+\input{aux-gc.tex}
+
+\begin{frame}
+  \frametitle{Allocation}
+  \begin{overprint}
+    \onslide<1>
+    \begin{center} \Large
+      Java
+    \end{center}
+    \onslide<2>
+    \begin{center} \Large
+      \cpp
+    \end{center}
+  \end{overprint}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<1>
+    \begin{center}
+      \begin{tikzpicture}[static allocation/.style={fill=red!50},
+                          stack allocation/.style={fill=blue!50},
+                          heap allocation/.style={fill=green!50}]
+        \coordinate (o) at (-5,0);
+        \coordinate (static) at (o);
+        \coordinate (stack) at ($ (o) + (3,0) $);
+        \coordinate (heap) at ($ (o) + (6,0) $);
+
+        \draw[static allocation] (o) rectangle ++(3,-4);
+        \node[anchor=north,font=\scshape\bfseries] at ($ (static) + (1.5,0) $) {static};
+
+        \draw[stack allocation] (stack) rectangle ++(3,-4);
+        \node[anchor=north,font=\scshape\bfseries] at ($ (stack) + (1.5,0) $) {stack};
+
+        \draw[heap allocation] (heap) rectangle ++(3,-4);
+        \node[anchor=north,font=\scshape\bfseries] at ($ (heap) + (1.5,0) $) {heap};
+
+        \node[anchor=north west,inner sep=0pt] at ($ (static) + (0,-1) $) {
+          \parbox{3cm}{\centering\scshape
+            class variables \\
+            {\tiny (only primitives)}
+          }
+        };
+        \node[anchor=north west,inner sep=0pt] at ($ (stack) + (0,-1) $) {
+          \parbox{3cm}{\centering\scshape
+            arguments \\
+            locals \\
+            {\tiny (only primitives)}
+          }
+        };
+        \node[anchor=north west,inner sep=0pt] at ($ (heap) + (0,-1) $) {
+          \parbox{3cm}{\centering\scshape
+            object variables
+          }
+        };
+      \end{tikzpicture}
+    \end{center}
+    \onslide<2>
+    \begin{center}
+      \begin{tikzpicture}[static allocation/.style={fill=red!50},
+                          stack allocation/.style={fill=blue!50},
+                          heap allocation/.style={fill=green!50}]
+        \coordinate (o) at (-5,0);
+        \coordinate (static) at (o);
+        \coordinate (stack) at ($ (o) + (3,0) $);
+        \coordinate (heap) at ($ (o) + (6,0) $);
+
+        \draw[static allocation] (o) rectangle ++(3,-4);
+        \node[anchor=north,font=\scshape\bfseries] at ($ (static) + (1.5,0) $) {static};
+
+        \draw[stack allocation] (stack) rectangle ++(3,-4);
+        \node[anchor=north,font=\scshape\bfseries] at ($ (stack) + (1.5,0) $) {stack};
+
+        \draw[heap allocation] (heap) rectangle ++(3,-4);
+        \node[anchor=north,font=\scshape\bfseries] at ($ (heap) + (1.5,0) $) {heap};
+
+        \node[anchor=north west,inner sep=0pt] at ($ (static) + (0,-1) $) {
+          \parbox{3cm}{\centering\scshape
+            globals \\
+            class variables \\
+            static locals \\
+          }
+        };
+        \node[anchor=north west,inner sep=0pt] at ($ (stack) + (0,-1) $) {
+          \parbox{3cm}{\centering\scshape
+            arguments \\
+            locals
+          }
+        };
+        \node[anchor=north west,inner sep=0pt] at ($ (heap) + (0,-1) $) {
+          \parbox{3cm}{\centering\scshape
+            anything created with \texttt{new}
+          }
+        };
+      \end{tikzpicture}
+    \end{center}
+  \end{overprint}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<1>
+    \begin{itemize}
+      \item Primitives: \texttt{int}, \texttt{boolean}, references, \dots
+    \end{itemize}
+    \onslide<2>
+    \begin{itemize}
+      \item Anything can be put anywhere
+            \begin{itemize}
+              \item Statically allocated objects
+              \item Heap allocated \texttt{int}s
+              \item \dots
+            \end{itemize}
+    \end{itemize}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Allocation Example}
+  \begin{center}
+    \begin{tikzpicture}[static allocation/.style={fill=red!50},
+                        stack allocation/.style={fill=blue!50},
+                        heap allocation/.style={fill=green!50},
+                        object/.style={drop shadow,draw,fill=white},
+                        remember picture]
+      \coordinate (o) at (-5,0);
+      \coordinate (static) at (o);
+      \coordinate (stack) at ($ (o) + (3,0) $);
+      \coordinate (heap) at ($ (o) + (6,0) $);
+
+      \draw[static allocation] (o) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (static) + (1.5,0) $) {static};
+
+      \draw[stack allocation] (stack) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (stack) + (1.5,0) $) {stack};
+
+      \draw[heap allocation] (heap) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (heap) + (1.5,0) $) {heap};
+
+      \node[object,anchor=north] (static int 32 bit) at ($ (static) + (1.5,-1)$ ) {32 bits};
+    \end{tikzpicture}
+  \end{center}
+  \code[language=c++14]{int-on-static.cpp}
+  \begin{tikzpicture}[remember picture,overlay,allocation/.style={-latex,thick}]
+    \codeoverlinex{int on static}
+    \draw[allocation] (int on static) -- (static int 32 bit);
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Allocation Example}
+  \begin{center}
+    \begin{tikzpicture}[static allocation/.style={fill=red!50},
+                        stack allocation/.style={fill=blue!50},
+                        heap allocation/.style={fill=green!50},
+                        object/.style={drop shadow,draw,fill=white},
+                        remember picture]
+      \coordinate (o) at (-5,0);
+      \coordinate (static) at (o);
+      \coordinate (stack) at ($ (o) + (3,0) $);
+      \coordinate (heap) at ($ (o) + (6,0) $);
+
+      \draw[static allocation] (o) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (static) + (1.5,0) $) {static};
+
+      \draw[stack allocation] (stack) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (stack) + (1.5,0) $) {stack};
+
+      \draw[heap allocation] (heap) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (heap) + (1.5,0) $) {heap};
+
+      \node[object,anchor=north] (stack int 32 bit) at ($ (stack) + (1.5,-1)$ ) {32 bits};
+    \end{tikzpicture}
+  \end{center}
+  \code[language=c++14]{int-on-stack.cpp}
+  \begin{tikzpicture}[remember picture,overlay,allocation/.style={-latex,thick}]
+    \codeoverlinex{int on stack}
+    \draw[allocation] (int on stack) -- (stack int 32 bit);
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Allocation Example}
+  \begin{center}
+    \begin{tikzpicture}[static allocation/.style={fill=red!50},
+                        stack allocation/.style={fill=blue!50},
+                        heap allocation/.style={fill=green!50},
+                        object/.style={drop shadow,draw,fill=white},
+                        remember picture]
+      \coordinate (o) at (-5,0);
+      \coordinate (static) at (o);
+      \coordinate (stack) at ($ (o) + (3,0) $);
+      \coordinate (heap) at ($ (o) + (6,0) $);
+
+      \draw[static allocation] (o) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (static) + (1.5,0) $) {static};
+
+      \draw[stack allocation] (stack) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (stack) + (1.5,0) $) {stack};
+
+      \draw[heap allocation] (heap) rectangle ++(3,-4);
+      \node[anchor=north,font=\scshape\bfseries] at ($ (heap) + (1.5,0) $) {heap};
+
+      \node[object,anchor=north] (heap int pointer) at ($ (stack) + (1.5,-1)$ ) {address};
+      \node[object,anchor=north] (heap int 32 bit) at ($ (heap) + (1.5,-1)$ ) {32 bits};
+    \end{tikzpicture}
+  \end{center}
+  \code[language=c++14]{int-on-heap.cpp}
+  \begin{tikzpicture}[remember picture,overlay,allocation/.style={-latex,thick}]
+    \codeoverlinex{int pointer on stack}
+    \codeoverlinex{int on heap}
+    \draw[allocation] (int pointer on stack) -- (heap int pointer);
+    \draw[allocation] (int on heap) -- (heap int 32 bit);
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Allocation}
+  \begin{itemize}
+    \item Same applies on \emph{all} types
+    \item Same treatment for both primitives and objects
+    \item For example, objects can be put on stack
+  \end{itemize}
+
+  \code[language=c++14]{object-on-stack.cpp}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "allocation-methods"
+%%% End:

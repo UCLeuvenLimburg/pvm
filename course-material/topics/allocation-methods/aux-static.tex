@@ -1,0 +1,129 @@
+\section{Static Allocation}
+
+\begin{frame}
+  \tableofcontents[currentsection]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Static Allocation}
+  \begin{itemize}
+    \item Simplest allocation mechanism
+    \item Fastest
+    \item Most restrictive
+    \item Was only available allocation method in first programming language (Fortran, early 1950s)
+  \end{itemize}
+  \vskip1cm
+  \begin{center}
+    {\color{red}\Huge\danger}
+    \parbox{8cm}{\centering 
+      {\color{red}\Huge \textsc{warning}} \\
+      Examples that follow are what-ifs \\
+      They do not show how really \cpp\ works
+    }
+    {\color{red}\Huge\danger}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{How Does It Work?}
+  \notrealcpp
+  \begin{itemize}
+    \item Compiler scans source code for variables
+          \begin{itemize}
+            \item Parameters, locals, globals, \dots
+          \end{itemize}
+    \item The compiler assigns a fixed address to each variable
+  \end{itemize}
+  \code[language=c++14,frame=none]{allocation.cpp}
+  \begin{tikzpicture}[overlay,remember picture,allocation/.style={-latex,thick}]
+    \coordinate (upperleft) at (6,4);
+
+    \begin{scope}[scale=.5]
+      \coordinate (double) at (upperleft);
+      \coordinate (int) at ($ (upperleft) + (0,-1) $);
+      \coordinate (char) at ($ (upperleft) + (4,-1) $);
+
+      \visible<2->{
+        \draw[fill=red!50] (double) rectangle ++(8,-1);
+      }
+
+      \visible<3->{
+        \draw[fill=green!50] (int) rectangle ++(4,-1);
+      }
+
+      \visible<4->{
+        \draw[fill=blue!50] (char) rectangle ++(1,-1);
+      }
+
+      \draw (upperleft) grid ++(8,-4);
+    \end{scope}
+
+    \visible<2>{
+      \draw[allocation] (global) -- (double);
+    }
+
+    \visible<3>{
+      \draw[allocation] (param) -- ($ (int) + (0,-0.25) $);
+    }
+
+    \visible<4>{
+      \draw[allocation] (local) -- ($ (char) + (0,-0.25) $);
+    }
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Consequences of Static Allocation}
+  \notrealcpp
+  \begin{itemize}
+    \item Compiler needs to have full knowledge at compile-time
+  \end{itemize}
+  \code{array-creation.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Consequences of Static Allocation}
+  \notrealcpp
+  \begin{itemize}
+    \item Local variables ``remember'' their values
+  \end{itemize}
+  \code[language=c++14]{static-locals.cpp}
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Quick Intermezzo}
+%   \begin{itemize}
+%     \item You can actually make this work in \cpp
+%     \item Static local variables remember their values
+%   \end{itemize}
+%   \code{static-locals-working.cpp}
+% \end{frame}
+
+\begin{frame}
+  \frametitle{Consequences of Static Allocation}
+  \notrealcpp
+  \begin{itemize}
+    \item Recursion does not work
+  \end{itemize}
+  \code[language=c++14]{static-recursion.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Static Allocation}
+  \begin{procontralist}
+    \pro Very fast
+    \pro No bookkeeping needed at runtime
+    \pro No out-of-memory errors possible at runtime
+    \pro Entire memory footprint known beforehand
+    \con Data structure size must be known at compile time
+    \con Full recompilation needed to allow larger data structures
+    \con Cannot make use of extra RAM:
+         If it's been compiled to work with 1MB but you have 8GB, too bad
+    \con No recursion possible
+  \end{procontralist}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "allocation-methods"
+%%% End:
