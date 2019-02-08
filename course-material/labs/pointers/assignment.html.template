@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Pointers</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             void main()
+             {
+               int x = 5;
+               int* px = &x;
+
+               std::cout << *px << std::endl;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? If the code does not compile, enter <code>DNC</code>. If the code leads to undefined behaviour, answer with <code>???</code>.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end                                  
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             void main()
+             {
+               int x = 97;
+
+               std::cout << *&*&*&*&x << std::endl;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? If the code does not compile, enter <code>DNC</code>. If the code leads to undefined behaviour, answer with <code>???</code>.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end                                  
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             void foo(int* x)
+             {
+               *x *= 2;
+             }
+
+             void main()
+             {
+               int x = 5;
+               foo(&x);
+
+               std::cout << x << std::endl;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? If the code does not compile, enter <code>DNC</code>. If the code leads to undefined behaviour, answer with <code>???</code>.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end                                  
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* foo()
+             {
+               int x = 5;
+               return &x;
+             }
+
+             void main()
+             {
+               std::cout << *foo() << std::endl;
+             }
+           END
+
+           self.output = '???'
+
+           <<-END
+             <p>What is the output of the following code? If the code does not compile, enter <code>DNC</code>. If the code leads to undefined behaviour, answer with <code>???</code>.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end                                  
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             void main()
+             {
+               int x = 5, y = 9;
+
+               int* p = &x;
+               ++*p;
+               
+               p = &y;
+               --*p;
+                             
+               std::cout << x << " " << y << " " << *p << std::endl;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? If the code does not compile, enter <code>DNC</code>. If the code leads to undefined behaviour, answer with <code>???</code>.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end                                  
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             void main()
+             {
+               int x = 5, y = 9;
+               int* p = &x;
+               int* q = &y;
+               
+               p = q;
+               *p = *q;
+                             
+               std::cout << x << " " << y << " " << *p << " " << *q << std::endl;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? If the code does not compile, enter <code>DNC</code>. If the code leads to undefined behaviour, answer with <code>???</code>.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end                                  
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             void main()
+             {
+               int x = 0, y = 1;
+               int* p = &y;
+               int* q = &x;
+               int** pp = &q;
+               int** qq = &p;
+               
+               std::cout << x << " " << y << " " << *p << " " << *q << " " << **pp << " " << **qq << std::endl;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? If the code does not compile, enter <code>DNC</code>. If the code leads to undefined behaviour, answer with <code>???</code>.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end                                  
+      %>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            #include <iostream>
+
+            void main()
+            {
+              int x = 56, y = 10;
+              int q, r;
+
+              quotrest(x, y, &q, &r);
+
+              std::cout << q << " " << r << std::endl;
+            }
+          END
+
+          <<-END
+            <p>
+              Write a function <code>quotrest</code> that
+              returns both the quotient and the rest of two integers.
+              Use out-parameters to be able to return these two results. For example,
+              the code below should print <code>5&nbsp;6</code>.
+            </p>
+            #{show_source_editor}
+            <p>
+              Open the solution at <code>labs/pointers/quotrest</code>.
+              It contains two projects: <code>student</code> and <code>solution</code>.
+              Add files <code>quotrest.cpp</code> and <code>quotrest.h</code>
+              to the <code>student</code> project and write the necessary code to make the tests work.
+            </p>
+            <p>
+              If you cannot find the solution in the repo, you need to <code>git pull</code> first.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            #include <iostream>
+
+            void main()
+            {
+              int x = 3, y = 4;
+
+              swap(&x, &y);
+
+              std::cout << x << " " << y << std::endl;
+            }
+          END
+
+          <<-END
+            <p>
+              Open the solution at <code>labs/pointers/swap</code>.
+              Add files <code>swap.cpp</code> and <code>swap.h</code>.
+              Write a function <code>swap</code> that can be used
+              to exchange the values of two variables. Use pointers to make this possible.
+              For example, the code below should output <code>4&nbsp;3</code>.
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            #include <iostream>
+
+            void main()
+            {
+              int x = 8, y = 1, z = 5;
+              int* p = min(&x, &y, &z);
+         
+              ++*p;
+
+              // Prints 8 2 5
+              std::cout << x << " " << y << " " << z << std::endl;
+            }
+          END
+
+          <<-END
+            <p>
+              Open the solution at <code>labs/pointers/min</code>.
+              Write a function <code>min</code> that returns
+              a pointer to the lesser of three arguments.
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Open the solution at <code>labs/pointers/minmax</code>.
+              You will need to write the following functions:
+            </p>
+            <ol>
+              <li>
+                <code>max</code> which operates similarly to the <code>min</code>-function
+                from a previous exercise: given 3 parameters, it must return a pointer
+                to the one with the highest value.
+              </li>
+              <li>
+                <code>minmax</code> must look for pointers to both the minimum
+                and maximum of three numbers. This means it will receive 5 parameters:
+                3 parameters giving the 3 values for which to find the minimum and maximum,
+                and 2 extra out-parameters ready to receive pointers to the minimum and maximum.
+              </li>
+              <li>
+                <code>swap_min_and_max</code> that given three parameters,
+                swaps the minimum and maximum. For example, <code>1 2 3</code> should be transformed
+                into <code>3 2 1</code>.
+              </li>
+            </ol>
+            <p>
+              Take a look at the tests in <code>tests.cpp</code>
+              if you need some examples of how the functions are expected
+              to behave.
+            </p>
+            <p>
+              Code for <code>min</code> and <code>swap</code> is given because you already made
+              these in previous exercises and they will come in handy for this exercise.
+            </p>
+          END
+        end
+            %>
+         
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            struct Foo
+            {
+                // Single public field
+                int x;
+            };
+
+            // Creation Foo object on stack
+            Foo foo;
+
+            // Accessing field
+            foo.x = 5;
+          END
+          
+          <<-END
+            <p>
+              Open the solution at <code>labs/pointers/linked_list</code>.
+              You will need to write a number of linked list related functions.
+            </p>
+            <p>
+              For this exercise, we will need <code>struct</code>s.
+              You can assume these are classes whose members are public for now;
+              they will be discussed in more detail in later sessions.
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+         
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+  </script>
+</html>
