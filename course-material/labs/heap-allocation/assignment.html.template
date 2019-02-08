@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Heap Allocation</div>
+    </header>
+    <div id="contents">
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            #include <iostream>
+
+            int main()
+            {
+              int x = new int;
+              x = 0;
+              
+              std::cout << x << std::endl;
+
+              delete x;
+            }
+          END
+          
+          <<-END
+            <p>
+              Find out what's wrong with this code.
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+      
+      <div data-revealer="Show solution" class="solution">
+        <p>
+          <code>new int</code> returns an <code>int*</code>, therefore you cannot
+          assign it to <code>int x</code>.
+        </p>
+      </div>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            #include <iostream>
+
+            int main()
+            {
+              int* p = new int;
+
+              std::cin >> *p;
+              std::cout << "Square = " << *p * *p << std::endl;
+            }
+          END
+          
+          <<-END
+            <p>
+              Find out what's wrong with this code.
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+      
+      <div data-revealer="Show solution" class="solution">
+        <p>
+          The program has a memory leak: it never frees <code>p</code>.
+          In this particular instance, no harm is done, as the program
+          exits immediately afterwards, at which point the OS reclaims
+          all memory. Memory leaks are only a problem as long as the leaking application
+          is running.
+        </p>
+      </div>
+
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            #include <iostream>
+
+            int main()
+            {
+              int* p = new int;
+
+              std::cin >> *p;
+              std::cout << "Square = " << *p * *p << std::endl;
+
+              delete *p;
+            }
+          END
+          
+          <<-END
+            <p>
+              Find out what's wrong with this code.
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+      
+      <div data-revealer="Show solution" class="solution">
+        <p>
+          <code>delete</code> expects a pointer, not a pointee.
+          Use <code>delete p</code> instead of <code>delete *p</code>.
+        </p>
+      </div>
+
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            struct linked_list
+            {
+              int x;
+              linked_list* next;
+            };
+
+            void free_list(linked_list* p)
+            {
+              if ( p != nullptr )
+              {
+                delete p;
+                free_list( (*p).next );            
+              }
+            }
+          END
+          
+          <<-END
+            <p>
+              Find out what's wrong with this code.
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+      
+      <div data-revealer="Show solution" class="solution">
+        <p>
+          While this code will very probably work as intended, its behaviour is actually undefined:
+          it tries to access the <code>next</code> field after <code>p</code> has been deleted.
+          A correct implementation would first make the recursive call, and only then
+          <code>delete p</code>.
+        </p>
+      </div>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            struct linked_list
+            {
+              int x;
+              linked_list* next;
+            };
+
+            void free_list(linked_list* p)
+            {
+              if ( p != nullptr )
+              {
+                free_list( (*p).next );            
+                delete p;
+              }
+            }
+
+            int main()
+            {
+              linked_list lst;
+              lst.x = 5;
+              lst.next = nullptr;
+              linked_list* p = &lst;
+
+              // Use p
+
+              free_list(&lst);
+              free_list(&lst);
+            }
+          END
+          
+          <<-END
+            <p>
+              Find out what's wrong with this code.
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+      
+      <div data-revealer="Show solution" class="solution">
+        <p>
+          Of course you cannot delete the same list twice. But you are not even allowed to delete it once,
+          as the list is stack allocated, not heap allocated.
+        </p>
+      </div>
+
+
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
