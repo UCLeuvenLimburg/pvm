@@ -1,0 +1,135 @@
+\section{Copy Constructor}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Copy Constructor}
+  \begin{itemize}
+    \item Constructor that takes single \texttt{const C\&} parameter
+    \item Again simplified rule, \link{http://en.cppreference.com/w/cpp/language/copy_constructor}{details here}
+  \end{itemize}
+  \code[language=c++14,width=.6\linewidth]{copy-constructor.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{When Is It Called?}
+  \begin{overprint}
+    \onslide<1>
+    \code[language=c++14,width=.9\linewidth]{copy-constructor-init.cpp}
+    \onslide<2>
+    \code[language=c++14,width=.9\linewidth]{copy-constructor-assignment.cpp}
+    \onslide<3>
+    \code[language=c++14,width=.9\linewidth]{default-constructor-parameter.cpp}
+    \onslide<4>
+    \code[language=c++14,width=.9\linewidth]{default-constructor-return.cpp}
+  \end{overprint}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<1-2>
+    \begin{center}
+      When creating a new object \texttt{T} from another \texttt{T}
+    \end{center}
+
+    \onslide<3>
+    \begin{center}
+      When passing an object by value \\ (i.e.\ not by reference or pointer)
+    \end{center}
+
+    \onslide<4>
+    \begin{center}
+      When returning an object by value \\ (i.e.\ not by reference or pointer)
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ambiguous Behaviour}
+  \begin{itemize}
+    \item Compiler is allowed to transform your code
+          \begin{itemize}
+            \item Tries to make it run faster
+            \item Behaviour should remain unchanged
+          \end{itemize}
+    \item \cpp\ standard allows some optimisations to affect behaviour
+    \item Copy constructor is example of this
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ambiguous Behaviour}
+  \code[language=c++14,width=.85\linewidth,font=\small]{optimisation.cpp}
+  \begin{itemize}
+    \item Has (at least) three legal semantics!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ambiguous Behaviour: Interpretation 1}
+  \begin{enumerate}
+    \item \texttt{bar} constructs \texttt{Foo} object (\texttt{D})
+    \item \texttt{return} copies this object to temporary ``return variable'' (\texttt{C})
+    \item Return value gets copied to \texttt{foo} (\texttt{C})
+  \end{enumerate}
+  \vskip5mm
+  \structure{Final Output}
+  \begin{center}
+    \ttfamily DCC
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ambiguous Behaviour: Interpretation 2}
+  \begin{enumerate}
+    \item \texttt{bar} constructs \texttt{Foo} object (\texttt{D})
+    \item \link{http://en.cppreference.com/w/cpp/language/copy_elision}{Copy elision optimisation} kicks in
+    \item \texttt{return} copies this object directly to \texttt{foo} (\texttt{C})
+  \end{enumerate}
+  \vskip5mm
+  \structure{Final Output}
+  \begin{center}
+    \ttfamily DC
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ambiguous Behaviour: Interpretation 3}
+  \begin{enumerate}
+    \item \link{https://en.wikipedia.org/wiki/Return_value_optimization}{Named return value optimization} kicks in
+    \item \texttt{bar} constructs \texttt{Foo} object directly in \texttt{foo} (\texttt{D})
+  \end{enumerate}
+  \vskip5mm
+  \structure{Final Output}
+  \begin{center}
+    \ttfamily D
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ambiguous Behaviour: Conclusion}
+  \begin{itemize}
+    \item Compiler optimisations can change behaviour
+    \item Code has three possible outcomes (\texttt{DCC}, \texttt{DC}, \texttt{D})
+    \item How to deal with this?
+          \begin{itemize}
+            \item Copy constructor should only copy
+            \item Copy constructor should not have side effects
+            \item It should not matter how many times it gets called
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Automatic Generation}
+  \begin{itemize}
+    \item Compiler generates copy constructor for you if you don't define one yourself
+    \item Having no copy constructor is rather limiting
+    \item Generated constructor copies fields one by one
+    \item \link{http://en.cppreference.com/w/cpp/language/copy_constructor}{Technical details}
+  \end{itemize}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "constructors"
+%%% End:

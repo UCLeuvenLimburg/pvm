@@ -1,0 +1,29 @@
+\usepackage{ucll-code}
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{Classes: Constructors}
+\author{Fr\'ed\'eric Vogels}
+
+\newcommand{\highlightbox}[2][]{
+  \draw[opacity=.75,ultra thick,red,#1] ($ (#2.south west) + (-.1,-.1) $) rectangle ($ (#2.north east) + (.1,.1) $)
+}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\input{aux-default-constructor.tex}
+\input{aux-copy-constructors.tex}
+\input{aux-unary-constructors.tex}
+\input{aux-move-constructors.tex}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "constructors"
+%%% End:

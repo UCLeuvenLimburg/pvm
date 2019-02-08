@@ -1,0 +1,65 @@
+\section{Unary Constructor}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Unary Constructors}
+  \begin{itemize}
+    \item Constructors for \texttt{T} that take single non-\texttt{T} parameter
+    \item These constructors also have special meaning in \cpp
+  \end{itemize}
+  \vskip5mm
+  \code[language=c++14]{unary-constructor.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{When Are They Called?}
+  \begin{overprint}
+    \onslide<1>
+    \code[language=c++14,width=.9\linewidth]{unary-constructor-stack.cpp}
+    \onslide<2>
+    \code[language=c++14,width=.9\linewidth]{unary-constructor-stack-assign.cpp}
+    \onslide<3>
+    \code[language=c++14,width=.9\linewidth]{unary-constructor-heap.cpp}
+    \onslide<4>
+    \code[language=c++14,width=.9\linewidth]{unary-constructor-parameter.cpp}
+    \onslide<5>
+    \code[language=c++14,width=.9\linewidth]{unary-constructor-return.cpp}
+  \end{overprint}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<1-3>
+    \begin{center}
+      When creating an object with one argument
+    \end{center}
+    \onslide<4-5>
+    \begin{center}
+      When a cast could help
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dangers of Implicit Cast}
+  \begin{itemize}
+    \item The cast-like behaviour can easily lead to bugs
+  \end{itemize}
+  \code[language=c++14,width=.9\linewidth,font=\small]{bug.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Making Casting Behaviour Explicit}
+  \begin{itemize}
+    \item You can prevent \cpp\ from casting implicitly
+  \end{itemize}
+  \code[language=c++14,width=.9\linewidth,font=\small]{explicit.cpp}
+  \codeunderlinex{explicit}
+\end{frame}
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "constructors"
+%%% End:
