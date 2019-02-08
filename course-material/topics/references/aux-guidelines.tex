@@ -1,0 +1,94 @@
+\section{Guidelines}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Limitations of References}
+  \begin{itemize}
+    \item References cannot be retargeted
+          \begin{itemize}
+            \item Once a reference refers to \texttt{x}, it does so forever
+          \end{itemize}
+    \item References cannot be null
+  \end{itemize}
+  \vskip4mm
+  \code[language=c++14]{redirection.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{When To Use References}
+  \begin{itemize}
+    \item Rule of Thumb: prefer references over pointers
+          \begin{itemize}
+            \item Unfortunately, pointers will often still be unavoidable
+          \end{itemize}
+    \item In practice: mostly used with functions
+          \begin{itemize}
+            \item \texttt{const T\&} parameters
+            \item \texttt{T\&} return values
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Do Not Use References for Out Parameters}
+  \code[language=c++14]{out-params.cpp}
+  \begin{itemize}
+    \item It is important to know whether \texttt{x} could change
+    \item If signature is \texttt{void foo(int)}, \texttt{x} cannot change
+    \item If signature is \texttt{void foo(int\&)}, \texttt{x} could change
+    \item Whether \texttt{x} can change depends on \texttt{foo}'s signature
+    \item Signature not immediately visible above
+    \item We would have to look it up
+    \item Would seriously impede code reading
+    \item Code above should visually express whether \texttt{x} can change
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Do Not Use References for Out Parameters}
+  \begin{itemize}
+    \item We introduce a convention
+    \item Having to write \texttt{foo(x)} should mean \texttt{x} remain unmodified
+          \begin{itemize}
+            \item $\rightarrow$ \texttt{foo} receives \texttt{T} or \texttt{const T\&}
+          \end{itemize}
+    \item Having to write \texttt{foo(\&x)}, it signals \texttt{x} could change
+          \begin{itemize}
+            \item $\rightarrow$ \texttt{foo} receives \texttt{T*}
+          \end{itemize}
+    \item The \& makes it explicit that \texttt{x} could change
+    \item No need to look up \texttt{foo}'s signature
+    \item This way, we are able to understand code quicker
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{How To Pass Parameters}
+  \begin{center}
+    \begin{tabular}{ccc}
+      & \textbf{Small} & \textbf{Large} \\
+      \toprule
+      \textbf{Read} & \texttt{T} & \texttt{const T\&} \\
+      \textbf{Read+Write} & \texttt{T*} & \texttt{T*} \\
+    \end{tabular}
+  \end{center}
+  \vskip4mm
+  \structure{Readonly Access}
+  \begin{itemize}
+    \item Small values: pass by value
+    \item Large values: pass by const reference
+  \end{itemize}
+  \vskip4mm
+  \structure{Read and Write Access}
+  \begin{itemize}
+    \item Always by pointer
+  \end{itemize}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "references"
+%%% End:

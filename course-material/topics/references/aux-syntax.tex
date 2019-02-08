@@ -1,0 +1,57 @@
+\section{Syntax}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Pointers}
+  \begin{procontralist}
+    \pro Efficient way to give access to large amounts of data
+    \pro Allow to give write-access to own variables
+    \con Clumsy syntax
+  \end{procontralist}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<1>
+    \code[language=c++14]{clumsy1.cpp}
+
+    \onslide<2>
+    \code[language=c++14]{clumsy2.cpp}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{References}
+  \begin{itemize}
+    \item C has only pointers
+    \item \cpp\ introduced references
+    \item Gives same ``power'' as pointers
+    \item Uses pointers behind the scenes
+    \item Much cleaner syntax
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Syntax}
+  \begin{center}
+    \begin{tabular}{cl}
+      \textbf{Syntax}       & \textbf{Semantic} \\
+      \toprule
+      \texttt{T[]}          & Array of \texttt{T}s \\
+      \texttt{const T}      & Readonly view of \texttt{T} \\
+      \texttt{T*}           & Pointer to \texttt{T} \\
+      \alert{\texttt{T\&}}  & \alert{Reference to \texttt{T}} \\
+    \end{tabular}
+  \end{center}
+  \begin{framed}
+    \begin{center} \Large
+      \textbf{Warning} \\[2mm]
+      Do not confuse with address-of operator!
+    \end{center}
+  \end{framed}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "references"
+%%% End:

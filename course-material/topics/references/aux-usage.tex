@@ -1,0 +1,102 @@
+\section{Usage}
+\subsection{Pass By Reference}
+
+\frame{\tableofcontents[currentsubsection]}
+
+
+\begin{frame}
+  \frametitle{Parameter Passing}
+  \begin{overprint}
+    \onslide<1>
+    \code[width=.5\linewidth,language=c++14]{by-value.cpp}
+
+    \onslide<2>
+    \code[width=.5\linewidth,language=c++14]{by-pointer.cpp}
+
+    \onslide<3>
+    \code[width=.5\linewidth,language=c++14]{by-reference.cpp}
+  \end{overprint}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<1>
+    \begin{itemize}
+      \item {\tt foo} receives \emph{copy} of {\tt x}
+      \item {\tt foo} only has access to the {\tt value} of the variable
+      \item {\tt foo} cannot modify {\tt x} in any way
+    \end{itemize}
+
+    \onslide<2>
+    \begin{itemize}
+      \item \texttt{foo} receives the \emph{address} of \texttt{x}
+      \item \texttt{foo} has access to the {\tt value} of \texttt{x}
+            \begin{itemize}
+              \item Syntax: \texttt{int y = *arg}
+            \end{itemize}
+      \item \texttt{foo} can modify {\tt x}
+            \begin{itemize}
+              \item Syntax: \texttt{*arg = 6}
+            \end{itemize}
+    \end{itemize}
+
+    \onslide<3>
+    \begin{itemize}
+      \item {\tt foo} receives a \emph{reference} to {\tt x}
+      \item Gives same access as when using pointer
+            \begin{itemize}
+              \item \texttt{foo} can read \texttt{x}
+              \item \texttt{foo} can modify \texttt{x}
+            \end{itemize}
+      \item What's the difference then except for the \texttt{\&}?
+    \end{itemize}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Syntax}
+  \code[language=c++14,width=.5\linewidth,font=\small]{reference-syntax.cpp}
+  \begin{itemize}
+    \item No need for dereferencing (no \texttt{*x}, just \texttt{x})
+    \item Cleaner syntax
+  \end{itemize}
+\end{frame}
+
+\subsection{Aliasing}
+\frame{\tableofcontents[currentsubsection]}
+
+
+\begin{frame}
+  \frametitle{Aliasing}
+  \begin{itemize}
+    \item Introducing another name for a variable
+  \end{itemize}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<1>
+    \code[language=c++14,font=\small]{aliasing1.cpp}
+
+    \onslide<2>
+    \code[language=c++14,font=\small]{aliasing2.cpp}
+  \end{overprint}
+\end{frame}
+
+\subsection{Returning References}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Returning References}
+  \code[language=c++14]{max-reference.cpp}
+  \begin{itemize}
+    \item Intuition: \texttt{max} returns the variable itself, not just its value
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Returning References}
+  \code[language=c++14]{field-reference.cpp}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "references"
+%%% End:
