@@ -1,0 +1,89 @@
+\usepackage{ucll-code}
+
+\usetikzlibrary{shadows,math}
+
+\title{Technical Details}
+\author{Fr\'ed\'eric Vogels}
+
+\errorcontextlines 10000
+
+\makeatletter
+\pgfkeys{
+  /ucll/pvm/.cd,
+  start/.initial=0,
+  size/.initial=1,
+  height unit/.initial={0.75},
+  contents/.initial={},
+  id/.initial=sf,
+  node style/.initial=unknown,
+  stack frame/.style={minimum width=2cm,fill=red!50,font=\sc,draw},
+  invisible stack frame/.style={minimum width=2cm,draw=none},
+  heap object/.style={minimum width=2cm,fill=blue!50,draw},
+}
+\newcommand{\alloc@block}[1][]{
+  {
+    \pgfkeys{
+      /ucll/pvm/.cd,
+      #1,
+      /ucll/pvm/start/.get=\ucll@start,
+      /ucll/pvm/size/.get=\ucll@size,
+      /ucll/pvm/height unit/.get=\ucll@heightunit,
+      /ucll/pvm/contents/.get=\ucll@contents,
+      /ucll/pvm/node style/.get=\ucll@nodestyle,
+      /ucll/pvm/id/.get=\ucll@id,
+    }
+    \tikzmath{
+      real \ucll@y;
+      real \ucll@height;
+      \ucll@y = \ucll@start * \ucll@heightunit;
+      \ucll@height = \ucll@size * \ucll@heightunit;
+    }
+    \node[\ucll@nodestyle,minimum height={\ucll@height cm},anchor=north west,font=\tiny] (\ucll@id) at (0,-\ucll@y) {\ucll@contents};
+  }
+}
+\newcommand{\stackframe}[1][]{
+  \alloc@block[node style=/ucll/pvm/stack frame,#1]
+}
+\newcommand{\invisiblestackframe}[1][]{
+  \alloc@block[node style=/ucll/pvm/invisible stack frame,#1,contents={}]
+}
+\newcommand{\heapobject}[1][]{
+  \begin{scope}[xshift=2.3cm]
+    \alloc@block[node style=/ucll/pvm/heap object,#1]
+  \end{scope}
+}
+
+\newcommand{\memorylayout}{
+  \node[anchor=south] at (1,0) {\textsc{stack}};
+  \draw[fill=red!25] (-0.1,0.1) rectangle (2.1,-5.1);
+  \begin{scope}[xshift=2.3cm]
+    \node[anchor=south] at (1,0) {\textsc{heap}};
+    \draw[fill=blue!25] (-0.1,0.1) rectangle (2.1,-5.1);
+  \end{scope}
+}
+\makeatother
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\input{aux-intro.tex}
+\input{aux-call-by-value.tex}
+\input{aux-call-by-pointer.tex}
+\input{aux-call-by-reference.tex}
+\input{aux-return-by-value.tex}
+\input{aux-return-local-by-pointer.tex}
+\input{aux-return-heap-by-pointer.tex}
+\input{aux-return-arg-by-reference.tex}
+\input{aux-assignment.tex}
+\input{aux-assignment-comparison.tex}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:

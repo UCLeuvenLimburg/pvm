@@ -1,0 +1,97 @@
+\begin{frame}
+  \frametitle{Returning by Pointer or Reference}
+  \begin{itemize}
+    \item When is it ok to return a pointer or reference?
+    \item Whenever the object pointed to still exists after the function cleans up
+    \item E.g.~it can return a pointer/reference to a heap-allocated object
+    \item It can return a pointer/reference to an object
+          it received by pointer/reference (see examples on next slides)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Returning Heap-Allocated Object By Pointer}
+  \begin{center}
+    \begin{columns}
+      \column{5cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{return-heap-by-pointer.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+        
+        \only<2-10>{
+          \stackframe[start=0,contents={p = ?}]
+        }
+        \only<5-8>{
+          \stackframe[start=1,contents={q = ?}]
+        }
+        \only<7->{
+          \heapobject[start=0,contents={Bar(x=1,y=2)},id=bar];
+        }
+        \only<9-12>{
+          \stackframe[start=1,contents={q},id=q]
+          \draw[-latex] (q.east) -- (bar.west);
+        }
+        \only<11->{
+          \stackframe[start=0,contents={p},id=p]
+          \draw[-latex] (p.east) -- (bar.west);
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1-2>
+    \begin{center}
+      Space gets allocated (but not initialised) for {\tt p}
+    \end{center}
+
+    \onslide<3>
+    \begin{center}
+      {\tt foo} gets called.
+    \end{center}
+
+    \onslide<4-5>
+    \begin{center}
+      {\tt q} gets allocated on the stack
+    \end{center}
+
+    \onslide<6-7>
+    \begin{center}
+      {\tt b} gets created on the heap.
+    \end{center}
+
+    \onslide<8-9>
+    \begin{center}
+      {\tt q} points to the newly created heap-object
+    \end{center}
+
+    \onslide<10-11>
+    \begin{center}
+      {\tt foo} returns {\tt q} \\
+      The address it contains gets copied to {\tt p}
+    \end{center}
+
+    \onslide<12-13>
+    \begin{center}
+      {\tt foo}'s locals get cleaned up \\
+      {\tt q} is the only local, and since it is a {\tt Bar*}, nothing happens (i.e.~no destructors)
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Returning Heap Objects by Reference}
+  \code{return-heap-by-reference.cpp}
+  \begin{itemize}
+    \item This works, but it's rather unidiomatic
+    \item It makes more sense to return a pointer
+    \item Or better yet, a {\tt std::shared\_ptr}
+  \end{itemize}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:

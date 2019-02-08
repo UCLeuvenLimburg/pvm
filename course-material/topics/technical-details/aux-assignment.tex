@@ -1,0 +1,70 @@
+\begin{frame}
+  \frametitle{Assignment Operator}
+  \code[width=.5\linewidth]{assignment.cpp}
+  \begin{itemize}
+    \item {\tt x = y} where {\tt x} and {\tt y} are objects (not pointers/references)
+          copies the contents of {\tt y} to {\tt x}
+    \item The {\tt =} operator will generally overwrite all of {\tt x}'s fields with {\tt y}'s field values.
+    \item It is important to distinguish between using {\tt =} on objects and using {\tt =} on pointers
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment Operator On Objects}
+  \begin{center}
+    \begin{columns}
+      \column{5cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{assignment.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+        
+        \only<2-7>{
+          \stackframe[start=0,contents={bar.x = 1}]
+        }
+        \only<8->{
+          \stackframe[start=0,contents={bar.x = 3}]
+        }
+        \only<3-8>{
+          \stackframe[start=1,contents={bar.y = 2}]
+        }
+        \only<9->{
+          \stackframe[start=1,contents={bar.y = 6}]
+        }
+        \only<5-11>{
+          \stackframe[start=2,contents={temp.x = 1}]
+        }
+        \only<6-10>{
+          \stackframe[start=3,contents={temp.y = 2}]
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1-3>
+    \begin{center}
+      {\tt bar} gets created on stack using the default constructor
+    \end{center}
+
+    \onslide<4-6>
+    \begin{center}
+      {\tt foo} gets called. It creates a new object (default constructor) which we'll call {\tt temp}.
+    \end{center}
+
+    \onslide<7-9>
+    \begin{center}
+      {\tt Bar::operator =} gets called on {\tt bar} with as argument a reference to {\tt temp}
+    \end{center}
+
+    \onslide<10-12>
+    \begin{center}
+      {\tt temp} gets destroyed (destructor gets called)
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:

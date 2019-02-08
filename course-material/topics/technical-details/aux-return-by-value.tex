@@ -1,0 +1,313 @@
+\begin{frame}
+  \frametitle{Return By Value}
+  \code[frame=lines,width=.5\linewidth,font=\small]{return-by-value.cpp}
+  \begin{itemize}
+    \item {\tt foo} returns a {\tt Bar}
+    \item This means it returns it \emph{by value}
+    \item A copy must be made
+    \item This copy is made using a copy constructor
+    \item In reality, things are more complex
+          \begin{itemize}
+            \item Compiler can optimise: have {\tt foo} directly write to {\tt bar}
+            \item Move constructors can be used under certain circumstances
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Return By Value}
+  \begin{center}
+    \begin{columns}
+      \column{4cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{return-by-value.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+
+        \only<2->{
+          \stackframe[start=0,contents={bar.x = ?}]
+        }
+        \only<3->{
+          \stackframe[start=1,contents={bar.y = ?}]
+        }
+        \only<6->{
+          \stackframe[start=2,contents={b.x = 1}]
+        }
+        \only<7->{
+          \stackframe[start=3,contents={b.y = 2}]
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1-3>
+    \begin{center}
+      Space for {\tt bar} is allocated on stack \\
+      {\tt bar} is \emph{not} initialised yet \\
+      We have to wait for {\tt foo()}'s result
+    \end{center}
+
+    \onslide<4>
+    \begin{center}
+      {\tt foo} gets called.
+    \end{center}
+
+    \onslide<5-7>
+    \begin{center}
+      {\tt b} gets created on the stack.
+    \end{center}
+
+    \onslide<8>
+    \begin{center}
+      What happens next depends on your compiler and its optimisation settings\dots
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \begin{center} \Huge
+    Possible Path A \\[4mm]
+    The Path of Least Optimisation
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Return By Value (Path A)}
+  \begin{center}
+    \begin{columns}
+      \column{4cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{return-by-value.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+
+        \only<1-6>{
+          \stackframe[start=0,contents={bar.x = ?}]
+        }
+        \only<7->{
+          \stackframe[start=0,contents={bar.x = 3}]
+        }
+        \only<1-7>{
+          \stackframe[start=1,contents={bar.y = ?}]
+        }
+        \only<8-13>{
+          \stackframe[start=1,contents={bar.y = 4}]
+        }
+        \only<1-12>{
+          \stackframe[start=2,contents={b.x = 1}]
+        }
+        \only<1-11>{
+          \stackframe[start=3,contents={b.y = 2}]
+        }
+        \only<2-10>{
+          \stackframe[start=4,contents={temp.x = 2}]
+        }
+        \only<3-9>{
+          \stackframe[start=5,contents={temp.y = 3}]
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1-3>
+    \begin{center}
+      Returning {\tt b} creates a copy of {\tt b} \\
+      Let's call it {\tt temp} \\
+    \end{center}
+
+    \onslide<4>
+    \begin{center}
+      {\tt temp} is considered the object that is returned by {\tt foo}
+    \end{center}
+
+    \onslide<5>
+    \begin{center}
+      We can continue initialising {\tt bar}. \\
+      If declaration and assignment occur on the same line (as is the case here),
+      the copy constructor is called.
+    \end{center}
+
+    \onslide<6-8>
+    \begin{center}
+      The copy constructor is called with a reference to {\tt temp} as its argument
+    \end{center}
+
+    \onslide<9-13>
+    \begin{center}
+      {\tt temp} and {\tt b} are cleaned up \\
+      {\tt \~{}Bar()} is called twice
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \begin{center} \Huge
+    Possible Path B \\[4mm]
+    Return Value Optimisation (RVO)
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Return By Value (Path B)}
+  \begin{center}
+    \begin{columns}
+      \column{4cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{return-by-value.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+
+        \only<1-2>{
+          \stackframe[start=0,contents={bar.x = ?}]
+        }
+        \only<3->{
+          \stackframe[start=0,contents={bar.x = 2}]
+        }
+        \only<1-3>{
+          \stackframe[start=1,contents={bar.y = ?}]
+        }
+        \only<4->{
+          \stackframe[start=1,contents={bar.y = 3}]
+        }
+        \only<1-6>{
+          \stackframe[start=2,contents={b.x = 1}]
+        }
+        \only<1-5>{
+          \stackframe[start=3,contents={b.y = 2}]
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1>
+    \begin{center}
+      The compiler is allowed to omit making a copy of {\tt b} prior to returning it \\
+      {\tt b} is then considered the object that is returned
+    \end{center}
+
+    \onslide<2-4>
+    \begin{center}
+      The copy constructor initialising {\tt bar} is called with a reference to {\tt b} as argument
+    \end{center}
+
+    \onslide<5-7>
+    \begin{center}
+      {\tt b}'s destructor is called
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \begin{center} \Huge
+    Possible Path C \\[4mm]
+    Full Optimisation
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Return By Value (Path C)}
+  \begin{center}
+    \begin{columns}
+      \column{4cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{return-by-value.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+
+        \only<1-3>{
+          \stackframe[start=0,contents={bar.x = ?},id=bar]
+        }
+        \only<4->{
+          \stackframe[start=0,contents={bar.x = 1},id=bar]
+        }
+        \only<1-4>{
+          \stackframe[start=1,contents={bar.y = ?}]
+        }
+        \only<5->{
+          \stackframe[start=1,contents={bar.y = 2}]
+        }
+        \only<1-6>{
+          \stackframe[start=2,contents={b},id=b]
+          \draw[-latex] (b.east) to [bend right=30] (bar.east);
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1>
+    \begin{center}
+      It is not necessary for {\tt foo} to have its own object {\tt b}.
+      Instead, it can operate directly on {\tt bar}.
+    \end{center}
+
+    \onslide<2>
+    \begin{center}
+      Every write that {\tt foo} makes to {\tt b}
+      is then in reality a write to {\tt bar}
+    \end{center}
+
+    \onslide<3-5>
+    \begin{center}
+      When {\tt foo} initialised {\tt b} using the default constructor,
+      it is in reality initialising {\tt bar}
+    \end{center}
+
+    \onslide<6-7>
+    \begin{center}
+      When {\tt foo} ends, {\tt b} is cleaned up.
+      Since {\tt b} was never constructed as a separate object, {\tt b} cannot be destructed either.
+      In other words, {\tt b} just disappears. {\tt b} can be seen as a reference to {\tt bar}.
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \begin{center} \Huge
+    Possible Path D \\[4mm]
+    Move Constructor
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Return By Value (Path D)}
+  \begin{itemize}
+    \item If a move constructor is defined, {\tt b}
+          may be \emph{moved} to {\tt bar}
+    \item Steps:
+          \begin{enumerate}
+            \item {\tt b} gets created with the default constructor
+            \item Upon returning, {\tt bar} gets initialised with its move constructor.
+                  It ``steals'' {\tt b}'s data
+            \item {\tt b} is destructed
+          \end{enumerate}
+    \item We don't discuss move constructors in detail for this course
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Return By Value: Summary}
+  \begin{itemize}
+    \item It is impossible to predict what exactly will happen
+    \item Four possibilities
+          \begin{itemize}
+            \item Two copy constructors called
+            \item One copy constructor called
+            \item Zero constructors called
+            \item One move constructors called
+          \end{itemize}
+    \item It is therefore important to define your constructors in such a way
+          that it does not matter how often they get called
+    \item A copy constructor should only copy and do nothing more
+    \item Then it does not matter if you get an object, a copy of an object, or a copy of a copy of an object
+    \item {\tt Bar}'s implementation clearly does not satisfy this requirement
+  \end{itemize}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:

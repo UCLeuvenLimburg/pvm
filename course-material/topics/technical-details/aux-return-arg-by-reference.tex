@@ -1,0 +1,78 @@
+\begin{frame}
+  \frametitle{Returning An Argument By Reference}
+  \code[width=.5\linewidth]{return-arg-by-reference.cpp}
+  \begin{itemize}
+    \item If a function receives an object by ptr/ref, it means
+          this object will survive the function
+    \item Hence, the function can return a ptr/ref to this object
+    \item It's a bit strange to do, but it can come in handy
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Returning An Argument By Reference}
+  \begin{center}
+    \begin{columns}
+      \column{5cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{return-arg-by-reference.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+        
+        \only<2->{
+          \stackframe[start=0,contents={bar.x = 1},id=bar]
+        }
+        \only<3->{
+          \stackframe[start=1,contents={bar.y = 2}]
+        }
+        \only<5-8>{
+          \stackframe[start=2,contents={p = ?}]
+        }
+        \only<9->{
+          \stackframe[start=2,contents={p},id=p]
+          \draw[-latex] (p.east) to [bend right=30] (bar.east);
+        }
+        \only<7-10>{
+          \stackframe[start=3,contents={b},id=b]
+          \draw[-latex] (b.east) to [bend right=30] (bar.east);
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1-3>
+    \begin{center}
+      {\tt bar} gets created on stack (default constructor)
+    \end{center}
+
+    \onslide<4-5>
+    \begin{center}
+      {\tt p} gets allocated on the stack (uninitialised)
+    \end{center}
+
+    \onslide<6-7>
+    \begin{center}
+      {\tt foo} gets called, argument {\tt b} resides on heap
+    \end{center}
+
+    \onslide<8-9>
+    \begin{center}
+      {\tt foo} returns address of what {\tt b} refers to, which is {\tt bar} \\
+      {\tt p} is overwritten with this address
+    \end{center}
+
+    \onslide<10-11>
+    \begin{center}
+      {\tt foo} is done, cleanup time
+    \end{center}
+    
+  \end{overprint}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:

@@ -1,0 +1,67 @@
+\begin{frame}
+  \frametitle{Different Meanings of Assignment}
+  \begin{itemize}
+    \item The {\tt =} operator's meaning depends on how you use it
+    \item We distinguish four cases
+          \begin{itemize}
+            \item Assignment at declaration
+            \item Assignment between objects
+            \item Assignment between pointers
+            \item Assignment with references
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment At Declaration}
+  \code[font=\small,width=.95\linewidth]{assignment-declaration.cpp}
+  \begin{itemize}
+    \item If assignment happens in the same statement as declaration,
+          the copy constructor will be called.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment with Objects}
+  \code[font=\small,width=.95\linewidth]{assignment-objects.cpp}
+  \begin{itemize}
+    \item Using {\tt x = y} where {\tt x} and {\tt y} are of type {\tt T}
+          will call {\tt T::operator =(const T\&)}
+    \item No new objects get constructed
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment with Pointers}
+  \code[font=\small,width=.95\linewidth]{assignment-pointers.cpp}
+  \begin{itemize}
+    \item Using {\tt x = y} where {\tt x} and {\tt y} are of type {\tt T*}
+          will simply copy pointers
+    \item This is C++'s closest equivalent of Java's assignment
+    \item {\tt q} and {\tt r} point to the same object
+    \item Writing {\tt p = r} would make {\tt p} also point to the same object as {\tt q} and {\tt r}.
+          {\tt bar} would remain untouched.
+    \item Neither copy constructor nor {\tt Bar::operator =} is called
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment with References}
+  \code[font=\small,width=.95\linewidth]{assignment-references.cpp}
+  \begin{itemize}
+    \item When declaring a reference, immediate initialisation is mandatory (see {\tt bar5})
+    \item Declaring reference is same as introducing extra name for same object
+    \item {\tt bar} and {\tt bar2} are indistuingishable from each other
+    \item When working with a reference, it is the same as if working with the original object
+    \item {\tt bar2 = bar3} is the same as {\tt bar = bar3}: calls {\tt operator=}
+    \item You cannot make a reference refer to another object. Once it refers to some object,
+          it will do so until it dies.
+  \end{itemize}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:

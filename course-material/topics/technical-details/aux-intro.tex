@@ -1,0 +1,32 @@
+\begin{frame}
+  \frametitle{Working Example: {\tt Bar}}
+  \begin{itemize}
+    \item These slides contain a few step-by-step examples
+    \item Make use of common struct {\tt Bar}
+    \item Definition on following slide
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Definition of {\tt Bar}}
+  \code{bar.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Definition of {\tt Bar}}
+  \begin{itemize}
+    \item Note the very unorthodox implementation
+    \item Copy constructor increments fields
+    \item Assignment operator triples fields
+    \item \textbf{Don't do this at home!}
+    \item Very ugly semantics
+    \item Copy constructor should behave nicely, i.e.~just copy
+    \item Same for assignment
+    \item Eccentric behaviour only for illustrative purposes, to make it possible to disambiguate which member function gets called
+  \end{itemize}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:

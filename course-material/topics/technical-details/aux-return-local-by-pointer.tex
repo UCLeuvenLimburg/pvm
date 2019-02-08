@@ -1,0 +1,89 @@
+\begin{frame}
+  \frametitle{Returning a Local Variable By Pointer}
+  \code[frame=lines,width=.5\linewidth,font=\small]{return-local-by-pointer.cpp}
+  \begin{itemize}
+    \item Returning by pointer is possible (why would it not be?)
+    \item Returning a \emph{local} by pointer is an extremely bad idea (leads to undefined behaviour)
+    \item The local gets removed after the function has returned\dots
+    \item \dots yet the pointer  will still point to that space
+    \item A pointer pointing to something that's been destroyed is called a dangling pointer
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Return Local By Pointer}
+  \begin{center}
+    \begin{columns}
+      \column{4cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{return-local-by-pointer.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+
+        \only<2-7>{
+          \stackframe[start=0,contents={p = ?}]
+        }
+        \only<5-10>{
+          \stackframe[start=1,contents={b.x = 1},id=b]
+        }
+        \only<11->{
+          \invisiblestackframe[start=1,contents={b.x = 1},id=b]
+        }
+        \only<6-9>{
+          \stackframe[start=2,contents={b.y = 2}]
+        }        
+        \only<8->{
+          \stackframe[start=0,contents={p},id=p]
+          \draw[-latex] (p.east) to [bend left=30] (b.east);
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1-2>
+    \begin{center}
+      Space gets allocated (but not initialised, that's for later) for {\tt p}
+    \end{center}
+
+    \onslide<3>
+    \begin{center}
+      {\tt foo} gets called.
+    \end{center}
+
+    \onslide<4-6>
+    \begin{center}
+      {\tt b} gets created on the stack.
+    \end{center}
+
+    \onslide<7-8>
+    \begin{center}
+      {\tt foo} returns the address of {\tt b}
+    \end{center}
+
+    \onslide<9-11>
+    \begin{center}
+      {\tt foo}'s locals get cleaned up \\
+      {\tt b}'s destructor gets called
+    \end{center}
+
+    \onslide<12>
+    \begin{center}
+      {\tt p} points to no-man's-land \\
+      {\tt p->x++} is undefined
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Returning Local by Reference}
+  \begin{itemize}
+    \item Returning a local by reference suffers from exactly the same problem
+  \end{itemize}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:

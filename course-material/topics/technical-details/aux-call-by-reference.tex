@@ -1,0 +1,86 @@
+\begin{frame}
+  \frametitle{Call By Reference}
+  \code[frame=lines,width=.5\linewidth,font=\small]{call-by-reference.cpp}
+  \begin{itemize}
+    \item {\tt foo} receives a \emph{reference} to a {\tt Bar}
+    \item I.e.~{\tt foo} gets the address of a {\tt Bar} object
+    \item {\tt foo} can read the object
+          \begin{itemize}
+            \item {\tt p} yields the {\tt Bar} object itself
+            \item {\tt p.x} reads the {\tt x} member variable
+          \end{itemize}
+    \item {\tt foo} can also write to the object
+          \begin{itemize}
+            \item E.g.~{\tt p.x = 5}
+          \end{itemize}
+    \item {\tt foo} can do the same as with call-by-pointer
+    \item Call-by-pointer and call-by-reference differ in syntax, but not much more
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Call By Reference}
+  \begin{center}
+    \begin{columns}
+      \column{4cm}
+      \code[frame=lines,width=.95\linewidth,font=\small]{call-by-reference.cpp}
+      \column{4cm}
+      \begin{tikzpicture}
+        \memorylayout
+
+        \only<2-6>{
+          \stackframe[start=0,contents={bar.x = 1},id=bar]
+        }
+        \only<7->{
+          \stackframe[start=0,contents={bar.x = 2},id=bar]
+        }
+        \only<3->{
+          \stackframe[start=1,contents={bar.y = 2}]
+        }
+        \only<5-8>{
+          \stackframe[start=2,contents={b},id=p]
+          \draw[-latex] (p.east) to [bend right=30] (bar.east);
+        }
+      \end{tikzpicture}
+    \end{columns}
+  \end{center}
+  \vskip2mm
+  \begin{overprint}
+    \onslide<1-3>
+    \begin{center}
+      Creation of {\tt bar} on stack \\
+      Default constructor does the job
+    \end{center}
+
+    \onslide<4-5>
+    \begin{center}
+      Calling {\tt foo}: {\tt bar} is passed by reference \\
+      $\Rightarrow$ no copy is made \\
+      $\Rightarrow$ no constructor gets called
+    \end{center}
+
+    \onslide<6-7>
+    \begin{center}
+      Incrementing {\tt b.x} operates on original
+    \end{center}
+
+    \onslide<8-9>
+    \begin{center}
+      Returning from {\tt foo}: all locals are cleaned up \\
+      Only local variable is {\tt b}, a reference \\
+      A reference's destructor does nothing
+    \end{center}
+
+    \onslide<10>
+    \begin{center}
+      Note how {\tt bar} has changed since before the call to {\tt foo}
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "technical-details"
+%%% End:
