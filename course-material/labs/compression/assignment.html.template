@@ -1,0 +1,113 @@
+!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Compression</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Numerical) do
+           <<-END
+             <p>
+               How many <em>ibits</em> do you need to be able to encode all integers from 0 to 100?
+               Your answer should be precise to 3 decimal numbers. #{show_input_field(6.6582115, 0.001)}
+             </p>
+             <p>
+               How many <em>storage bits</em> do you need to be able to encode all integers from 0 to 100? #{show_input_field(7, 0)} 
+             </p>
+             <p>
+               Given that storage uses more bits than necessary, how many extra numbers would you
+               be able to store? #{show_input_field(27, 0)}
+             </p>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           <<-END
+             <p>
+               How many <em>ibits</em> do you need to be able to encode all integers from 0 to 200?
+               #{show_input_field(7.6510517, 0.001)}
+             </p>
+             <p>
+               How many <em>storage bits</em> would you need? #{show_input_field(8, 0)} 
+             </p>
+             <p>
+               Given that storage uses more bits than necessary, how many extra numbers would you
+               be able to store? #{show_input_field(55, 0)}
+             </p>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           <<-END
+             <p>
+               How many <em>ibits</em> do you need to be able to encode all integers from -10 to 10?
+               #{show_input_field(4.3923174, 0.001)}
+             </p>
+             <p>
+               How many <em>storage bits</em> would you need? #{show_input_field(5, 0)} 
+             </p>
+             <p>
+               Given that storage uses more bits than necessary, how many extra numbers would you
+               be able to store? #{show_input_field(11, 0)}
+             </p>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           <<-END
+             <p>
+               How many <em>ibits</em> do you need to be able to encode all integers from -2 billion to +2 billion?
+               #{show_input_field(31.897353, 0.001)}
+             </p>
+             <p>
+               How many <em>storage bits</em> would you need? #{show_input_field(32, 0)} 
+             </p>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           extend SourceCodeMixin
+
+           self.source = <<-END
+             struct Date
+             {
+               int day, month;
+             };
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>
+               If I wish to use the struct above, how many bits are used per object? (Assuming 32 bit platform) #{show_input_field(64, 0)}
+             </p>
+             <p>
+               How many ibits are necessary to encode a date of the year (assuming 366 days per year)? #{show_input_field(8.52, 0.1)}
+             </p>
+           END
+         end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
