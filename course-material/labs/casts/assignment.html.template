@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Casts</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+                 void func() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+                 void func() { std::cout << "bar"; }
+             };
+
+             struct Baz : public Foo
+             {
+                void func() { std::cout << "baz"; }
+             };
+
+             int main()
+             {
+                 Foo* p = new Bar;
+                 Bar* q = dynamic_cast<Bar*>(p);
+                 
+                 q->func();
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>dynamic_cast</code> works only on polymorphic types, i.e. <code>Foo</code> needs to have at least one virtual function.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+                 virtual void func() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+                 void func() override { std::cout << "bar"; }
+             };
+
+             struct Baz : public Foo
+             {
+                void func() override { std::cout << "baz"; }
+             };
+
+             int main()
+             {
+                 Foo* p = new Bar;
+                 Bar* q = dynamic_cast<Bar*>(p);
+                 
+                 q->func();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+                 virtual void func() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+                 void func() override { std::cout << "bar"; }
+             };
+
+             struct Baz : public Foo
+             {
+                void func() override { std::cout << "baz"; }
+             };
+
+             int main()
+             {
+                 Foo* p = new Bar;
+                 Baz* q = dynamic_cast<Baz*>(p);
+                 
+                 q->func();
+             }
+           END
+
+           self.output = '???'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>q</code> is <code>nullptr</code> because <code>dynamic_cast</code>ing to the wrong type yields <code>nullptr</code>.
+                 Calling member functions on <code>nullptr</code> is undefined.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+                 virtual void func() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+                 void func() override { std::cout << "bar"; }
+             };
+
+             struct Baz : public Foo
+             {
+                void func() override { std::cout << "baz"; }
+             };
+
+             int main()
+             {
+                 Foo* p = new Bar;
+                 Baz* q = static_cast<Baz*>(p);
+                 
+                 q->func();
+             }
+           END
+
+           self.output = '???'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>static_cast</code>ing to the wrong type leads to undefined behaviour.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+                 virtual void func() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+                 void func() override { std::cout << "bar"; }
+             };
+
+             struct Baz : public Foo
+             {
+                void func() override { std::cout << "baz"; }
+             };
+
+             int main()
+             {
+                 Bar* p = new Bar;
+                 Baz* q = static_cast<Baz*>(p);
+                 
+                 q->func();
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The compiler detects that your cast can never succeed, so rejects the <code>static_cast</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+                 virtual void func() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+                 void func() override { std::cout << "bar"; }
+             };
+
+             struct Baz : public Foo
+             {
+                void func() override { std::cout << "baz"; }
+             };
+
+             int main()
+             {
+                 std::shared_ptr<Foo> p = std::make_shared<Baz>();
+                 
+                 p->func();
+             }
+           END
+
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+             struct Foo
+             {
+                 virtual void func() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+                 void func() override { std::cout << "bar"; }
+             };
+
+             struct Baz : public Foo
+             {
+                void func() override { std::cout << "baz"; }
+             };
+
+             int main()
+             {
+                 std::shared_ptr<Baz> p = std::make_shared<Baz>();
+                 std::shared_ptr<Foo> q = std::dynamic_pointer_cast<Foo>(p);
+                 
+                 q->func();
+             }
+           END
+
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The <code>dynamic_pointer_cast</code> is rather useless: it's an upcast (subtype to supertype),
+                 meaning no explicit casting needs to be done.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <cstdint>
+
+
+             int main()
+             {
+                 double x = 1.0;
+                 double* p = &x;
+                 uint64_t* q = reinterpret_cast<uint64_t*>(p);
+                 uint64_t y = *q;
+
+                 std::cout << y;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 This construct allows you to reinterpret the bits as if they had a different type.
+                 <code>x</code> and <code>y</code> consist internally of exactly the same bits,
+                 but since they have types <code>double</code> and <code>uint64_t</code>, respectively,
+                 those bits mean different things.
+               </p>
+               <p>
+                 No worries, you were not supposed to actually know the answer to this question.
+                 Technically, the right answer should be '???' as C++ does not make any
+                 guarantees about which representation is used for <code>double</code>s.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <cstdint>
+
+
+             int main()
+             {
+                 int8_t x = -1;
+                 uint8_t y = *reinterpret_cast<uint8_t*>(&x);
+
+                 // std::hex prints value in hexadecimal (e.g. 10 is printed as a)
+                 // Use lowercase hexadecimal digits! (i.e. f instead of F)
+                 // Assume platform uses two's complement representation
+                 std::cout << std::hex << unsigned(y);
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The signed 8-bit integer <code>-1</code> is internally represented by 8 <code>1</code> bits.
+               </p>
+               <p>
+                 The <code>unsigned(y)</code> is necessary to force <code>std::cout</code> to print
+                 <code>y</code> as a number. Without it, <code>y</code> would be interpreted as a <code>char</code>
+                 and the symbol with ASCII number <code>255</code> would be printed.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <cstdint>
+
+
+             int main()
+             {
+               uint32_t x = 0;
+               // Assume little endian
+               uint8_t* p = reinterpret_cast<uint8_t*>(&x);
+
+               std::cout << x;
+               p[0] = 1;
+               std::cout << "," << x;
+               p[1] = 1;
+               std::cout << "," << x;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>p</code> interprets the <code>uint32</code> as an array of <code>uint8</code>.
+                 First, <code>x = 0</code>, which is internally represented by <code>0x00000000</code>.                 
+               </p>
+               <p>
+                 Next, we increment the first byte, meaning that <code>x</code> becomes <code>0x01000000</code>.
+                 Since we work on a little endian platform, this bit pattern corresponds to <code>1</code>.
+               </p>
+               <p>
+                 Last, we increment the second byte, resulting in <code>x</code> becoming <code>0x01010000</code>,
+                 which corresponds to <code>257</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <memory>
+
+
+             class Foo
+             {
+             public:
+                 virtual void f() { std::cout << "foo"; }
+             };
+
+             class Bar : Foo
+             {
+             public:
+                 void f() override { std::cout << "bar"; }
+             };
+
+             class Qux : Bar
+             {
+             public:
+                 void f() override { std::cout << "qux"; }
+             };
+
+
+             int main()
+             {
+                 std::shared_ptr<Foo> p = std::make_shared<Qux>();
+
+                 p->f();
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>Qux</code> inherits from <code>Bar</code>, which inherits from <code>Foo</code>.
+                 The problem here is that it is not public inheritance but instead private inheritance, which
+                 means that <code>Qux</code> and <code>Foo</code> do not have a subtype relation between them.
+                 To the outside world, it looks as if <code>Qux</code> has no superclass.
+               </p>
+             </div>
+           END
+         end
+      %>
+              
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write functions <code>is_little_endian()</code> and <code>is_big_endian()</code> that
+              determine whether the platform the code is running on is little or big endian.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write a <code>struct</code> named <code>ARGB</code> with 4 <code>uint8</code> fields <code>r</code>, <code>g</code>, <code>b</code> and <code>b</code>.
+              Make it so that when you <code>reinterpret_cast</code> an ARGB object to <code>uint32</code>, the color components are laid out as <code>0xAARRGGBB</code>,
+              i.e. the color (A=0, R=0, G=0, B=255) must correspond to <code>0xFF</code>.
+            </p>
+            <p>
+              Also write a function <code>convert_to_uint</code> that, given an <code>ARGB</code>, returns the corresponding <code>uint32</code>.
+            </p>
+          END
+        end
+      %>
+      
+      <%=
+        exercise do
+          <<-END
+            <p>
+              You are given a small hierarchy: superclass <code>Shape</code> and subclasses <code>Square</code> and <code>Circle</code>.
+            </p>
+            <ul>
+              <li>
+                Write a function <code>bool is_square(const Shape*)</code> that returns <code>true</code> if the given object is a <code>Square</code>, <code>false</code> otherwise.
+              </li>
+              <li>
+                Write a template function <code>is_instance_of</code> that allows to check for arbitrary <code>Shape</code> subclasses. E.g. <code>is_instance_of&lt;Circle&gt;(obj)</code>
+                should return <code>true</code> if <code>obj</code> is a <code>Circle</code>, <code>false</code> otherwise.
+              </li>
+            </ul>
+            <p>
+              The rests expects to find this extra functionality in <code>square.h</code> and <code>square.cpp</code>; therefore, no need to create new files.
+            <p>
+          END
+        end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
