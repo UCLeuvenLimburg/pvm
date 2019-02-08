@@ -1,0 +1,36 @@
+\usepackage{ucll-code}
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{Structs}
+\author{Fr\'ed\'eric Vogels}
+
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Structs}
+  \begin{itemize}
+    \item In C: let you group data together (only member variables)
+    \item In \cpp: {\tt struct} is identical to {\tt class}
+    \item One exception: default visibility is {\tt public}
+  \end{itemize}
+  \begin{columns}
+    \column{4cm}
+    \code[frame=lines,width=\linewidth]{class.cpp}
+    \column{4cm}
+    \code[frame=lines,width=\linewidth]{struct.cpp}
+  \end{columns}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "structs"
+%%% End:
