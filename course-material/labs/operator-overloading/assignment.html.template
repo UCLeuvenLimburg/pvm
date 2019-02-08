@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Operator Overloading</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               int x;
+
+               Foo(int x) : x(x) { }
+             };
+
+             Foo operator -(const Foo& foo)
+             {
+               return Foo(-foo.x);
+             }
+
+             int main()
+             {
+               Foo a(15), b(5);
+               Foo c = a - b;
+
+               std::cout << c.x;
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The code above overloads the <em>unary</em> operator -, not the binary one. In other words,
+                 given the operator overload above, you can write <code>-a</code> and <code>-b</code>, but not <code>a-b</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+      
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               int x;
+
+               Foo(int x) : x(x) { }
+             };
+
+             Foo operator -(const Foo& a, const Foo& b)
+             {
+               return Foo(a.x - b.x);
+             }
+
+             int main()
+             {
+               Foo a(15), b(5);
+               Foo c = a - b;
+
+               std::cout << c.x;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               int x;
+
+               Foo(int x) : x(x) { }
+             };
+
+             int operator &(const Foo& a)
+             {
+               return a.x * 2;
+             }
+
+             int main()
+             {
+               Foo a(15);
+
+               std::cout << &a;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 This example is particularly vile: we overload the <code>&amp;</code> operator, which is generally expected to return the address of the variable.
+                 However, it is possible to give it a different behaviour, which is what we do here: <code>&amp;a</code> has now
+                 become a way of getting twice the value of <code>a.x</code>. We cannot write <code>&amp;a</code> to get <code>a</code>'s address anymore.
+                 (It is still possible to get its address, but it requires some serious hoop-jumping.)
+               </p>
+               <p>
+                 It is very important that you only use operator overloading when it fits expectations, i.e. use <code>+</code> for addition-like operations,
+                 but don't start using it on <code>OilTank</code>s.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo {
+               int c;
+
+             public:
+               Foo() : c(0) { }
+
+               int operator ()() { return c++; }
+             };
+
+             int main()
+             {
+               Foo foo;
+
+               std::cout << foo();
+               std::cout << foo();
+               std::cout << foo();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo {
+               int c;
+
+             public:
+               Foo() : c(0) { }
+
+               int operator ()() { return ++c; }
+             };
+
+             int main()
+             {
+               Foo foo;
+
+               std::cout << foo() << foo() << foo();
+             }
+           END
+
+           self.output = '???'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 Within two "sequence points", the compiler has the freedom to reorder operations as it sees fit.
+                 The rules about sequence points are a bit complicated (and even outdated since C++11, they've been
+                 replaced by something probably even more confusing), but suffice it to say that it's a bad idea
+                 to put multiple state modifying operations on the same line. Here, each <code>foo()</code>
+                 operations modifies the value of some variable (hence it is state modifying),
+                 and since they appear on the same line, you have no way of knowing in what order
+                 it will be executed. For example, on this compiler, the program printed 210.
+               </p>
+               <p>
+                 This is not operator overloading specific. For example, when calling a normal function <code>bar(x++, x++, x++)</code>
+                 the actual result also remains a surprise.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               int x;
+
+               Foo() : x(5) { }
+             };
+
+             std::ostream& operator <<(std::ostream& out, const Foo& foo)
+             {
+               return out << foo.x << foo.x+1 << foo.x+2;
+             }
+
+             int main()
+             {
+               Foo foo;
+               
+               std::cout << foo << foo << foo;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 In case you expected undefined behaviour: no variable changes value anywhere. Whatever order <code>foo.x</code>, <code>foo.x+1</code>
+                 and <code>foo.x+2</code> are evaluated in, the results are the same.
+               </p>
+               <p>
+                 Each <code>out &lt;&lt; expr</code> is supposed to return <code>out</code> (hence the <code>std::ostream&amp;</code>
+                 return value for <code>operator &lt;&lt;</code>). This makes it possible to chain multiple <code>&lt;&lt;</code> operations.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int operator <<(int x, int y)
+             {
+               int result = 1;
+
+               while ( y-- ) result *= x;
+
+               return result;
+             }
+
+             int main()
+             {
+               std::cout << (2 << 8);
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               You are not allowed to redefine operators on primitive types. At least one of the operands must be a non-primitive type.
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+                 int x;
+
+                 Foo(int x) : x(x) { }
+                 
+                 Foo operator *(const Foo& foo)
+                 {
+                     return Foo(x * foo.x);
+                 }
+             };
+
+             int main()
+             {
+                 Foo foo(1);
+                 Foo goo(2);
+
+                 foo *= goo;
+
+                 std::cout << foo.x;
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 In C++ the operators <code>*</code> and <code>*=</code> are unrelated and are separately overloadable.
+                 The code above only specifies meaning for <code>Foo * Foo</code>, but leaves
+                 <code>Foo *= Foo</code> undefined, hence the compiler error.
+               </p>
+               <p>
+                 It is important to keep <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, etc.
+                 consistent with <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, etc. respectively.
+                 The compiler does not care, but you might value your life: keep in mind that you
+                 have to assume your code will be maintained by a homicidal maniac.
+               </p>
+               <p>
+                 C# takes a more sensible approach: in this language, you are only allowed to overload <code>+</code>, <code>-</code>, etc.
+                 Expressions like <code>a += b</code> are internally transformed to <code>a = a + b</code>, hence there
+                 is no need to define <code>+=</code> separately, nor is there opportunity for inconsistencies to arise.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+                 int x, y;
+
+                 Foo(int x, int y) : x(x), y(y) { }
+                 
+                 Foo& operator *=(const Foo& foo)
+                 {
+                     x *= foo.x;
+                     
+                     return *this;
+                 }
+             };
+
+             int main()
+             {
+                 Foo foo(1, 2);
+                 Foo goo(4, 5);
+
+                 foo *= goo;
+
+                 std::cout << foo.x << foo.y;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+              
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          self.source = <<-END
+            auto alpha = 80_degrees;
+            auto beta = 3_rad;
+            auto gamma = alpha + beta;
+
+            if ( gamma < 180_degrees )
+            {
+                // ...
+            }
+          END
+
+          <<-END
+            <p>
+              Ordinarily, you would use a <code>double</code> to represent an angle. A problem with this approach
+              is that angles can be expressed in degrees or in radians. Using <code>double</code>s is therefore
+              rather fragile, because you always need to make sure not mixing up both.
+            </p>
+            <p>
+              A simple way of dealing with this is to introduce an <code>Angle</code> class whose
+              purpose it is to automatically convert from degrees to radians and back where necessary.
+              For those worried that introducing a whole new type might impact performance
+              negatively: C++ provides zero-cost abstractions, which means that you can
+              introduce small helper classes without incurring any penalties. The compiler
+              will realise that <code>Angle</code> is just a <code>double</code> and compile it that way.
+            </p>
+            <p>
+              Using the <code>Angle</code> class should go as follows:
+            </p>
+            #{show_source_editor}
+            <p>
+              Base yourself on the tests to see what operators you need to implement.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          <<-END
+            <p>
+              Comparing <code>double</code>s using <code>==</code> is generally a bad idea,
+              as it doesn't take into account the possibility of rounding errors.
+              Instead, you need to check how large the difference between two
+              <code>double</code>s is, and if it is small enough, you can
+              assume they are equal.
+            </p>
+            <p>
+              Writing this in code gives <code>fabs(x - y) &lt; epsilon</code>,
+              with <code>x</code> and <code>y</code> the <code>double</code>s
+              to be compared, and <code>epsilon</code> a small value (e.g. <code>0.00001</code>)
+              that represents the maximum difference allowed. However, this code
+              is not very readable; you would rather use <code>==</code>.
+            </p>
+            <p>
+              Write a class <code>approx</code> that allows you to write
+              <code>x == approx(5)</code> or <code>x == approx(5, 0.00001)</code>
+              to allow for self chosen <code>epsilon</code>.
+            </p>  
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write a class <code>Complex</code> whose instances
+              represent complex numbers. A complex number consists
+              of a real and imaginary part, commonly referred to
+              as <code>re</code> and <code>im</code>. Both <code>re</code> and
+              <code>im</code> are doubles.
+            </p>
+            <p>
+              Look up the necessary formulas for addition, subtraction, multiplication, etc. online.
+            </p>
+          END
+        end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
