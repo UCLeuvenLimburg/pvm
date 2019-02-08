@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Classes</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()           { std::cout << "D"; }
+                 Foo(const Foo&) { std::cout << "C"; }
+                 ~Foo()          { std::cout << "X"; }
+             };
+
+             int main()
+             {
+                 std::cout << "[";
+                 Foo f;
+                 std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>Foo f</code> is enough to create an object.
+                 C++ guarantees that whenever an object is created,
+                 exactly one constructor will be called. In this case,
+                 since no arguments have been specified,
+                 the default constructor is the one being called
+                 to initialise the object.
+               </p>
+               <p>
+                 <code>f</code> is placed on the stack,
+                 meaning that when it goes out of scope,
+                 it gets destroyed.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()           { std::cout << "D"; }
+                 Foo(const Foo&) { std::cout << "C"; }
+                 ~Foo()          { std::cout << "X"; }
+             };
+
+             int main()
+             {
+                 std::cout << "[";
+                 Foo f;
+                 Foo g = f;
+                 std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 First <code>f</code> gets created.
+                 <code>Foo g = f</code> means the same as
+                 <code>Foo g(f)</code>, in other words, the copy constructor
+                 gets called to initialise a second <code>Foo</code> object.
+               </p>
+               <p>
+                 <code>f</code> and <code>g</code>, both stack allocated,
+                 are destroyed when they go out of scope.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()           { std::cout << "D"; }
+                 Foo(const Foo&) { std::cout << "C"; }
+                 ~Foo()          { std::cout << "X"; }
+             };
+
+             int main()
+             {
+                 std::cout << "[";
+                 Foo* f;
+                 std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The above code creates a <code>Foo</code>-pointer named <code>f</code>.
+                 It does <em>not</em> create an object <code>Foo</code>. The pointer
+                 points no random memory.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()           { std::cout << "D"; }
+                 Foo(const Foo&) { std::cout << "C"; }
+                 ~Foo()          { std::cout << "X"; }
+             };
+
+             int main()
+             {
+                 std::cout << "[";
+                 Foo* foo = new Foo;
+                 std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>new Foo</code> creates a new object, so
+                 the default constructor gets called.
+                 When <code>foo</code> goes out of scope,
+                 nothing happens: <code>foo</code> is a <em>pointer</em>,
+                 and it's the pointer's destructor that gets called.
+                 This destructor does nothing. In other words,
+                 the <code>Foo</code> object never gets destroyed.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()           { std::cout << "D"; }
+                 Foo(const Foo&) { std::cout << "C"; }
+                 ~Foo()          { std::cout << "X"; }
+             };
+
+             void bar(Foo arg)
+             {
+                 std::cout << "!";
+             }
+
+             int main()
+             {
+                 std::cout << "[";
+                 Foo foo;
+                 bar(foo);
+                 std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The code performs the following steps:
+               </p>
+               <ol>
+                 <li>
+                   <code>"["</code> is printed.
+                 <li>
+                   A <code>Foo</code> object gets created
+                   using the default constructor.
+                 </li>
+                 <li>
+                   <code>bar</code> gets called, and <code>foo</code> gets passed <em>by value</em>,
+                   meaning a copy gets made. C++ relies on the copy constructor for this.
+                 </li>
+                 <li>
+                   <code>bar</code> prints "!".
+                 </li>
+                 <li>
+                   <code>arg</code> goes out of scope. <code>foo</code>'s copy gets destroyed.
+                 </li>
+                 <li>
+                   <code>"]"</code> is printed.
+                 </li>
+                 <li>
+                   <code>foo</code> goes out of scope and gets destroyed.
+                 </li>
+               </ol>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()           { std::cout << "FD"; }
+                 Foo(const Foo&) { std::cout << "FC"; }
+                 ~Foo()          { std::cout << "FX"; }
+             };
+
+             class Bar
+             {
+                 Foo foo;
+
+             public:
+                 Bar()           { std::cout << "BD"; }
+                 Bar(const Bar&) { std::cout << "BC"; }
+                 ~Bar()          { std::cout << "BX"; }
+             };
+
+             class Qux
+             {
+                 Bar bar;
+
+             public:
+                 Qux()           { std::cout << "QD"; }
+                 Qux(const Qux&) { std::cout << "QC"; }
+                 ~Qux()          { std::cout << "QX"; }
+
+             };
+
+             int main()
+             {
+                 std::cout << "[";
+                 Qux q;
+                 std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 If an object contains other objects (such as a <code>Qux</code> contains a <code>Bar</code>
+                 and a <code>Bar</code> contains a <code>Foo</code>), its constructor
+                 will call its components' constructors:
+               </p>
+               <ol>
+                 <li>
+                   <code>"["</code> is printed.
+                 </li>
+                 <li>
+                   A <code>Qux</code> gets created without arguments. This calls Qux::Qux().
+                 </li>
+                 <li>
+                   The initialiser list gets executed first. The list is empty, but
+                   C++ demands that every member variable gets constructed.
+                   This means that <code>Qux::Qux()</code> will call <code>Bar::Bar()</code>
+                   to initialise the <code>bar</code> field.
+                 </li>
+                 <li>
+                   <code>Bar::Bar()</code> first needs to construct all member variables,
+                   of which there is only one, namely <code>foo</code>.
+                   <code>Foo::Foo()</code> is called implicitly by <code>Bar::Bar()</code>.
+                 </li>
+                 <li>
+                   <code>Foo::Foo()</code> has no member variables to initialise,
+                   so it proceeds with the execution of the body. <code>"FD"</code> gets printed.
+                 </li>
+                 <li>
+                   After <code>Foo::Foo()</code> is done, we're back in <code>Bar::Bar()</code>.
+                   The default constructor has finished initialising all member variables,
+                   so it can proceed with its body: <code>"BD"</code> is printed.
+                 </li>
+                 <li>
+                   We're back in <code>Qux::Qux()</code>. It's done initialising
+                   <code>Qux</code>'s fields, so it's ready to execute its body.
+                   <code>"QD"</code> is printed.
+                 </li>
+                 <li>
+                   Execution returns to <code>main</code>. After printing <code>"]"</code>,
+                   <code>q</code> goes out of scope and must get destroyed.
+                 </li>
+                 <li>
+                   Destructors get called in the reverse order of constructors.
+                 </li>
+               </ol>
+             </div>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()           { std::cout << "FD"; }
+                 Foo(int)        { std::cout << "FI"; }
+                 Foo(const Foo&) { std::cout << "FC"; }
+                 ~Foo()          { std::cout << "FX"; }
+             };
+
+             class Bar
+             {
+                 Foo foo;
+
+             public:
+                 Bar()
+                 {
+                   std::cout << "BD";
+                   foo = Foo(5);
+                 }
+
+                 Bar(const Bar&) { std::cout << "BC"; }
+                 ~Bar()          { std::cout << "BX"; }
+             };
+
+             int main()
+             {
+                 std::cout << "[";
+                 Bar bar;
+                 std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <ol>
+                 <li>
+                   <code>"["</code> gets printed.
+                 </li>
+                 <li>
+                   <code>bar</code> is constructed using the default constructor.
+                 </li>
+                 <li>
+                   <code>Bar::Bar()</code> starts with the initialisation of all fields.
+                   In this case, <code>Foo::Foo()</code> is called.
+                 </li>
+                 <li>
+                   <code>Foo::Foo()</code> prints <code>"FD"</code>.
+                 <li>
+                   <code>Bar::Bar()</code>'s body gets executed. It prints <code>"BD"</code>.
+                 </li>
+                 <li>
+                   Next, it constructs a <em>new</em> (temporary) Foo object using
+                   the <code>Foo::Foo(int)</code> constructor. <code>"FI"</code> gets printed.
+                 </li>
+                 <li>
+                   It assigns this newly created object to the field <code>foo</code>.
+                   Later you will see how this happens; suffice it to say
+                   that assigning one object to another amounts to overwriting
+                   the values of the second object's fields with the first object's field values.
+                 </li>
+                 <li>
+                   The temporary <code>Foo</code> object gets destroyed: <code>"FX"</code> gets printed.
+                 </li>
+                 <li>
+                   Back in <code>main</code>, <code>"]"</code> gets printed.
+                 </li>
+                 <li>
+                   <code>main</code> ends and <code>bar</code> goes out of scope.
+                   First, <code>Bar::~Bar()</code> gets called (<code>"BX"</code>),
+                   next <code>Foo::~Foo()</code> (<code>"FX"</code>).
+                 </li>
+               </ol>
+             </div>
+           END
+         end
+      %>
+      
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()           { std::cout << "D"; }
+                 Foo(const Foo&) { std::cout << "C"; }
+                 ~Foo()          { std::cout << "X"; }
+             };
+
+             int main()
+             {
+                 std::cout << "[";
+                 Foo();
+                 std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The <code>Foo</code> object is a temporary object, therefore
+                 its destructor gets called after the statement <code>Foo();</code>
+                 has been executed. In other words, destruction is not postponed
+                 until <code>main</code> returns.
+               </p>
+             </div>
+           END
+         end
+      %>
+      
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             class Foo
+             {
+             public:
+                 Foo()            { std::cout << "D"; }
+                 ~Foo()           { std::cout << "X"; }
+                 
+                 void bar()       { std::cout << "A"; }
+                 void bar() const { std::cout << "B"; }
+             };
+
+             int main()
+             {
+                 Foo().bar();
+                 Foo().bar();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <ol>
+                 <li>
+                   <code>Foo()</code> creates a new object. The default constructor
+                   is called. It is a temporary object since it is not stored in a variable.
+                 </li>
+                 <li>
+                   <code>Foo().bar()</code> immediately calls <code>bar()</code>
+                   on this new object. Since the object is not <code>const</code>,
+                   the non<code>const</code> variant of <code>bar()</code> is called.
+                 </li>
+                 <li>
+                   A temporary object is destroyed at the end of the statement
+                   in which it appears.
+                 </li>
+                 <li>
+                   Repeat the above steps a second time.
+                 </li>
+               </ol>
+               <p>
+                 Note the difference with other exercises: this exercise
+                 features temporary objects, which are destroyed as soon
+                 as the statement in which they appear ends.
+                 Non-temporary object (i.e. those bound to variables)
+                 do survive until the variable goes out of scope.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Open the solution <code>coding-exercises</code>. In the <code>student</code>'s project <code>counter/java</code> folder
+              you will find the file <code>Counter.java</code>. Translate this into C++. Make sure to pick the right types,
+              and think of <code>const</code>-correctness!
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Translate the code in <code>person/java</code> to C++. Only free what you allocate yourself.
+            </p>
+          END
+        end
+      %>
+      
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Make the tests in the <code>bitmap</code> project succeed. To know what code to write, let yourself be guided by the tests' code
+              and your common sense.
+            </p>
+          END
+        end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
