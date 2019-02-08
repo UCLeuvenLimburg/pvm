@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Default Parameter Values</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int foo(int x = 5)
+             {
+               return x;
+             }
+
+             int main()
+             {
+               std::cout << foo(1) << foo(2) << foo();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int foo(int x = 5, bool y = true)
+             {
+               return y ? x * 10 : x;
+             }
+
+             int main()
+             {
+               std::cout << foo(false);
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 C++ will not try to match types, so <code>false</code> will assigned to <code>x</code>, not to <code>y</code>.
+                 During this process, <code>false</code> must be converted to an <code>int</code>, which is possible: <code>false</code> gets turned into <code>0</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int foo(int x = 5, int y)
+             {
+               return x * y;
+             }
+
+             int main()
+             {
+               std::cout << foo(1, 2);
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 In <code>foo</code>'s definition, <code>x</code> has a default argument value, meaning
+                 that all subsequent parameters must also get one.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int foo(int x = 5);
+
+             int main()
+             {
+               std::cout << foo();
+             }
+
+             int foo(int x)
+             {
+               return x;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int foo(int x = 5);
+
+             int main()
+             {
+               std::cout << foo();
+             }
+
+             int foo(int x = 5)
+             {
+               return x;
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 This code won't compile as the compiler encounters default values for <code>x</code> twice.
+                 Even if these values agree, this is forbidden.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int foo(int x);
+
+             int main()
+             {
+               std::cout << foo();
+             }
+
+             int foo(int x = 5)
+             {
+               return x;
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 At the time <code>foo</code> is called, the compiler hasn't encountered a default value for <code>x</code> yet.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+          <<-END
+            <p>
+              Rewrite the class <code>Counter</code> so that it makes use of default parameter values where possible.
+            </p>
+          END
+        end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
