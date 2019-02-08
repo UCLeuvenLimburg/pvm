@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+    <style>
+      table.codebook {
+        margin-left: auto;
+        margin-right: auto;
+        border-collapse: collapse;
+      }
+
+      table.codebook td {
+        text-align: center;
+      }
+
+      table.codebook th {
+        padding: 0em 1em;
+      }
+
+      table.codebook tr {
+        border-top: 1px black solid;
+        border-bottom: 1px black solid;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">LZ77</div>
+    </header>
+    <div id="contents">
+      <p> 
+        A basic LZ77 C++ implementation is available in this html's directory.
+      </p>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 7, max distance = 7, operating on bytes) to compress the following string:
+               <code>a</code>
+             </p>
+             #{lz77_encoding [ [0, 0, 'a'] ]}
+             <p>
+               How many storage bits are required? #{numeric_field 14}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 3, max distance = 3, operating on bytes) to compress the following string:
+               <code>a</code>
+             </p>
+             #{lz77_encoding [ [0, 0, 'a'] ]}
+             <p>
+               How many storage bits are required? #{numeric_field(2+2+8)}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 7, max distance = 7, operating on bytes) to compress the following string:
+               <code>aa</code>
+             </p>
+             #{lz77_encoding [ [0, 0, 'a'], [0, 0, 'a'] ]}
+             <p>
+               How many storage bits are required? #{numeric_field( (3+3+8) * 2 )}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 7, max distance = 7, operating on bytes) to compress the following string:
+               <code>aaa</code>
+             </p>
+             #{lz77_encoding [
+                               [0, 0, 'a'],
+                               [1, 1, 'a']
+                             ]}
+             <p>
+               How many storage bits are required? #{numeric_field( (3+3+8) * 2 )}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 15, max distance = 15, operating on bytes) to compress the following string:
+               <code>aaa</code>
+             </p>
+             #{lz77_encoding [
+                               [0, 0, 'a'],
+                               [1, 1, 'a']
+                             ]}
+             <p>
+               How many storage bits are required? #{numeric_field( (4+4+8) * 2 )}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 7, max distance = 7, operating on bytes) to compress the following string:
+               <code>ababc</code>
+             </p>
+             #{lz77_encoding [
+                               [0, 0, 'a'],
+                               [0, 0, 'b'],
+                               [2, 2, 'c']
+                             ]}
+             <p>
+               How many storage bits are required? #{numeric_field( (3+3+8) * 3 )}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 7, max distance = 7, operating on bytes) to compress the following string:
+               <code>ababababc</code>
+             </p>
+             #{lz77_encoding [
+                               [0, 0, 'a'],
+                               [0, 0, 'b'],
+                               [2, 6, 'c']
+                             ]}
+             <p>
+               How many storage bits are required? #{numeric_field( (3+3+8) * 3 )}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 7, max distance = 3, operating on bytes) to compress the following string:
+               <code>ababababc</code>
+             </p>
+             #{lz77_encoding [
+                               [0, 0, 'a'],
+                               [0, 0, 'b'],
+                               [2, 3, 'b'],
+                               [2, 2, 'c']
+                             ]}
+             <p>
+               How many storage bits are required? #{numeric_field( (3+2+8) * 4 )}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 (max length = 127, max distance = 127) to compress the following string:
+               <code>wubba lubba dub dub</code>
+             </p>
+             #{lz77_encoding [
+                               [0, 0, 'w'],
+                               [0, 0, 'u'],
+                               [0, 0, 'b'],
+                               [1, 1, 'a'],
+                               [0, 0, ' '],
+                               [0, 0, 'l'],
+                               [6, 5, 'd'],
+                               [6, 2, ' '],
+                               [4, 2, 'b']
+                             ]}
+             <p>
+               How many storage bits are required? #{numeric_field( (7+7+8) * 9 )}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 to decompress the following data:
+             </p>
+             #{lz77_decoding [
+                               [0, 0, 'a'],
+                               [0, 0, 'b'],
+                               [1, 1, 'a']
+                             ]}
+             <p>
+               Original string: #{text_field 'abba'}
+             </p>
+           END
+         end
+      %>
+      <%=
+         exercise(Lib::LZ77) do
+           <<-END
+             <p>
+               Apply LZ77 to decompress the following data:
+             </p>
+             #{lz77_decoding [
+                               [0, 0, 'a'],
+                               [1, 2, 'b'],
+                               [3, 12, 'c']
+                             ]}
+             <p>
+               Original string: #{text_field 'aaabaabaabaabaabc'}
+             </p>
+           END
+         end
+      %>
+
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
