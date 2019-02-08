@@ -1,0 +1,182 @@
+\usepackage{ucll-code}
+
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{RAII}
+\author{Fr\'ed\'eric Vogels}
+
+
+\lstset{language=c++14}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Resources}
+  \structure{What are resources?}
+  \begin{itemize}
+    \item Can be acquired
+    \item While acquired, can generally not be shared
+    \item Must be released so that others can use it
+  \end{itemize}
+  \vskip5mm
+  \structure{Examples of resources}
+  \begin{itemize}
+    \item Memory
+    \item Files
+    \item Ports (networking)
+    \item GPU (pre Windows Vista)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Heap Memory}
+  \begin{itemize}
+    \item Acquiring: {\tt T* p = new T}
+    \item Releasing: {\tt delete p;}
+    \item Sharing not allowed: two objects can never share memory
+    \item Not releasing leads to memory leaks 
+    \item Memory leaks lead to memory exhaustion
+    \item Memory exhaustion leads to crash
+    \item Crash leads to unhappy users
+    \item You do not want unhappy users
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Files}
+  \begin{itemize}
+    \item Sharing is possible
+    \item Multiple readers
+    \item Single writer
+    \item Multiple writers: feasible but difficult
+    \item Files must be ``closed''
+    \item Consequences of not closing:
+          \begin{itemize}
+            \item Readers block writers
+            \item Writers block readers and writers
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Resources}
+  \begin{itemize}
+    \item Correct resource management is important
+    \item Always free your resources
+    \item Resource exhaustion is a Bad Thing
+    \item Keep exceptions in mind!
+  \end{itemize}
+  \vskip5mm
+  \structure{Resource Management in an Ideal World}
+  \begin{itemize}
+    \item You want the resource to be freed \emph{automatically}
+    \item You don't want to be able to forget to free resources
+    \item You want to know when the resource gets freed
+    \item You don't want to have take exceptions into account
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java}
+  \begin{itemize}
+    \item {\tt finalize}
+          \begin{procontralist}
+            \pro Release cannot be forgotten
+            \con Nondeterministic: you don't know when it will be called
+            \con Trouble with zombies
+            \con Discouraged
+          \end{procontralist}
+    \item {\tt close} in {\tt finally}
+          \begin{procontralist}
+            \pro Deterministic
+            \con Difficult to get it right
+            \con Lots of boilerplate
+            \con You can still forget to release resources
+          \end{procontralist}
+    \item Since 1.7: \link{https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html}{try with resources}
+          \begin{procontralist}
+            \pro Deterministic
+            \pro No code necessary to release, hence cannot be forgotten
+          \end{procontralist}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\cpp}
+  \begin{itemize}
+    \item \cpp\ has no \texttt{try/finally} or try-with-resources
+    \item RAII: Resource Acquisition is Initialisation
+    \item Resource is represented by object
+    \item Object has destructor
+    \item Destructor is responsible for releasing resource
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Explicit Release}
+  \code[font=\small]{explicit-delete.cpp}
+  \begin{itemize}
+    \item Horribly fragile
+    \item What if {\tt ...} throws exception?
+    \item What if multiple {\tt return}s? Multiple {\tt delete}s needed
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \code[font=\small]{using-deleter.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\tt deleter}
+  \begin{itemize}
+    \item {\tt deleter} auxiliary objects
+    \item Destructor will be called whenever it goes out of scope
+          \begin{itemize}
+            \item On function's end of body
+            \item At every {\tt return}
+            \item At every exception
+          \end{itemize}
+    \item Still need not to forget about {\tt deleter}
+    \item Clumsy solution
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \code[font=\small]{intarray.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Destructors}
+  \begin{itemize}
+    \item Every resource should be represented by an object
+    \item The destructor should always release the resource
+    \item No leaks possible
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Memory Resource}
+  \code[font=\small]{vector.cpp}
+  \begin{itemize}
+    \item {\tt ns} allocates memory
+    \item This memory is deallocated automatically by {\tt ns}'s destructor
+    \item {\tt vector}s can be seen as ``automated resource management for heap allocated arrays''
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: File Resource}
+  \code[font=\small,width=.9\linewidth]{file.cpp}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "raii"
+%%% End:
