@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Inheritance</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               Foo() { std::cout << "FD"; }
+             };
+
+             struct Bar : public Foo {
+               Bar() { std::cout << "BD"; }
+             };
+
+             int main()
+             {
+               Foo foo;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               Foo() { std::cout << "FD"; }
+             };
+
+             struct Bar : public Foo {
+               Bar() { std::cout << "BD"; }
+             };
+
+             int main()
+             {
+               Bar bar;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 A subclass constructor will call its superconstructor
+                 prior to execute its own body.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               ~Foo() { std::cout << "FX"; }
+             };
+
+             struct Bar : public Foo {
+               ~Bar() { std::cout << "BX"; }
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               Bar bar;
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 A subclass destructor does the opposite of constructors:
+                 it first executes its own prior, and only then
+                 calls its superdestructor.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               Foo(int) { std::cout << "Fi"; }
+               ~Foo()   { std::cout << "FX"; }
+             };
+
+             struct Bar : public Foo {
+               
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               Bar bar;
+               std::cout << "]";
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>Bar::Bar()</code> tries to call <code>Foo:Foo()</code>,
+                 but no such constructor exists.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               Foo(int) { std::cout << "Fi"; }
+               ~Foo()   { std::cout << "FX"; }
+             };
+
+             struct Bar : public Foo {
+               Bar() : Foo(0) { std::cout << "BD"; }
+               ~Bar()         { std::cout << "BX"; }
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               Bar bar;
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>Bar::Bar()</code> explicitly chooses a superconstructor to call.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               ~Foo()   { std::cout << "FX"; }
+             };
+
+             struct Bar : public Foo {
+
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               Bar bar;
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 Each object must have a destructor. If you don't define one, the compiler generates one for you
+                 that will call the destructor of each member variable and then calls the superdestructor.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               ~Foo()   { std::cout << "FX"; }
+             };
+
+             struct Bar : public Foo {
+               Foo foo;
+
+               ~Bar()   { std::cout << "BX"; }
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               Bar bar;
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>Bar::~Bar()</code> is called. There are three things it has to do:
+               </p>
+               <ul>
+                 <li>
+                   Destroying <code>Bar</code>'s member variables.
+                 </li>
+                 <li>
+                   Calling the superdestructor.
+                 </li>
+                 <li>
+                   Executing its body.
+                 </li>
+               </ul>
+               <p>
+                 The question is now, in what order are these actions taken?
+               </p>
+               <p>
+                 Calling the superdestructor must definitely come last, as otherwise you'd be cutting the branch you're sitting on.
+                 That leaves us with the destructor body and the member variables.
+               </p>
+               <p>
+                 If the member variables were to be destroyed before the destructor body, what would the destructor body operate on?
+                 Thus, it makes more sense that the destructor body is called first.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo {
+               int x;
+               
+               Foo(int x) : x(x) { std::cout << "FD" << x; }
+               ~Foo()            { std::cout << "FX" << x; }
+             };
+
+             struct Bar : public Foo {
+               Foo foo;
+
+               Bar() : Foo(1), foo(2) { }
+               ~Bar()                 { Foo f(3); std::cout << "BX"; }
+             };
+
+             int main()
+             {
+               std::cout << "[";
+               Bar bar;
+               std::cout << "]";
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               void f() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+               void f() { std::cout << "bar"; }
+             };
+
+             int main()
+             {
+               Bar bar;
+               bar.f();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               virtual void f() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+               void f() override { std::cout << "bar"; }
+             };
+
+             int main()
+             {
+               Bar bar;
+               Foo foo = bar;
+               
+               foo.f();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>Bar bar</code> creates a fresh <code>Bar</code> object. Next, a new <code>Foo</code> object is created using
+                 its copy constructor <code>Foo::Foo(const Foo&amp;)</code>. This copy constructor has been generated by the compiler because you didn't define one yourself.
+                 This autogenerated copy constructor copies all member variables from the received object, but this is of no importance for this exercise.
+                 What matters is that <code>Foo foo = bar</code> constructed a <code>Foo</code> object, and so calling <code>f()</code>
+                 on <code>foo</code> executes <code>Foo::f()</code>, not <code>Bar::f()</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               void f() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+               void f() { std::cout << "bar"; }
+             };
+
+             int main()
+             {
+               Foo* p = new Bar;
+               p->f();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 When trying to find out what <code>p-&gt;f()</code> does, there are two possibilities to choose from (ignoring the ever possible undefined behaviour):
+               </p>
+               <ul>
+                 <li>
+                   Either <code>Foo::f()</code> gets called.
+                 </li>
+                 <li>
+                   Or, <code>Bar::f()</code> gets called.
+                 </li>
+               </ul>
+               <p>
+                 The compiler operates as follows:
+               </p>
+               <ol>
+                 <li>
+                   The compiler determines the type of <code>p</code>, which is <code>Foo*</code>.
+                 </li>
+                 <li>
+                   The compiler looks for information about <code>f</code> in <code>Foo</code>.
+                 </li>
+                 <li>
+                   The compiler notices that <code>f</code> is not virtual, so it generates
+                   a call to <code>Foo::f()</code>. Had <code>f</code> been declared virtual,
+                   the compiler would have generated code to determine the dynamic
+                   type of whatever <code>p</code> points to (in our case that would be <code>Bar</code>)
+                   and call that type's <code>f</code> (i.e. <code>Bar::f()</code>).
+                 </li>
+               </ol>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               virtual void f() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+               void f() override { std::cout << "bar"; }
+             };
+
+             int main()
+             {
+               Foo* p = new Bar;
+               p->f();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The compiler sees that <code>f</code> is virtual, so the dynamic type (<code>Bar</code>) is used to determine which version of <code>f</code> to call.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               Foo() { f(); }
+               
+               virtual void f() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+               void f() override { std::cout << "bar"; }
+             };
+
+             struct Qux : public Bar
+             {
+               void f() override { std::cout << "qux"; }
+             };
+
+             int main()
+             {
+               Foo* p = new Qux;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 At the time <code>Foo::Foo()</code> calls <code>f()</code>, the <code>Qux</code> object is not fully constructed yet:
+                 only the <code>Foo</code> layer is ready. Virtual method calls in constructors can only go so "deep" as the object is constructed.
+                 In our case, the only available version of <code>f</code> is <code>Foo::f()</code> (the <code>Bar</code> and <code>Qux</code>
+                 layers not yet having been constructed), so this is the one being called.                 
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               Foo() { f(); }
+               
+               virtual void f() { std::cout << "foo"; }
+             };
+
+             struct Bar : public Foo
+             {
+               Bar() { f(); }
+               
+               void f() override { std::cout << "bar"; }
+             };
+
+             struct Qux : public Bar
+             {
+               Qux() { f(); }
+               
+               void f() override { std::cout << "qux"; }
+             };
+
+             int main()
+             {
+               Foo* p = new Qux;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 When <code>Foo::Foo()</code> calls <code>f()</code>, only the <code>Foo</code> layer
+                 has been constructed, so the "deepest" method to call is <code>Foo:f()</code>.
+               </p>
+               <p>
+                 Next, <code>Bar::Bar()</code> calls <code>f()</code>. At that time, both the <code>Foo</code> and <code>Bar</code> layer
+                 are ready, so <code>f()</code> will execute <code>Bar::f()</code>.
+               </p>
+               <p>
+                 Lastly, <code>Qux::Qux()</code> calls <code>f()</code>, and by this time all layers have been constructed, meaning
+                 <code>Qux::f()</code> gets called.
+               </p>                 
+             </div>
+           END
+         end
+      %>
+         
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write a class hierarchy containing <code>Shape</code>, <code>Rectangle</code> and <code>Square</code>.
+              A <code>Shape</code> has two abstract methods <code>circumference</code> and <code>area</code>,
+              which are implemented in <code>Rectangle</code> and <code>Square</code>.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Open the <code>ast</code> folder. Translate the <code>Expression</code> hierarchy from Java to C++.
+            </p>
+          END
+        end
+      %>
+         
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
