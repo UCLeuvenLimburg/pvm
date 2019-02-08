@@ -1,0 +1,67 @@
+\section{Generics}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Generics (Java/\csharp)}
+  \begin{itemize}
+    \item Java and \csharp\ support generic classes
+    \item Classes parameterised in one or more type variables
+    \item Typical use: container classes
+          \begin{itemize}
+            \item \texttt{List<T>}
+            \item \texttt{Set<T>}
+            \item \texttt{Map<K, V>}
+            \item \dots
+          \end{itemize}
+    \item You can define your own
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{How Do Generics Work in \csharp?}
+  \code[language=csharp,font=\small]{generics.cs}
+  \vskip-10mm
+  \begin{overprint}
+    \onslide<1>
+    \codeunderlinex{list type parameter}
+    \begin{center}
+      Add type parameters to class name
+    \end{center}
+
+    \onslide<2>
+    \codeunderlinex{list items field type}
+    \codeunderlinex{list items field initialization}
+    \codeunderlinex{list add parameter type}
+    \begin{center} 
+      Use type parameters wherever necessary
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Type Checks}
+  \begin{itemize}
+    \item As always, compiler type checks your code
+    \item Since \texttt{T} could be any type, you cannot make any assumptions about it
+    \item Code below won't compile
+  \end{itemize}
+  \code[language=csharp]{generics-typechecks.cs}
+  \codeunderlinex{typecheck muzzify}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Type Bounds}
+  \begin{itemize}
+    \item If your \texttt{Foo<T>} class needs to interact with \texttt{T} objects,
+          you can demand that \texttt{T} is a subtype of some other type
+    \item \texttt{Foo} now only accepts \texttt{T}s that are muzzifiable
+  \end{itemize}
+  \code[language=csharp]{generics-bounds.cs}
+  \codeunderlinex{type bound}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "templates"
+%%% End:

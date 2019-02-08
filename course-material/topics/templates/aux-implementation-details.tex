@@ -1,0 +1,33 @@
+\section{Implementation Details}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Code Organisation}
+  \structure{For non-templated functions/classes}
+  \begin{itemize}
+    \item Put declarations in \texttt{.h} file
+    \item Put definitions in \texttt{.cpp} file
+  \end{itemize}
+  \vskip5mm
+  \structure{For templated functions/classes}
+  \begin{itemize}
+    \item Put entire definition in \texttt{.h} file
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reason}
+  \begin{itemize}
+    \item Compiler needs to be able to generate code from template
+    \item For this, compiler needs source code of template definition
+    \item If template definition were in separate \texttt{.cpp} file, the compiler wouldn't have access to it
+  \end{itemize}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "templates"
+%%% End:
