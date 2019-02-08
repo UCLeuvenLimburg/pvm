@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Declarations</div>
+    </header>
+    <div id="contents">
+      <%=
+         interpretation(<<-END)
+           #include <iostream>
+
+           int main()
+           {
+             std::cout << "Hello world" << std::endl;
+
+             return 0;
+           }
+         END
+      %>
+
+      <%= interpretation(<<-END, input: '5')
+            #include <iostream>
+
+            int main()
+            {
+              int x;
+              std::cin >> x;
+
+              std::cout << 2 * x << std::endl;
+
+              return 0;
+            }
+          END
+      %>
+
+      <%= interpretation(<<-END, input: '8')
+            #include <iostream>
+
+            int main()
+            {
+              int x;
+              std::cin >> x;
+
+              std::cout << (x ^ 2) << std::endl;
+
+              return 0;
+            }
+          END
+      %>
+
+      <%= interpretation(<<-END, input: 'abcde')
+            #include <iostream>
+            #include <string>
+
+            int main()
+            {
+              std::string string;
+
+              std::cin >> string;
+
+              std::cout << "The string counts "
+                        << string.length()
+                        << " characters"
+                        << std::endl;
+
+              return 0;
+            }
+          END
+      %>
+
+      <%= interpretation(<<-END, input: '5 1 2 3 4 5')
+            #include <iostream>
+
+            int main()
+            {
+              int n;
+              std::cin >> n;
+
+              int total = 0;
+              for ( int i = 0; i != n; ++i )
+              {
+                int x;
+                std::cin >> x;
+                total += x;
+              }
+
+              std::cout << total << std::endl;
+
+              return 0;
+            }
+          END
+      %>
+
+      <%= interpretation(<<-END, input: '10 6 4 1 8 7 -2 3 8 4 0')
+            #include <iostream>
+            #include <limits>
+
+            int next_int();
+            int pick(int, int);
+
+            int main()
+            {
+              int result = std::numeric_limits<int>::max();
+              int n = next_int();
+
+              for ( int i = 0; i != n; ++i )
+              {
+                result = pick(result, next_int());
+              }
+
+              std::cout << result << std::endl;
+
+              return 0;
+            }
+
+            int next_int()
+            {
+              int x;
+              std::cin >> x;
+
+              return x;
+            }
+
+            int pick(int x, int y)
+            {
+              return x < y ? x : y;
+            }
+          END
+      %>
+
+      <%= format_exercise do
+            <<-END
+              <ul>
+                <li>
+                  Open to the directory <code>labs/declarations/missing-declarations</code>.
+                </li>
+                <li>
+                  Double click on the solution file <code>missing-declarations.sln</code>.
+                </li>
+                <li>
+                  Compile the code (CTRL + SHIFT + B). Errors should appear. These are
+                  due to missing declarations, i.e. code is referring
+                  to functions that only appear later in the code.
+                </li>
+                <li>
+                  Add the necessary forward declarations to make the code compile.
+                </li>
+              </ul>
+            END
+          end
+      %>
+
+      <%= format_exercise do
+            <<-END
+              <p>
+                Open the solution in <code>labs/declarations/countdown</code>.
+                Finish the function <code>countdown(int from)</code> (in <code>student.cpp</code>)
+                so that writes the numbers starting with <code>from</code> until <code>1</code>
+                to <code>std::cout</code>.
+              </p>
+              <p>
+                Tests are provided: run them with CTRL + F5.
+              </p>
+            END
+          end
+      %>
+
+      <%= format_exercise do
+            <<-END
+                <p>
+                  Open the solution in <code>labs/declarations/nth_prime</code>.
+                  Write the function <code>nth_prime</code> that returns the nth prime.
+                </p>
+            END
+          end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+  </script>
+</html>
