@@ -1,0 +1,108 @@
+\usepackage{ucll-code}
+
+
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{Heap Allocation}
+\author{Fr\'ed\'eric Vogels}
+
+
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Allocation Methods}
+  \begin{columns}[t]
+    \column{3cm}
+    \begin{center}
+      \textbf{Static}
+    \end{center}
+    \begin{procontralist}
+      \pro Fast
+      \con Unflexible
+    \end{procontralist}
+    \column{3cm}
+    \begin{center}
+      \textbf{Stack}
+    \end{center}
+    \begin{procontralist}
+      \pro Fast
+      \con Semiflexible
+    \end{procontralist}
+    \column{3cm}
+    \begin{center}
+      \textbf{Heap}
+    \end{center}
+    \begin{procontralist}
+      \con Slow
+      \pro Flexible
+    \end{procontralist}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Allocating on the Heap}
+  \begin{center}
+    \tt {\bfseries new} {\it type}
+  \end{center}
+  \begin{itemize}
+    \item Returns a pointer to {\it type}
+    \item Memory contains random bits
+  \end{itemize}
+  \vskip5mm
+  \structure{Example}
+  \code[frame=lines,width=.75\linewidth,language=c++14]{allocation-example.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Initialisation}
+  \begin{center}
+    \tt {\bfseries new} {\it type}({\it args})
+  \end{center}
+  \begin{itemize}
+    \item Constructor-style syntax
+    \item Works on primitive types
+  \end{itemize}
+  \vskip5mm
+  \structure{Example}
+  \code[frame=lines,width=.75\linewidth,language=c++14]{initialisation-example.cpp}  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Freeing Memory}
+  \begin{center}
+    \tt {\bfseries delete} {\it id}
+  \end{center}
+  \begin{itemize}
+    \item Deallocating memory necessary
+    \item Illegal to use pointer after {\tt delete}: dangling pointer
+  \end{itemize}
+  \vskip5mm
+  \structure{Example}
+  \code[frame=lines,width=.75\linewidth,language=c++14]{delete-example.cpp}  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Memory Leaks}
+  \code[frame=lines,width=.75\linewidth,language=c++14]{memory-leak.cpp}
+  \begin{itemize}
+    \item Don't forget to \texttt{delete}
+    \item Leads to memory leaks
+    \item No way to find out if a pointer has already been deleted
+    \item Design often affected by manual memory management
+    \item Need for many helper classes to deal with complexity
+  \end{itemize}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "heap-allocation"
+%%% End:
