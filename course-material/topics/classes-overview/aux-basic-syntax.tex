@@ -1,0 +1,89 @@
+\section{Basic Syntax}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Classes: Basic Syntax}
+  \code[language=c++14]{basic-syntax.cpp}
+  \onslide<1>{
+    \codeunderlinex{basic syntax private}
+    \codeunderlinex{basic syntax public}
+  }
+  \onslide<2>{
+    \codeunderlinex{basic syntax semicolon}
+  }
+  \begin{overprint}
+    \onslide<1>
+    \begin{itemize}
+      \item Members with same access are grouped
+      \item You can alternate as many times you you want
+    \end{itemize}
+    \onslide<2>
+    
+    \begin{itemize}
+      \item Don't forget the semicolon at the end
+    \end{itemize}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Default Access}
+  \code[language=c++14]{default-access.cpp}
+  \begin{itemize}
+    \item Default access: \texttt{private}
+    \item $\rightarrow$ \texttt{x} is private
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Access Modifiers}
+  \begin{itemize}
+    \item \texttt{public}
+          \begin{itemize}
+            \item Accessible to everyone
+          \end{itemize}
+    \item \texttt{protected}
+          \begin{itemize}
+            \item Accessible to subclasses
+            \item Different from Java!
+          \end{itemize}
+    \item \texttt{private}
+          \begin{itemize}
+            \item Accessible within class
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Member Functions Inside Class Declaration}
+  \code[language=c++14]{member-functions.cpp}
+  \begin{itemize}
+    \item Preferably only for single statement methods
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Member Functions Outside Class Declaration}
+  \code[language=c++14]{member-functions2.cpp}
+  \codeunderlinex{basic syntax class designator}
+  \vskip-5mm
+  \begin{itemize}
+    \item Indicates the member function's class
+    \item Without it, \cpp\ will think \texttt{getAge} is global function
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Typical File Layout}
+  \begin{columns}
+    \column{5.5cm}
+    \code[language=c++14,font=\small,width=.99\linewidth,title={Foo.h}]{layout.h}
+    \column{5.5cm}
+    \code[language=c++14,font=\small,width=.99\linewidth,title={Foo.cpp}]{layout.cpp}
+  \end{columns}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "classes-overview"
+%%% End:

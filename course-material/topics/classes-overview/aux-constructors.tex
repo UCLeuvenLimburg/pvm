@@ -1,0 +1,153 @@
+\section{Constructors}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Constructors}
+  \begin{itemize}
+    \item Called upon object creation
+    \item Which constructor depends on context
+          \begin{itemize}
+            \item When explicitly creating object: same rules as Java
+            \item There are other situations where objects are created
+            \item Details discussed in separate set of slides
+          \end{itemize}
+    \item Constructor initialises all member variables
+          \begin{itemize}
+            \item Different rules than Java!
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Initialiser List}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Initialiser List}
+  \begin{overprint}
+    \onslide<1>
+    \code[language=c++14]{initialiser-list.cpp}
+    \begin{tikzpicture}[remember picture,overlay,link/.style={-latex,red,thick}]
+      \codeunderlinex{constructor field a}
+      \codeunderlinex{constructor field b}
+      \codeunderlinex{constructor field c}
+      \codeoverlinex{constructor parameter a}
+      \codeoverlinex{constructor parameter b}
+      \codeoverlinex{constructor parameter c}
+      \draw[link] (constructor parameter a) -- ++(0,0.25) -| (constructor field a);
+      \draw[link] (constructor parameter b) -- ++(0,0.5) -| (constructor field b);
+      \draw[link] (constructor parameter c) -- ++(0,0.75) -| (constructor field c);
+    \end{tikzpicture}
+
+    \onslide<2>
+    \code[language=c++14]{initialiser-list2.cpp}
+
+    \onslide<3>
+    \code[language=c++14]{initialiser-list3.cpp}
+
+    \onslide<4>
+    \code[language=c++14]{initialiser-list4.cpp}
+
+    \onslide<5>
+    \code[language=c++14]{initialiser-list5.cpp}
+    \begin{tikzpicture}[remember picture,overlay,link/.style={red,thick}]
+      \codeunderlinex{ilnaming field a}
+      \codeunderlinex{ilnaming field b}
+      \codeunderlinex{ilnaming field c}
+
+      \codeoverlinex{ilnaming init a}
+      \codeoverlinex{ilnaming init b}
+      \codeoverlinex{ilnaming init c}
+
+      \draw[link] (ilnaming init a) -- ++(0,0.25) -| (ilnaming field a);
+      \draw[link] (ilnaming init b) -- ++(0,0.5) -| (ilnaming field b);
+      \draw[link] (ilnaming init c) -- ++(0,0.75) -| (ilnaming field c);
+    \end{tikzpicture}
+
+    \onslide<6>
+    \code[language=c++14]{initialiser-list5.cpp}
+    \begin{tikzpicture}[remember picture,overlay,link/.style={red,thick}]
+      \codeunderlinex{ilnaming parameter a}
+      \codeunderlinex{ilnaming parameter b}
+      \codeunderlinex{ilnaming parameter c}
+
+      \codeoverlinex{ilnaming value a}
+      \codeoverlinex{ilnaming value b}
+      \codeoverlinex{ilnaming value c}
+
+      \draw[link] (ilnaming value a) -- (ilnaming parameter a);
+      \draw[link] (ilnaming value b) -- (ilnaming parameter b);
+      \draw[link] (ilnaming value c) -- (ilnaming parameter c);
+    \end{tikzpicture}
+
+    \onslide<7>
+    \code[language=c++14]{initialiser-list7.cpp}
+  \end{overprint}
+
+  \begin{overprint}
+    \onslide<1>
+    \begin{center}
+      Initialiser list gets executed first \\
+      Sets \texttt{a = 1}, \texttt{b = 2}, \texttt{c = 3}
+    \end{center}
+
+    \onslide<2>
+    \begin{center}
+      Initialiser list is series of constructor calls
+    \end{center}
+
+    \onslide<3>
+    \begin{center}
+      Compiler completes list with default constructor calls
+    \end{center}
+
+    \onslide<4>
+    \begin{center}
+      Omitting field initialisation is error if no default constructor \\
+      In example: \texttt{foo2} requires explicit initialisation
+    \end{center}
+
+    \onslide<5-6>
+    \begin{center}
+      \cpp\ is smart enough to know whether you refer to the member
+      variable or the parameter value
+    \end{center}
+
+    \onslide<7>
+    \begin{center}
+      Warning: default constructors of primitive types do nothing! \\
+      \texttt{x}, \texttt{y} and \texttt{z} will have random values!
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\subsection{Constructor Body}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Constructor Body}
+  \begin{itemize}
+    \item Only after initialiser list does body get executed
+    \item Initialise as much as possible in initialiser list
+          \begin{itemize}
+            \item Otherwise field will get initialised twice
+            \item In example, field \texttt{foo} gets initialised twice
+          \end{itemize}
+  \end{itemize}
+  \code[language=c++14,font=\scriptsize]{double-initialisation.cpp}
+\end{frame}
+
+\subsection{Delegation}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Delegating To Other Constructor}
+  \code[language=c++14]{construction-delegation.cpp}
+  \codeunderlinex{constructor delegation nullary}
+  \codeunderlinex{constructor delegation unary}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "classes-overview"
+%%% End:

@@ -1,0 +1,149 @@
+\section{Destructors}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Destructors}
+  \begin{center}
+    \begin{tabular}{lll}
+      & \textbf{Constructor} & \textbf{Destructor} \\
+      \toprule
+      \textbf{Called} & at creation & on destruction \\
+      \textbf{Name} & {\tt classname()} & {\tt \~{}classname()} \\
+      \textbf{Parameters} & No restrictions & None \\
+      \textbf{Overloads} & Possible & Impossible \\
+    \end{tabular}
+  \end{center}
+  \vskip5mm
+  \code[language=c++14,width=.6\linewidth]{destructor.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reason for Destructors}
+  \begin{itemize}
+    \item Object requires resources (memory, files, \dots)
+    \item When object dies, its resources need to be freed
+          \begin{itemize}
+            \item Heap allocated memory must be freed
+            \item Files must be closed
+            \item \dots
+          \end{itemize}
+    \item Constructor acquires resources
+    \item Destructor frees those resources
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Destructors in Java}
+  \begin{itemize}
+    \item Java needs not free memory thanks to garbage collection
+    \item Files/streams/\dots still need to be released
+    \item Java went through several solutions
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java Approach \#1: {\tt finalize}}
+  \begin{itemize}
+    \item Object has {\tt finalize} method ({\tt protected})
+    \item Can be overriden in subclasses
+    \item Called by garbage collector when object gets recycled
+  \end{itemize}
+  \code[language=java,font=\small]{finalize.java}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Problems with \texttt{finalize}}
+  \begin{itemize}
+    \item Nondeterministic: you never know when the GC will notice object has become unreachable
+    \item {\tt finalize()} itself could make the object reachable again
+          \begin{itemize}
+            \item \link{https://en.wikipedia.org/wiki/Object_resurrection}{Zombie objects}
+          \end{itemize}
+    \item Rule of thumb: do not rely on {\tt finalize}
+  \end{itemize}
+  \code[language=java,font=\small]{zombie.java}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java Approach \#2: {\tt try/finally}}
+  \begin{itemize}
+    \item Object has to be closed manually by calling {\tt close()}
+    \item Should be used with {\tt try/finally}
+  \end{itemize}
+  \code[language=java,font=\small]{close.java}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Problems with {\tt try/finally}}
+  \begin{itemize}
+    \item Easy to forget
+    \item Writing correct \texttt{try/finally} is actually complex
+    \item Compiler does not remind you
+    \item No consistent naming (e.g.\ {\tt close}, {\tt destroy}, {\tt dispose}, \dots)
+  \end{itemize}
+  \code[language=java,font=\tiny,width=.6\linewidth]{correct-close.java}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java Approach \#3: {\tt Closeable}}
+  \begin{itemize}
+    \item Interface with {\tt close} method
+    \item \link{https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html}{\tt try-with-resources}
+    \item Introduced in Java 7
+  \end{itemize}
+  \vskip5mm
+  \code[language=java,font=\small,width=.9\linewidth]{try-with-resources.java}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\cpp\ Approach}
+  \begin{itemize}
+    \item Destructors are similar to {\tt finalize}
+    \item Called when object gets destroyed
+    \item Important difference: destructors are fully deterministic
+  \end{itemize}
+  \vskip5mm
+  \begin{overprint}
+    \onslide<handout:1|1>
+    \code[language=c++14,width=.9\linewidth]{out-of-scope.cpp}
+
+    \onslide<handout:2|2>
+    \code[language=c++14,width=.9\linewidth]{delete.cpp}
+
+    \onslide<handout:3|3>
+    \code[language=c++14,width=.9\linewidth]{delete-array.cpp}
+
+    \onslide<handout:4|4>
+    \code[language=c++14,width=.9\linewidth]{pointer-out-of-scope.cpp}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Usage: Example}
+  \code[language=c++14]{destructor-usage.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Usage: Example}
+  \code[language=c++14,width=.9\linewidth]{destructor-members.cpp}
+  \begin{itemize}
+    \item Destructor implicitly calls destructors of all fields
+    \item A pointer's destructor does nothing!
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Destructors: Usage}
+  \begin{itemize}
+    \item Destructor needs to clean up things that do not clean up themselves (e.g.~pointers)
+    \item Never call destructor yourself
+  \end{itemize}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "classes-overview"
+%%% End:

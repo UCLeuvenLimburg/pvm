@@ -1,0 +1,87 @@
+\section{Objects}
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Objects on the Stack}
+  \code[language=c++14]{instantiatation-stack.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Objects on the Stack}
+  \code[language=c++14,font=\small,width=.95\linewidth]{instantiatation-stack-wrong-syntax.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Object on the Heap}
+  \begin{overprint}
+    \onslide<handout:1|1>
+    \code[language=c++14]{instantiatation-heap.cpp}
+    \onslide<handout:2|2>
+    \code[language=c++14]{instantiatation-heap2.cpp}
+  \end{overprint}
+  \begin{itemize}
+    \item \texttt{(*p).member}: clumsy syntax
+    \item Shorthand: \texttt{p->member} means same thing
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Difference With Java}
+  \code[language=c++14,width=.2\linewidth]{object.cpp}
+  \structure{Java}
+  \begin{itemize}
+    \item \texttt{foo} is a \emph{reference} to an object
+  \end{itemize}
+  \structure{\cpp}
+  \begin{itemize}
+    \item \texttt{foo} is the object itself
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Assignment}
+  \code[language=c++14,width=.25\linewidth]{assignment.cpp}
+  \structure{Java}
+  \begin{itemize}
+    \item After assignment, \texttt{f} and \texttt{g} refer to same object
+  \end{itemize}
+  \structure{\cpp}
+  \begin{itemize}
+    \item After assignment, \texttt{f} and \texttt{g} are still distinct objects
+    \item Assignment overwrites fields of \texttt{f} with fields of \texttt{g}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Recursive Data Structures}
+  \code[language=c++14,font=\small,width=.4\linewidth]{recursive.cpp}
+  \structure{Java}
+  \begin{itemize}
+    \item Each \texttt{Foo} refers to a \texttt{Foo} object
+    \item No infinite recursion, no infinite amount objects required
+          \begin{itemize}
+            \item \texttt{field} could refer to owning object
+            \item \texttt{field} could contain \texttt{null}
+          \end{itemize}
+  \end{itemize}
+  \structure{\cpp}
+  \begin{itemize}
+    \item Invalid class declaration
+    \item A \texttt{Foo} actually contains another \texttt{Foo}
+    \item \link{https://en.wikipedia.org/wiki/Matryoshka_doll}{Matryoshka}-like infinite recursion
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Java vs \cpp}
+  \structure{Java Code}
+  \code[language=java]{recursive-example.java}
+  \vskip4mm
+  \structure{\cpp\ Equivalent}
+  \code[language=c++14]{recursive-example.cpp}
+\end{frame}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "classes-overview"
+%%% End:
