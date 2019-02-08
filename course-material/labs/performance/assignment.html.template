@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Performance</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Numerical) do
+           extend SourceCodeMixin
+
+           self.source = <<-END
+             struct Date
+             {
+               uint32_t day, month, year;
+             };
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>
+               How many bytes does a <code>Date</code> object occupy in memory, taking into account memory alignment? #{show_input_field(12, 0)}
+             </p>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           extend SourceCodeMixin
+           extend MemoryLayoutMixin
+
+           self.source = <<-END
+             struct Date
+             {
+               uint8_t day, month;
+               int32_t year;
+             };
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>
+               How many bytes does a <code>Date</code> object occupy in memory, taking into account memory alignment? #{show_input_field(8, 0)}
+             </p>
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The memory layout can be visualised as follows:
+               </p>
+               #{memory_layout(1,2,0,0,3,3,3,3)}
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           extend SourceCodeMixin
+           extend MemoryLayoutMixin
+
+           self.source = <<-END
+             struct Foo
+             {
+               uint16_t x;
+               uint8_t y;
+             };
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>
+               How many bytes does a <code>Foo</code> object occupy in memory, taking into account memory alignment? #{show_input_field(4, 0)}
+             </p>
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The memory layout can be visualised as follows:
+               </p>
+               #{memory_layout(1,1,2,0)}
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           extend SourceCodeMixin
+           extend MemoryLayoutMixin
+
+           self.source = <<-END
+             struct Foo
+             {
+               uint32_t x;
+               uint64_t y;
+               int8_t   z;
+             };
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>
+               How many bytes does a <code>Foo</code> object occupy in memory, taking into account memory alignment? #{show_input_field(24, 0)}
+             </p>
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The memory layout can be visualised as follows:
+               </p>
+               #{memory_layout(1,1,1,1,0,0,0,0,2,2,2,2,2,2,2,2,3,0,0,0,0,0,0,0)}
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Numerical) do
+           extend SourceCodeMixin
+           extend MemoryLayoutMixin
+
+           self.source = <<-END
+             struct Foo
+             {
+               uint8_t x, y, z;
+             };
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>
+               How many bytes does a <code>Foo</code> object occupy in memory, taking into account memory alignment? #{show_input_field(3, 0)}
+             </p>
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The memory layout can be visualised as follows:
+               </p>
+               #{memory_layout(1,2,3)}
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise do
+           extend SourceCodeMixin
+
+           self.source = <<-END
+             struct Foo
+             {
+               uint8_t x;
+               uint16_t y;
+               uint8_t z;
+             };
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>
+               Reorder the member variables so that a <code>Foo</code> object requires a minimal amount of memory. Memory alignment must still be respected.
+             </p>
+             <div data-revealer="Solution" class="explanation">
+               <p>
+                 Using order <code>x</code>, <code>y</code> and <code>z</code>, a <code>Foo</code> requires 6 bytes.
+                 Using order <code>x</code>, <code>z</code> and <code>y</code>, a <code>Foo</code> requires 4 bytes.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise do
+           extend SourceCodeMixin
+
+           self.source = <<-END
+             struct Foo
+             {
+                uint64_t a;
+                uint16_t b;
+                uint32_t c;
+                uint64_t d;
+             };
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>
+               Reorder the member variables so that a <code>Foo</code> object requires a minimal amount of memory. Memory alignment must still be respected.
+             </p>
+             <div data-revealer="Solution" class="explanation">
+               <p>
+                 Using order <code>a d c b</code> gives a size of 8+8+4+2+2 = 24.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <div class="message">
+        For the coding exercises below, make sure you enable optimisations by choosing Release in the dropdown
+        control at the top of your screen (assuming you are using Visual Studio.) By default, this dropdown
+        control shows Debug.
+      </div>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+
+
+          self.source = <<-END
+            auto before = std::chrono::high_resolution_clock::now();
+            // Perform computation
+            auto after = std::chrono::high_resolution_clock::now();
+
+            auto duration_in_ms = std::chrono::duration_cast<std::chrono::milliseconds>(after - before).count();
+          END
+
+          <<-END
+            <p>
+              Find a way to measure the effect of branch prediction:
+              this will involve writing two loops that execute an <code>if</code> millions
+              of time. One loop will try to maximise the effect of branch prediction,
+              the other needs to sabotage it.
+            <p>
+            <p>
+              To thwart branch prediction, you will need to ensure
+              that the condition switches from <code>true</code> to <code>false</code>
+              in a random fashion.
+            </p>
+            <p>
+              Make sure that you measure the correct thing: if you
+              compare an <code>if (true)</code> with a
+              <code>if (random())</code>, the latter will of course
+              run much more slowly, but mostly due to the fact that generating
+              random numbers requires many times more computing
+              power than loading a <code>true</code> value into a register.
+              The subtle effect of the failing branch prediction would be drowned.
+              In other words, both loops need to execute the same
+              instructions, but on different data.
+            </p>
+            <p>
+              To perform time measurements, you can use the following code:
+            </p>
+            #{show_source_editor}
+            <p>
+              In order to get meaningful results, make sure that the benchmarks
+              runs at least a few seconds: millisecond benchmarks
+              are meaningless because "background noise" (such as the OS
+              preempting your program) will affect timings too much.
+            </p>
+            <p>
+              Also be careful that the compiler does not optimise away your code:
+              if the compiler sees your computation is never used, it might
+              ommit your code altogether from the resulting executable.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Find a way to measure the effect of memory alignment.
+            <p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Find a way to measure the effect of the cache.
+            <p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Find a way to measure the effect of reading sequentially vs reading randomly.
+            <p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Look up on how to let the compiler generate assembly from your C++ code.
+              Write a small function that gets called. Check in the outputted assembly that the
+              function does indeed get inlined.
+            <p>
+            <p>
+              Again, you'll have to make sure the compiler does not perform other optimisations
+              (e.g. dead code elimination or compile time execution).
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write code with dead code and check that the generated assembly does
+              indeed not contain the dead code.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Show that abstractions are indeed zero cost, i.e. show
+              that using a helper class does not negatively impact performance.
+            </p>
+          END
+        end
+      %>
+
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
