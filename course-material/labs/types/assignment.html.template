@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Types</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             int main()
+             {
+               int x = 1;
+               auto y = x;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'x', 'int' ],
+                                  [ 'y', 'int' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             int main()
+             {
+               int x = 5;
+               auto y = &x;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'x', 'int' ],
+                                  [ 'y', 'int*' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             int main()
+             {
+               auto a = 5.0;
+               auto b = &a;
+               auto c = &b;
+               auto d = &c;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'a', 'double' ],
+                                  [ 'b', 'double*' ],
+                                  [ 'c', 'double**' ],
+                                  [ 'd', 'double***' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             void foo(int** xs)
+             {
+               auto a = xs[0];
+               auto b = &a;
+               auto c = &xs[1];
+               auto d = *xs[2];
+               auto e = &d;
+               auto f = &e;
+               auto g = f[0][1];
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'a', 'int*' ],
+                                  [ 'b', 'int**' ],
+                                  [ 'c', 'int**' ],
+                                  [ 'd', 'int' ],
+                                  [ 'e', 'int*' ],
+                                  [ 'f', 'int**' ],
+                                  [ 'g', 'int' ] )}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::TypeInference) do
+           self.source = <<-END
+             void foo(const int* xs)
+             {
+               auto x = xs[0];
+               auto y = *&xs;
+             }
+           END
+
+           <<-END
+             #{show_source_editor}
+             <p>What are the types of the following expressions?</p>
+             #{ask_type_of_table( [ 'x', 'int' ],
+                                  [ 'y', 'const int*' ] )}
+           END
+         end
+      %>
+
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
