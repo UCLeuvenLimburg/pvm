@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Templates</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               Foo() { std::cout << "foo"; }
+             };
+
+             template<typename T>
+             void qux()
+             {
+               T x;
+             }
+
+             int main()
+             {
+               qux<Foo>();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>qux</code> is called with type parameter <code>T = Foo</code>, so <code>qux&lt;Foo&gt;()</code>
+                 will create a <code>Foo</code> object.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             struct Foo
+             {
+               Foo() { std::cout << "foo"; }
+             };
+
+             struct Bar
+             {
+               Bar() { std::cout << "bar"; }
+             };
+
+             template<typename T, typename U, typename V>
+             void qux()
+             {
+               T t;
+               U u;
+               V v;
+             }
+
+             int main()
+             {
+               qux<Bar, int, Foo>();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>qux&lt;Bar, int, Foo&gt;</code> creates three local variables of types
+                 <code>Bar</code>, <code>int</code> and <code>Foo</code>, respectively.
+                 Constructing a <code>Bar</code> prints <code>bar</code>,
+                 constructing an <code>int</code> prints nothing,
+                 and constructing a <code>Foo</code> prints <code>foo</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             template<unsigned N>
+             void foo()
+             {
+               std::cout << N;
+             }
+
+             int main()
+             {
+               foo<5>();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 Templates can also be used in conjunction with integral types such as <code>unsigned</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <string>
+
+
+             template<typename T>
+             struct Foo
+             {
+               int value() { return 0; }
+             };
+
+             template<>
+             struct Foo<int>
+             {
+               int value() { return 1; }
+             };
+
+             template<>
+             struct Foo<double>
+             {
+               int value() { return 2; }
+             };
+
+             template<>
+             struct Foo<bool>
+             {
+               int value() { return 3; }
+             };
+
+             int main()
+             {
+               Foo<int> a;
+               Foo<bool> b;
+               Foo<std::string> c;
+               
+               std::cout << a.value() << b.value() << c.value();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 This is an example of template specialisation. By default, <code>Foo&lt;T&gt;::value()</code> returns <code>0</code>.
+                 <code>int</code>, <code>double</code> and <code>bool</code>, however, have specialised definitions.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+             #include <string>
+
+
+             template<unsigned N>
+             struct Foo
+             {
+               static unsigned value()
+               {
+                 return N + Foo<N-1>::value();
+               }
+             };
+
+             template<>
+             struct Foo<0>
+             {
+               static unsigned value()
+               {
+                 return 0;
+               }
+             };
+            
+
+             int main()
+             {
+               std::cout << Foo<5>::value();
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code? Enter <code>DNC</code> if the code does not compile. Enter <code>???</code> if its behaviour is undefined.</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+              
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write a class <code>Pair&lt;T1, T2&gt;</code> that holds two values of types <code>T1</code> and <code>T2</code> respectively.
+              Many languages use pairs (or triplets, &hellip;) as a means to return more than one value from functions.
+            </p>
+            <p>
+              A <code>Pair&lt;T1, T2&gt;</code> does not offer any interesting functionality; it only allows you to access both components
+              (called <code>first</code> and <code>second</code>) of the pair.
+            </p>
+            <p>
+              Remember that templates are to be entirely defined in the header file.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write a function <code>max(x, y)</code> that returns the maximum of <code>x</code> and <code>y</code>.
+              The function must rely on the <code>&lt;</code> operator to compare its arguments.
+            </p>
+            <p>
+              Since the function does not know about the size of its arguments (might be <code>int</code>s, might be gigantic data structures),
+              you must pass them by reference. Also return a reference so that things like <code>max(x, y)++</code> are possible.
+              Make sure it also works on <code>const</code> values.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write the <code>Grid<T></code> class, which represents a grid (2D array) with elements of type <code>T</code>.
+              To access elements of the grid, overload the <code>[]</code> operator with a <code>Position</code> object, whose
+              code is given. For example, <code>grid[Position(0,0)] = 5</code> should set the value of
+              the item at position (0, 0) to <code>5</code>.
+            </p>
+          END
+        end
+      %>
+             
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
