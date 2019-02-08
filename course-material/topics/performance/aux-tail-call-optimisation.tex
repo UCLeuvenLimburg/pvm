@@ -1,0 +1,60 @@
+\subsection{Tail Call Optimisation}
+
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Tail Call Optimisation}
+  \begin{itemize}
+    \item Recursive functions call themselves
+          \begin{itemize}
+            \item Involves \texttt{CALL}, \texttt{RET}
+            \item Involves \texttt{PUSH} and \texttt{POP}
+          \end{itemize}
+    \item Are iterative approaches (= using loops) more efficient?
+          \begin{itemize}
+            \item Reuse of same local variables instead of always new ones
+            \item No \texttt{CALL} or \texttt{RET} needed
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Tail Call Optimisation}
+  \code[language=c++14,font=\small,width=.7\linewidth]{tail-call.cpp}
+  \begin{itemize}
+    \item Tail call = returning result of recursive call without any postprocessing
+          \begin{itemize}
+            \item \texttt{return rec()} is ok
+            \item \texttt{return 1 + rec()} is not ok
+          \end{itemize}
+    \item Multiple \texttt{return}s allowed, as long as they are all tail calls
+    \item Recursive call can then recycle same locals
+          \begin{itemize}
+            \item No new stack frame needed for recursive call
+            \item Just reuse current one
+          \end{itemize}
+    \item Tail Call Optimisation transforms recursion to loop
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Tail Call Optimisation: Example}
+  \code[language=c++14,font=\small]{find-last.cpp}
+  \begin{center}
+    Recursive algorithm
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Tail Call Optimisation: Example}
+  \code[font=\small,width=.99\linewidth]{find-last.asm}
+  \begin{center}
+    Generated assembly is iterative
+  \end{center}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "performance"
+%%% End:

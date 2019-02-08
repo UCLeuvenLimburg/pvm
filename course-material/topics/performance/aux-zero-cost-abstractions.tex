@@ -1,0 +1,45 @@
+\subsection{Zero Cost Abstractions}
+
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Zero Cost Abstractions}
+  \begin{itemize}
+    \item Similarly to inlining, objects can be compiled away
+    \item If a \texttt{Foo} contains only a \texttt{double}, working with a \texttt{Foo} is as fast as working with a \texttt{double}
+    \item There is no inherent overhead to objects
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Angles}
+  \begin{itemize}
+    \item Angles can be represented by \texttt{double}s
+    \item Is given \texttt{double} an angle expressed in radians or degrees?
+    \item No way of knowing
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Angles}
+  \begin{itemize}
+    \item We introduce helper class \texttt{angle}
+  \end{itemize}
+  \code[language=c++14,font=\small]{angle.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Angles}
+  \begin{itemize}
+    \item Type contains the unit (\texttt{rad}/\texttt{deg})
+    \item No mistakes possible, compiler will catch them
+    \item Is just as fast as working with straight \texttt{double}s
+  \end{itemize}
+  \code[language=c++14,font=\small]{angle-usage.cpp}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "performance"
+%%% End:

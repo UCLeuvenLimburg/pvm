@@ -1,0 +1,115 @@
+\section{Cache}
+
+\frame{\tableofcontents[currentsection]}
+
+
+\begin{frame}
+  \frametitle{\only<1-5>{Your Work Environment}\only<6>{Storage Mediums}}
+  \begin{center}
+    \begin{tikzpicture}[message/.style={fill=white,draw,font=\small,text opacity=1,drop shadow},
+                        arrow/.style={black,thick,-latex}]
+      \pgfdeclarelayer{background}
+      \pgfdeclarelayer{foreground}
+      \pgfsetlayers{background,main,foreground}
+
+      \draw (0,0) circle [radius=3 cm];
+
+      \draw[fill=black] (0,0) circle [radius=0.05cm];
+
+      \begin{pgfonlayer}{foreground}
+        \visible<1>{
+          \draw[arrow] (90:1.25) -- (90:0.1) node[black,message,at start,above] {This is you};
+        }
+
+        \visible<2>{
+          \draw[arrow] (90:2) -- (60:1) node[black,message,at start,below] {This is your workspace};
+        }
+
+        \visible<3>{
+          \draw[arrow] (90:1) -- (60:0.25) node[black,message,at start,above] {Nearby, but little space};
+        }
+
+        \visible<4>{
+          \draw[arrow] (90:1.5) -- (60:2.75) node[black,message,at start,below] {Lot of space, but far away};
+        }
+
+        \visible<5>{
+          \node[message] at (0,0) {
+            \parbox{5cm}{
+              \centering Where to put your tools is a matter of trading off space for speed
+            }};
+        }
+
+        \visible<6>{
+          \foreach[count=\i,evaluate={\i*0.5-0.25} as \x,evaluate={\i*0.5} as \y] \medium in {CPU Registers,CPU Cache,RAM,SSD,HHD,BluRay} {
+            \node[draw,fill=white,anchor=east,font=\tiny] (medium) at (0,\y) {\medium};
+            \draw[-latex,thick] (medium) -| (\x,0);
+          }
+        }
+      \end{pgfonlayer}
+
+      \onslide<3->{
+        \foreach[count=\i,evaluate={\r/3*100} as \x] \r in {2.5,2,...,0.5} {
+          \draw[dashed] (0,0) circle [radius=\r cm];
+        }
+      }
+
+      \begin{pgfonlayer}{background}
+        \onslide<2>{
+          \draw[fill=gray!50] (0,0) circle [radius=3cm];
+        }
+
+        \onslide<3>{
+          \fill[gray!50] (0,0) circle [radius=0.5cm];
+        }
+
+        \onslide<4>{
+          \fill[gray!50] (0,0) circle [radius=3cm];
+          \fill[white] (0,0) circle [radius=2.5cm];
+        }
+      \end{pgfonlayer}
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Caching}
+  \begin{itemize}
+    \item Cheap storage is often slow
+    \item Most often used data on fast storage medium
+    \item Least often used data on cheap storage medium
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{lc}
+      \textbf{Storage} & \textbf{Speed (GB/s)} \\
+      \toprule
+      BluRay & 0.027 \\
+      HDD & 0.15 \\
+      SSD & \SI{3}{} \\
+      RAM & \SI{30}{} \\
+      L1 Cache & \SI{1000}{} \\
+      CPU Registers & \SI{30000}{}
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{CPU Cache}
+  \begin{itemize}
+    \item CPU registers are blazingly fast
+    \item RAM is relatively slow compared to CPU
+    \item Cache bridges the speed gap
+    \item How does it do that?
+    \item Optimisation is always a matter of making assumptions
+  \end{itemize}
+\end{frame}
+
+\input{aux-temporal-locality.tex}
+\input{aux-spatial-locality.tex}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "performance"
+%%% End:

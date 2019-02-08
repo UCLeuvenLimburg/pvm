@@ -1,0 +1,370 @@
+\subsection{Temporal Locality}
+
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Temporal Locality}
+  \begin{itemize}
+    \item Assumption: code often accesses same memory locations repeatedly in short time
+    \item Opposite of: code accesses some memory location once, and then leaves it alone for a long time
+    \item This idea is known as \emph{temporal locality}
+    \item How to make use of temporal locality?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cache (Simplified Explanation)}
+  \begin{center}
+    \begin{tikzpicture}[part/.style={draw,minimum width=1.5cm,minimum height=.5cm,font=\small\scshape},
+                        cpu/.style={part,fill=blue!50},
+                        cache/.style={part,fill=green!50},
+                        ram/.style={part,fill=red!50},
+                        fetch/.style={-latex,thick},
+                        slow fetch/.style={fetch,red},
+                        fast fetch/.style={fetch,green!50!black},
+                        caption/.style={font=\small\scshape}]
+      \pgfdeclarelayer{background}
+      \pgfdeclarelayer{foreground}
+      \pgfsetlayers{background,main,foreground}
+
+      \node[cpu] (cpu) at (0,0) {cpu};
+
+      \node[cache] (cache line 1) at (2.5,0.9) {\only<5-10>{a}\only<11-19>{e}\only<20->{d}};
+      \node[cache] (cache line 2) at (2.5,0.3) {\only<8-13>{b}\only<14->{a}};
+      \node[cache] (cache line 3) at (2.5,-0.3) {\only<8-15>{c}\only<16->{b}};
+      \node[cache] (cache line 4) at (2.5,-0.9) {\only<8-17>{d}\only<18->{c}};
+
+      \node[ram] (ram 1) at (8,1.5) {a};
+      \node[ram] (ram 2) at (8,0.9) {b};
+      \node[ram] (ram 3) at (8,0.3) {c};
+      \node[ram] (ram 4) at (8,-0.3) {d};
+      \node[ram] (ram 5) at (8,-0.9) {e};
+      \node[ram] (ram 6) at (8,-1.5) {f};
+      \node[anchor=south,inner sep=0mm,yshift=5pt] (ram above) at (ram 1.north) {\vdots};
+      \node[anchor=north,inner sep=0mm] (ram below) at (ram 6.south) {\vdots};
+
+      \begin{pgfonlayer}{background}
+        \draw[fill=green!25] let \p1=(cache line 1.north west),
+                                 \p2=(cache line 4.south east)
+                             in                             
+                             ($ (\x1,\y1) + (-0.25,0.25) $) coordinate (cache upper left)
+                             rectangle
+                             ($ (\x2,\y2) + (0.25,-0.25) $) coordinate (cache lower right);
+
+        \path let \p1=(cache upper left),
+                  \p2=($ (cache upper left) ! 0.5 ! (cache lower right) $),
+                  \p3=(cache lower right)
+              in
+              coordinate (cache center) at (\p2)
+              coordinate (cache left) at (\x1,\y2)
+              coordinate (cache right) at (\x3,\y2);
+
+        \draw[fill=red!25] let \p1=(ram 1.north west),
+                               \p2=(ram 1.south east),
+                               \p3=(ram above.north west),
+                               \p4=(ram below.south east)
+                           in
+                           ($ (\x1,\y3) + (-0.25,0.25) $)
+                           rectangle
+                           ($ (\x2,\y4) + (0.25,-0.25) $);
+
+        \path let \p1=($ (cache line 1.north west) ! 0.5 ! (cache line 4.south east) $),
+                  \p2=(cache line 4)
+              in
+              node[anchor=north,caption] at (\x1,\y2-0.5cm) {cache};
+        \path let \p1=($ (ram 1.north west) ! 0.5 ! (ram 6.south east) $),
+                  \p2=(ram below.south east)
+              in
+              node[anchor=north,caption] at (\x1,\y2-0.25cm) {ram};
+      \end{pgfonlayer}
+
+      \visible<3>{
+        \draw[fast fetch] (cpu) -- (cache left) node[above,midway,font=\tiny] {read A};
+      }
+
+      \visible<4>{
+        \draw[slow fetch] (cache right) -- ++(0.5,0) |- (ram 1);
+      }
+
+      \visible<5>{
+        \draw[slow fetch] (ram 1.west) -- ++(-0.75,0) |- (cache line 1.east);
+        \draw[fast fetch] (cache line 1.west) -- ++(-0.5,0) |- (cpu);
+      }
+
+      \visible<6>{
+        \draw[fast fetch] (cpu) -- (cache left) node[above,midway,font=\tiny] {read A};
+      }
+
+      \visible<7>{
+        \draw[fast fetch] (cache line 1.west) -- ++(-0.5,0) |- (cpu);
+      }
+
+      \visible<10>{
+        \draw[fast fetch] (cpu) -- (cache left) node[above,midway,font=\tiny] {read E};
+      }
+
+      \visible<11>{
+        \draw[slow fetch] (ram 5.west) -- ++(-0.75,0) |- (cache line 1.east);
+        \draw[fast fetch] (cache line 1.west) -- ++(-0.5,0) |- (cpu);
+      }
+
+      \visible<13>{
+        \draw[fast fetch] (cpu) -- (cache left) node[above,midway,font=\tiny] {read A};
+      }
+
+      \visible<14>{
+        \draw[slow fetch] (ram 1.west) -- ++(-0.75,0) |- (cache line 2.east);
+        \draw[fast fetch] (cache line 2.west) -- ++(-0.5,0) |- (cpu);
+      }
+
+      \visible<15>{
+        \draw[fast fetch] (cpu) -- (cache left) node[above,midway,font=\tiny] {read B};
+      }
+
+      \visible<16>{
+        \draw[slow fetch] (ram 2.west) -- ++(-0.75,0) |- (cache line 3.east);
+        \draw[fast fetch] (cache line 3.west) -- ++(-0.5,0) |- (cpu);
+      }
+
+      \visible<17>{
+        \draw[fast fetch] (cpu) -- (cache left) node[above,midway,font=\tiny] {read C};
+      }
+
+      \visible<18>{
+        \draw[slow fetch] (ram 3.west) -- ++(-0.75,0) |- (cache line 4.east);
+        \draw[fast fetch] (cache line 4.west) -- ++(-0.5,0) |- (cpu);
+      }
+
+      \visible<19>{
+        \draw[fast fetch] (cpu) -- (cache left) node[above,midway,font=\tiny] {read D};
+      }
+
+      \visible<20>{
+        \draw[slow fetch] (ram 4.west) -- ++(-0.75,0) |- (cache line 1.east);
+        \draw[fast fetch] (cache line 1.west) -- ++(-0.5,0) |- (cpu);
+      }
+    \end{tikzpicture}
+  \end{center}
+  \begin{overprint}
+    \onslide<2>
+    \begin{center}
+      Say cache can contain 4 lines
+    \end{center}
+
+    \onslide<3>
+    \begin{center}
+      CPU wants to read RAM location A
+    \end{center}
+
+    \onslide<4>
+    \begin{center}
+      Cache is empty at this point \\ We need to wait for RAM to answer
+    \end{center}
+
+    \onslide<5>
+    \begin{center}
+      After a few cycles, RAM answers \\
+      Result is copied to cache
+    \end{center}
+
+    \onslide<6>
+    \begin{center}
+      CPU wants to read A again \\
+    \end{center}
+
+    \onslide<7>
+    \begin{center}
+      A is already in cache; CPU receives answer quickly \\
+      All subsequent reads to A will be fast
+    \end{center}
+
+    \onslide<8>
+    \begin{center}
+      Say CPU reads B, C, D, then cache will look like this
+    \end{center}
+
+    \onslide<9>
+    \begin{center}
+      If CPU keeps working on A, B, C, D, everything will go fast
+    \end{center}
+
+    \onslide<10>
+    \begin{center}
+      What if the CPU now wants to read E?
+    \end{center}
+
+    \onslide<11>
+    \begin{center}
+      Cache is full so one of its lines needs to be recycled \\
+      Let's say the oldest one (A) is sacrificed
+    \end{center}
+
+    \onslide<12>
+    \begin{center}
+      As long as CPU restricts itself to B, C, D, E, \\
+      everything will be fine
+    \end{center}
+
+    \onslide<13-20>
+    \begin{center}
+      What if the CPU now starts reading A, B, C, D, E cyclically?
+    \end{center}
+
+    \onslide<21>
+    \begin{center}
+      This is disastrous as all reads will be slow
+    \end{center}
+  \end{overprint}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cache}
+  \begin{itemize}
+    \item For cache to work well, it is important that CPU keeps accessing the same memory locations
+    \item If CPU jumps around too much, cache lines will be recycled each time and performance
+          will be as bad as if there is no cache
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Benchmark}
+  \structure{Setup}
+  \begin{itemize}
+    \item We start with large block of memory
+    \item We split this memory up in $N$ blocks
+    \item For each block in turn, we access its contents $k$ times
+  \end{itemize}
+  \vskip5mm
+  \structure{Expectations}
+  \begin{itemize}
+    \item First block access will be slowest (not yet in cache)
+    \item Subsequent access should be fast, if block fits in cache
+    \item If block too large, even subsequent access should be slow
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Benchmark}
+  \begin{center}
+    \begin{tikzpicture}
+      \tikzmath{
+        real \xdiv;
+        real \ydiv;
+        \xdiv=2;
+        \ydiv=600;
+      }
+      \draw[thin,gray] (0,0) grid (10,6);
+      \foreach[evaluate={\i/\xdiv} as \x,
+               evaluate={\j/\ydiv} as \y,
+               remember=\x as \lastx (initially 0),
+               remember=\y as \lasty (initially 0)] \i/\j in 
+               {1/796,
+                2/1001,
+                3/1016,
+                4/892,
+                5/832,
+                6/808,
+                7/806,
+                8/890,
+                9/823,
+                10/809,
+                11/831,
+                12/895,
+                13/870,
+                14/872,
+                15/959,
+                16/1033,
+                17/1829,
+                18/2906,
+                19/3308} {
+        \ifnum\i>1
+          \draw[red] (\lastx,\lasty) -- (\x,\y);
+        \fi
+      }
+
+      \foreach[evaluate={\i/\xdiv} as \x,
+               evaluate={\j/\ydiv} as \y,
+               remember=\x as \lastx (initially 0),
+               remember=\y as \lasty (initially 0)] \i/\j in 
+               {1/744,
+                2/848,
+                3/865,
+                4/791,
+                5/755,
+                6/749,
+                7/751,
+                8/769,
+                9/767,
+                10/792,
+                11/788,
+                12/775,
+                13/790,
+                14/824,
+                15/816,
+                16/997,
+                17/1732,
+                18/2665,
+                19/3084} {
+        \ifnum\i>1
+          \draw[green] (\lastx,\lasty) -- (\x,\y);
+        \fi
+      }
+
+      \foreach[evaluate={\i/\xdiv} as \x,
+               evaluate={\j/\ydiv} as \y,
+               remember=\x as \lastx (initially 0),
+               remember=\y as \lasty (initially 0)] \i/\j in 
+               {1/729,
+                2/793,
+                3/783,
+                4/771,
+                5/770,
+                6/731,
+                7/758,
+                8/736,
+                9/750,
+                10/780,
+                11/737,
+                12/748,
+                13/767,
+                14/786,
+                15/789,
+                16/807,
+                17/1460,
+                18/2620,
+                19/3046} {
+        \ifnum\i>1
+          \draw[blue] (\lastx,\lasty) -- (\x,\y);
+        \fi
+      }
+
+      \foreach[evaluate={\i/\xdiv} as \x,
+      evaluate={\j/\ydiv} as \y,
+               remember=\x as \lastx (initially 0),
+               remember=\y as \lasty (initially 0)] \i/\j in 
+               {1/728,
+                2/754,
+                3/745,
+                4/728,
+                5/721,
+                6/717,
+                7/718,
+                8/721,
+                9/723,
+                10/733,
+                11/729,
+                12/726,
+                13/742,
+                14/769,
+                15/784,
+                16/802,
+                17/1449,
+                18/2616,
+                19/3120} {
+        \ifnum\i>1
+          \draw[purple] (\lastx,\lasty) -- (\x,\y);
+        \fi
+      }
+    \end{tikzpicture}
+  \end{center}
+\end{frame}

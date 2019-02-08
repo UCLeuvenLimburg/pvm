@@ -1,0 +1,39 @@
+\subsection{Spatial Locality}
+
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Spatial Locality}
+  \begin{itemize}
+    \item Other typical usage pattern
+    \item CPU often access memory range sequentially
+          \begin{itemize}
+            \item E.g.~accessing all elements in an array one after the other
+          \end{itemize}
+    \item How to make use of this?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Prefetching}
+  \begin{itemize}
+    \item When CPU starts accessing memory locations \texttt{p}, \texttt{p+1}, \texttt{p+2},
+          already ask RAM for \texttt{p+10}
+    \item By the time CPU is done processing \texttt{p}\dots\texttt{p+9}, the rest of the
+          data has already been fetched from RAM
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Benchmark}
+  \begin{itemize}
+    \item Accessing array sequentially: \SI{77}{\milli\second}
+    \item Accessing array at random indices: \SI{1848}{\milli\second}
+  \end{itemize}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "performance"
+%%% End:

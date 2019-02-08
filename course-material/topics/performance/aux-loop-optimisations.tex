@@ -1,0 +1,64 @@
+\section{Loop Optimisations}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Loop Optimisations}
+  \begin{itemize}
+    \item Loops can be rewritten in many ways
+    \item Loops are perfect candidates for optimisation
+          \begin{itemize}
+            \item Most of execution time is spent in loops
+          \end{itemize}
+    \item Loops can be rewritten so as to
+          \begin{itemize}
+            \item Reduce loop overhead
+            \item Improve locality
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\link{https://en.wikipedia.org/wiki/Loop_unrolling}{Loop Unrolling}}
+  \code[language=c++14,font=\small]{loop-unrolling.cpp}
+  \vskip-5mm
+  \begin{itemize}
+    \item Reduces amount of loop condition checks
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\link{https://en.wikipedia.org/wiki/Loop_fission}{Loop Fission}}
+  \code[language=c++14,font=\small]{loop-fission.cpp}
+  \vskip-5mm
+  \begin{itemize}
+    \item Before: CPU hops back and forth in memory
+    \item After: goes linearly over elements; better for cache
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\link{https://en.wikipedia.org/wiki/Loop_interchange}{Loop Interchange}}
+  \code[language=c++14,font=\small]{loop-interchange.cpp}
+  \vskip-5mm
+  \begin{itemize}
+    \item Before: CPU hops around a lot
+    \item After: CPU processes each array sequentially
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\link{https://en.wikipedia.org/wiki/Strength_reduction}{Strength Reduction}}
+  \code[language=c++14,font=\small]{strength-reduction.cpp}
+  \vskip-5mm
+  \begin{itemize}
+    \item Rewriting so as to use less expensive operations
+  \end{itemize}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "performance"
+%%% End:

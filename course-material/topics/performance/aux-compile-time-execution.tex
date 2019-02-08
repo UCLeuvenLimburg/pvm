@@ -1,0 +1,46 @@
+\subsection{Compile Time Execution}
+
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Compile Time Execution}
+  \begin{itemize}
+    \item Compiler can choose to execute code itself
+    \item The resulting executable then does contain the computation, but only the result
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example 1}
+  \code[language=c++14,font=\small]{sum.cpp}
+  \begin{center}
+    gets compiled to
+  \end{center}
+  \code[width=.4\linewidth]{sum.asm}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example 2}
+  \code[language=c++14,font=\small,width=.9\linewidth]{count-rt.cpp}
+  \vskip-5mm
+  \begin{itemize}
+    \item Using inheritance (\`a la Java)
+    \item Time used: \SI{2020}{\milli\second}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example 2}
+  \code[language=c++14,font=\small]{count-ct.cpp}
+  \vskip-5mm
+  \begin{itemize}
+    \item Using templates forces things to be compile time
+    \item Time used: \SI{571}{\milli\second}, i.e. 4$\times$ faster
+  \end{itemize}
+\end{frame}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "performance"
+%%% End:

@@ -1,0 +1,65 @@
+\subsection{Inlining}
+
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Inlining}
+  \begin{itemize}
+    \item Calling a function incurs some overhead
+            \begin{itemize}
+              \item Save important register values
+              \item Prepare parameters
+              \item \texttt{CALL}
+              \item Execute body
+              \item Prepare return value
+              \item \texttt{RET}
+              \item Restore important register values
+            \end{itemize}
+    \item This overhead should remain small compared to time needed for actual body
+    \item This isn't the case with small functions
+          \begin{itemize}
+            \item E.g.~getters
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Inlining}
+  \begin{itemize}
+    \item Inlining copies the body of the callee into the caller's body
+  \end{itemize}
+  \code[language=c++14,font=\small,width=.5\linewidth]{inlining.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Inlining}
+  \begin{itemize}
+    \item Inlining is good for short functions
+    \item Could be bad for cache
+          \begin{itemize}
+            \item Cache works best if same code is executed often
+            \item Inlining make copies, each called once
+          \end{itemize}
+    \item Compiler can be smart enough to dispense with pointers/references
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Inlining: Example}
+  \code[language=c++14,font=\small]{swap.cpp}
+  \begin{center}
+    is compiled to
+  \end{center}
+  \code[font=\small,width=.25\linewidth]{swap.asm}
+  \begin{itemize}
+    \item Notice lack of \texttt{CALL}/\texttt{RET}
+    \item Notice lack of pointer
+  \end{itemize}
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "performance"
+%%% End:

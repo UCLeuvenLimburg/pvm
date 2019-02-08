@@ -1,0 +1,29 @@
+\section{Compiler Optimisations}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{Compiler Optimisations}
+  \begin{itemize}
+    \item Compiler does not translate your code verbatim
+    \item Compiler only promises to generate code that behaves the same as your code
+    \item Compiler knows CPU better than you
+    \item Compiler will transform your code so that it runs faster
+    \item Compiler has many tricks up its sleeve
+  \end{itemize}
+\end{frame}
+
+
+\input{aux-dead-code-elimination.tex}
+\input{aux-inlining.tex}
+\input{aux-zero-cost-abstractions.tex}
+\input{aux-compile-time-execution.tex}
+\input{aux-tail-call-optimisation.tex}
+\input{aux-loop-optimisations.tex}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "performance"
+%%% End:
