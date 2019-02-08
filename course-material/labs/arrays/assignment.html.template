@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">Arrays</div>
+    </header>
+    <div id="contents">
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* create_range(int a, int b)
+             {
+               int size = b - a + 1;
+               int* result = new int[size];
+
+               for ( int i = 0; i != size; ++i )
+               {
+                 result[i] = a + i;
+               }
+
+               return result;
+             }
+
+             int main()
+             {
+               int* ns = create_range(1, 5);
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* create_range(int a, int b)
+             {
+               int size = b - a + 1;
+               int* result = new int[size];
+
+               for ( int i = 0; i != size; ++i )
+               {
+                 result[i] = a + i;
+               }
+
+               return result;
+             }
+
+             void process(int* ns, int size)
+             {
+               for ( int i = 0; i != size; ++i )
+               {
+                 ns[i] *= 2;
+               }
+             }
+
+             int main()
+             {
+               int* ns = create_range(1, 5);
+
+               process(ns, 5);
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 It is important to note that the <code>process</code> function receives
+                 a pointer to the array. Therefore, any modifications it makes
+                 to the array are felt by <code>main</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int main()
+             {
+               int* ns = new int[5];
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           self.output = '???'
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 The contents of a freshly allocated array are unknown.
+                 Memory is not "cleared" or reset to 0 for you behind the scenes.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* create_range(int a, int b)
+             {
+               int size = b - a + 1;
+               int* result = new int[size];
+
+               for ( int i = 0; i != size; ++i )
+               {
+                 result[i] = a + i;
+               }
+
+               return result;
+             }
+
+             int main()
+             {
+               int* ns = create_range(1, 5);
+
+               ns[3] = 0;
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* create_range(int a, int b)
+             {
+               int size = b - a + 1;
+               int* result = new int[size];
+
+               for ( int i = 0; i != size; ++i )
+               {
+                 result[i] = a + i;
+               }
+
+               return result;
+             }
+
+             int main()
+             {
+               int* ns = create_range(1, 5);
+               int* p = &ns[2];
+
+               *p = 0;
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>p</code> contains the address of the element
+                 with index 2. Writing to <code>p</code> has the same
+                 effect as writing to <code>ns[2]</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* create_range(int a, int b)
+             {
+               int size = b - a + 1;
+               int* result = new int[size];
+
+               for ( int i = 0; i != size; ++i )
+               {
+                 result[i] = a + i;
+               }
+
+               return result;
+             }
+
+             int main()
+             {
+               int* ns = create_range(1, 5);
+               int* p = &ns[1];
+
+               p[0] = 0;
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>p[0]</code> means "take the first element
+                 of the array starting at address <code>p</code>".
+                 Even though we never actually created an array at that address,
+                 we can pretend we did.
+                 Since <code>p</code> points to <code>ns[1]</code>,
+                 the array pointed at by <code>p</code> starts there too, meaning
+                 <code>p[0]</code> and <code>ns[1]</code> are the same.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* create_range(int a, int b)
+             {
+               int size = b - a + 1;
+               int* result = new int[size];
+
+               for ( int i = 0; i != size; ++i )
+               {
+                 result[i] = a + i;
+               }
+
+               return result;
+             }
+
+             int main()
+             {
+               int* ns = create_range(1, 5);
+               int* p = &ns[2];
+
+               p[1] = 0;
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>p</code> can be seen as an array overlapping
+                 with <code>ns</code>: it's shifted three items
+                 to the right with respect to <code>ns</code>.
+                 <code>p[0]</code> coincides with <code>ns[2]</code>, and similarly,
+                 <code>p[1]</code> with <code>ns[3]</code>.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* create_range(int a, int b)
+             {
+               int size = b - a + 1;
+               int* result = new int[size];
+
+               for ( int i = 0; i != size; ++i )
+               {
+                 result[i] = a + i;
+               }
+
+               return result;
+             }
+
+             int main()
+             {
+               int* ns = create_range(1, 5);
+               int* p = &ns[2];
+
+               p[-2] = 0;
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 There's nothing wrong with negative indices as long
+                 as you end up inside the array.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int* create_range(int a, int b)
+             {
+               int size = b - a + 1;
+               int* result = new int[size];
+
+               for ( int i = 0; i != size; ++i )
+               {
+                 result[i] = a + i;
+               }
+
+               return result;
+             }
+
+             int main()
+             {
+               int* ns = create_range(1, 5);
+               int* p = &ns[1];
+
+               p[-2] = 0;
+
+               for ( int i = 0; i != 5; ++i )
+                 std::cout << ns[i];
+
+               delete[] ns;
+             }
+           END
+
+           self.output = '???'
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 You're not allowed to go beyond the array's bounds.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <div class="message">
+        <p>
+          For this lab, all exercises  have been grouped together in the same solution.
+          Since in order to run tests in C++, all code has to compile (which is not the
+          case until you make all excersises), we have told Visual Studio to exclude
+          all exercise-related files.
+        </p>
+        <p>
+          When starting a new exercise, your first step should be to include
+          all necessary files pack in the project:
+        </p>
+        <ul>
+          <li>
+            In the Solution Explorer's toolbar, select the <code>student</code> project and
+            click on the button "Show All Files". This gives you an alternative view
+            of the project where you get to see its actual directory structure.
+          </li>
+          <li>
+            Right click on the folder corresponding with the exercise you want to make
+            and select "Include In Project".
+          </li>
+        </ul>
+      </div>
+
+      <%=
+        exercise do
+          extend SolutionMixin
+          extend GitMixin
+
+          <<-END
+            #{git_link 'coding-exercises/coding-exercises.sln'}
+            
+            <p>
+              Write the function <code>int* range(int from, int to)</code> that returns a new array
+              containing the values going from <code>from</code> (inclusive) to <code>to</code> (also inclusive).
+            </p>
+            <p>
+              <code>range</code> can assume that <code>from &lt; to</code>. In other cases, the result is undefined.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          extend SolutionMixin
+
+          <<-END
+            <p>
+              Write the function <code>void split(int* ns, unsigned size, int** odds, unsigned* n_odds, int** evens, unsigned* n_evens)</code> that splits
+              the array <code>ns</code> into two arrays <code>odds</code> and <code>evens</code>, which contains the odd and even value from <code>ns</code>, respectively.
+              Order is preserved. <code>n_odds</code> and <code>n_evens</code> must receive the size of the arrays <code>odds</code> and <code>evens</code>, respectively.
+            </p>
+            <p>
+              For example, say <code>ns = {1, 2, 3, 4}</code>, then <code>odds</code> must be overwritten with a pointer
+              to a newly heap-allocated array containing <code>{1, 3}</code>, <code>evens</code> must be overwritten
+              with a pointer to a newly allocated array containing <code>{2, 4}</code>, and both <code>n_odds</code>
+              and <code>n_evens</code> must be overwritten with <code>2</code>.
+            </p>
+          END
+        end
+      %>
+             
+      <%=
+        exercise do
+          extend SolutionMixin
+
+          <<-END
+            <p>
+              Write the function <code>unsigned length(int* p, int* q)</code> that, given pointers <code>p</code> and <code>q</code>
+              that point to the start and one-beyond-the-end of the array, respectively, returns
+              the size of the array.
+            </p>
+            <p>
+              To clarify, <code>p</code> points to the first element in the array, while <code>q</code> points
+              to the first memory location that lies beyond the array. In other words, dereferencing <code>q</code>
+              is forbidden.
+            </p>
+          END
+        end
+      %>
+              
+      <%=
+        exercise do
+          extend SolutionMixin
+
+          <<-END
+            <p>
+              Write the function <code>void veryquickort(int* ns, int size)</code> that, given a list that
+              contains only single digit decimal numbers (i.e. 0 to 9), sorts this list in place (i.e. the function modifies the list pointed to by <code>ns</code>).
+              For example, the array <code>5 4 2 5 1 9 8</code> must be transformed into <code>1 2 4 5 5 8 9</code>.
+            </p>
+            <p>
+              Implement the function such that it works in two linear passes, i.e. in a first pass it can read all values in <code>ns</code>
+              sequentially and in a second pass it can write values to <code>ns</code> sequentially.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          extend SolutionMixin
+
+          <<-END
+            <p>
+              Write the function <code>int most_frequent(int* ns, unsigned size)</code> that
+              returns the element of <code>ns</code> that appears the most often. For example,
+              given a sequence <code>1 2 2 3 3 3</code>, <code>3</code> appears most often.
+            </p>
+            <p>
+              In case of a tie, return the element that appears earliest in the sequence.
+              E.g. <code>4 1 2 4 1</code> should lead to result <code>4</code>.
+            </p>
+            <p>
+              If <code>ns</code> is empty (<code>size == 0</code>), the result is undefined
+              (i.e. you can do whatever you want.)
+            </p>
+            <p>
+              Solve this problem making use only of arrays.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+        exercise do
+          extend SolutionMixin
+
+          <<-END
+            <p>
+              Write the function <code>void lone_wolf(int* ns, int size)</code> that looks for the "lone wolf" in ns:
+              the list <code>ns</code> contains pairs of integers plus one unpaired integer, which is the lone wolf. For example,
+            </p>
+            <ul>
+              <li>0 0 1 1 2 2 3: the lone wolf is 3.</li>
+              <li>0 1 2 1 0: the lone wolf is 2.</li>
+              <li>5: the lone wolf is 5.</li>
+              <li>5 5 5: the lone wolf is 5.</li>
+            </ul>
+            <p>
+              Your function is allowed to assume that the list does indeed contain N pairs + one unpaired integer, i.e. it does
+              not have to work correctly if given the list <code>1 2 3</code>.
+            </p>
+            <p>
+              For extra fun, find a way to implement it in such a way that
+            </p>
+            <ul>
+              <li>each <code>n</code> of <code>ns</code> is only read once.</li>
+              <li>it consumes little memory: you are only allowed to use one local variable, which must be of type <code>int</code>.</li>
+            </ul>
+          END
+        end
+      %>
+
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
