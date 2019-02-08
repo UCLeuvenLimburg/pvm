@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PVM Assignment</title>
+    <%= stylesheets('pvm') %>
+    <%= scripts('jquery', 'jquery-ui', 'underscore', 'ace/ace', 'source-editor', 'revealer', 'quiz', 'html') %>
+    <style>
+      #nth-table {
+        margin: 0px auto;
+      }
+      
+      #nth-table th {
+        background: #AAA;
+        font-weight: bold;
+        min-width: 3em;
+      }
+
+      #nth-table td {
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="center-vertically">References</div>
+    </header>
+    <div id="contents">
+      <div class="message" title="You better be reading this!">
+        If the given code does not compile, fill in DNC.
+        If the given code has undefined behaviour, fill in ???.
+      </div>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             void foo(int& x)
+             {
+                 x++;
+             }
+
+             int main()
+             {
+                 int x = 2;
+                 foo(&x);
+
+                 std::cout << x << std::endl;
+             }
+           END
+
+           self.output = 'DNC'
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             <div data-revealer="Show explanation" class="explanation">
+               <p>
+                 <code>foo</code> expects to receive an <code>int&amp;</code>,
+                 so you need to pass it an <code>int</code>-variable.
+                 By writing <code>foo(&amp;x)</code> as in the above code, we're giving it an
+                 <code>int*</code>-value, which is wrong.
+               </p>
+             </div>
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             void foo(int& x)
+             {
+                 x++;
+             }
+
+             int main()
+             {
+                 int x = 2;
+                 foo(x);
+
+                 std::cout << x << std::endl;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Write the function <code>swap</code> that can swap the values
+              of two <code>int</code> variables using the following syntax: <code>swap(x, y)</code>.
+            </p>
+            <p>
+              From now on, you will have to create the necessary <code>.cpp</code>/<code>.h</code> files yourself.
+              Put them in the project's <code>swap</code> subdirectory otherwise the tests may not work.
+            </p>
+          END
+        end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+
+           self.source = <<-END
+             #include <iostream>
+
+             int foo(int& x)
+             {
+                 return x+1;
+             }
+
+             int main()
+             {
+                 std::cout << foo(5) << std::endl;
+             }
+           END
+
+           self.output = 'DNC'
+
+           explanation = <<-END
+             <p>
+               <code>foo</code> asks for a reference to an <code>int</code>,
+               which means that there has to exist some <code>int</code>-variable
+               somewhere in memory to refer to. If you pass along the constant
+               <code>5</code>, no such variable exists. <code>5</code> is
+               a <em>value</em>, not a <em>variable</em>.
+             </p>
+             <p>
+               Imagine <code>foo</code> had <code>x++</code>
+               as body and you pass it <code>5</code>. What would <code>5++</code> mean?
+             </p>
+             <p>
+               If <code>foo</code> were to accept an <code>int</code>
+               instead of an <code>int&amp;</code>, there would be no problem:
+               a copy needs to be made, and this entails allocating
+               new memory to host this copy (i.e. a new variable is created).
+               <code>x++</code> would then operate on this newly allocated memory.
+             </p>
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             #{show_explanation explanation}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           self.source = <<-END
+             #include <iostream>
+
+             int& foo(int& x)
+             {
+                 return x;
+             }
+
+             int main()
+             {
+                 int x = 2;
+                 foo(x)++;
+
+                 std::cout << x << std::endl;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend CakeMixin
+           extend RevealerMixin
+
+           cake_description = <<-END
+             <p><code>return ++x;</code> works, but not <code>return x++;</code>. Why?</p>
+           END
+
+           self.source = <<-END
+             #include <iostream>
+
+             int& foo(int& x)
+             {
+                 return x + 1;
+             }
+
+             int main()
+             {
+                 int x = 2;
+                 foo(x)++;
+
+                 std::cout << x << std::endl;
+             }
+           END
+
+           self.output = 'DNC'
+
+           explanation = <<-END
+             <p>
+               <code>foo</code> should return a reference to an <code>int</code>.
+               This means that there must exist an <code>int</code>-variable
+               whose address can be taken and passed around.
+             </p>
+             <p>
+               Returning <code>x</code> works, as <code>x</code>
+               is an existing variable, it has a memory location.
+               Returning <code>x + 1</code>, however, will lead
+               to an error. <code>x + 1</code> yields a <em>value</em>,
+               but this value is not stored in memory,
+               so no reference to it can be returned.
+             </p>
+             <p>
+               If <code>foo</code> is supposed to increment its argument
+               and return it by value, the following implementations will work:
+             </p>
+             <ul>
+               <li><code>x++; return x;</code></li>
+               <li><code>return x += 1;</code></li>
+               <li><code>return ++x;</code></li>
+             </ul>
+             <p>
+               These work because the increment value is stored in memory, i.e.
+               in <code>x</code>.
+             </p>
+             #{cake cake_description}
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             #{show_explanation explanation}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+           
+           self.source = <<-END
+             #include <iostream>
+
+             int& foo(int x)
+             {
+                 return x;
+             }
+
+             int main()
+             {
+                 int x = 2;
+                 foo(x)++;
+
+                 std::cout << x << std::endl;
+             }
+           END
+
+           self.output = '???'
+
+           explanation = <<-END
+             <p>
+               The code compiles perfectly (some compilers might give warnings though)
+               but its behaviour is undefined: the parameter <code>x</code>
+               is a local variable (meaning it's located on the stack)
+               and returning a reference to it is a bad idea since
+               <code>x</code> gets popped off the stack and hence
+               its address refers to no man's land.
+             </p>
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             #{show_explanation(explanation)}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+           
+           self.source = <<-END
+             #include <iostream>
+             #include <vector>
+
+             void foo(std::vector<int>& x)
+             {
+                 std::cout << "A";
+             }
+
+             void foo(const std::vector<int>& x)
+             {
+                 std::cout << "B";
+             }
+
+             int main()
+             {
+                 std::vector<int> xs;
+
+                 foo(xs);
+             }
+           END
+
+           explanation = <<-END
+             <p>
+               <code>const T&amp;</code> is a different type than <code>T&amp;</code>.
+               Therefore, the following overloads are valid:
+             </p>
+             <ul>
+               <li>
+                 <code>void foo(T&amp;)</code>
+               </li>
+               <li>
+                 <code>void foo(const T&amp;)</code>
+               </li>
+             </ul>
+             <p>
+               The non-<code>const</code> overload is favored: if you pass a variable
+               to which you have write access, the <code>T&amp;</code> version will be called.
+               If you have only read access, the <code>const T&amp;</code> will be called instead.
+             </p>
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             #{show_explanation(explanation)}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+           
+           self.source = <<-END
+             #include <iostream>
+             #include <vector>
+
+             void foo(std::vector<int>& x)
+             {
+                 std::cout << "A";
+             }
+
+             void foo(const std::vector<int>& x)
+             {
+                 std::cout << "B";
+             }
+
+             int main()
+             {
+                 const std::vector<int> xs;
+
+                 foo(xs);
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+           
+           self.source = <<-END
+             #include <iostream>
+
+             int global = 0;
+
+             int& foo()
+             {
+                return global;
+             }
+
+             int main()
+             {
+                 foo() += 5;
+
+                 std::cout << global;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+           
+           self.source = <<-END
+             #include <iostream>
+
+             int global = 0;
+
+             int& foo()
+             {
+                return global;
+             }
+
+             int main()
+             {
+                 int x = foo();
+                 x++;
+
+                 std::cout << global;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+           
+           self.source = <<-END
+             #include <iostream>
+
+             int global = 0;
+
+             int& foo()
+             {
+                return global;
+             }
+
+             int main()
+             {
+                 int& x = foo();
+                 x++;
+
+                 std::cout << global;
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+           
+           self.source = <<-END
+             #include <iostream>
+
+             int& first(const std::vector<int>& ns)
+             {
+               return ns[0];
+             }
+
+             int main()
+             {
+               std::vector<int> ns { 1, 2, 3 };
+
+               first(ns) = 5;
+             }
+           END
+
+           self.output = 'DNC'
+
+           explanation = <<-END
+             <p>
+               <code>first</code> gives a mutable reference (i.e. not const) to an element
+               of <code>ns</code>. However, <code>ns</code> is a <code>const std::vector&lt;int&gt;</code>,
+               meaning <code>first</code> only has readaccess, and cannot give away write
+               access to one of <code>ns</code>'s items. The best <code>first</code> can do
+               is to return a <code>const int&</code>, but since an <code>int</code>
+               is already a small data value, you might as well just return <code>int</code>.
+             </p>
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+             #{show_explanation(explanation)}
+           END
+         end
+      %>
+
+      <%=
+        exercise do
+          extend SourceCodeMixin
+          
+          self.source = <<-END
+            std::vector<int> ns { 1, 2, 3, 4, 5 };
+
+            std::cout << nth(ns, 0) << std::endl;      // Prints 1
+            std::cout << nth(ns, -1) << std::endl;     // Prints 5
+
+            nth(ns, 5) = 0;                            // ns == { 0, 2, 3, 4, 5 }
+            nth(ns, -2)++;                             // ns == { 0, 2, 3, 5, 5 }
+          END
+
+          <<-END
+            <p>
+              You like the fact that in some languages, you can start indexing containers
+              from the end by using negative indices. For example, index <code>-1</code>
+              refers to the last element, <code>-2</code> to the penultimate one, etc.
+            </p>
+            <p>
+              You decide to replicate this behaviour in C++ in a more generalised way:
+              every index outside the bounds of the container must get remapped
+              to inside the container. Say the container has 10 elements,
+              then its "normal" indices are 0, 1, 2, &hellip;, 9.
+              Index 10, which is normally invalid, gets remapped to 0,
+              index 11 to 1, etc. Similarly for negative indices:
+              -1 gets remapped to 9, i.e. the last element, -2 to 8, etc.
+            </p>
+            <table id="nth-table">
+              <tbody>
+                <tr>
+                  <td>-20</td>
+                  <td>-19</td>
+                  <td>-18</td>
+                  <td>-17</td>
+                  <td>-16</td>
+                  <td>-15</td>
+                  <td>-14</td>
+                  <td>-13</td>
+                  <td>-12</td>
+                  <td>-11</td>
+                </tr>
+                <tr>
+                  <td>-10</td>
+                  <td>-9</td>
+                  <td>-8</td>
+                  <td>-7</td>
+                  <td>-6</td>
+                  <td>-5</td>
+                  <td>-4</td>
+                  <td>-3</td>
+                  <td>-2</td>
+                  <td>-1</td>        
+                </tr>
+                <tr>
+                  <th>0</th>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
+                  <th>5</th>
+                  <th>6</th>
+                  <th>7</th>
+                  <th>8</th>
+                  <th>9</th>        
+                </tr>
+                <tr>
+                <tr>
+                  <td>10</td>
+                  <td>11</td>
+                  <td>12</td>
+                  <td>13</td>
+                  <td>14</td>
+                  <td>15</td>
+                  <td>16</td>
+                  <td>17</td>
+                  <td>18</td>
+                  <td>19</td>        
+                </tr>
+                <tr>
+                  <td>20</td>
+                  <td>21</td>
+                  <td>22</td>
+                  <td>23</td>
+                  <td>24</td>
+                  <td>25</td>
+                  <td>26</td>
+                  <td>27</td>
+                  <td>28</td>
+                  <td>29</td>        
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              Write the function <code>nth</code> so that
+              you can index a <code>std::vector&lt;int&gt;</code>
+              using your new fancy indices. Usage should be as follows:
+            </p>
+            #{show_source_editor}
+          END
+        end
+      %>
+
+      <%=
+         exercise(Lib::Interpretation) do
+           extend RevealerMixin
+           
+           self.source = <<-END
+             #include <iostream>
+
+             void foo(const int& x, int& y)
+             {
+               std::cout << x;
+               y++;
+               std::cout << x;
+             }
+
+             int main()
+             {
+               int x = 5;
+               foo(x, x);
+             }
+           END
+
+           <<-END
+             <p>What is the output of the following code?</p>
+             #{show_source_editor}
+             #{if input then show_input else '' end}
+             #{show_output_field}
+           END
+         end
+      %>
+
+      <%=
+        exercise do
+          <<-END
+            <p>
+              Open the <code>rewrite</code> exercise in Visual Studio. Rewrite
+              all functions so as to make use of references instead of pointers.
+            </p>
+          END
+        end
+      %>
+    </div>
+  </body>
+
+  <script>
+    Quiz.formatQuizzes();
+    SourceEditor.initialize();
+    Revealer.initialize();
+  </script>
+</html>
