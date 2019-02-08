@@ -1,0 +1,261 @@
+\usepackage{ucll-code}
+\usetikzlibrary{shadows,shapes.multipart}
+
+\title{Casts}
+\author{Fr\'ed\'eric Vogels}
+
+\lstset{language=c++14}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Casting}
+  \begin{itemize}
+    \item Casting: explicit type conversion
+    \item Upcasting: casting to a supertype
+          \begin{itemize}
+            \item E.g.\ cast from {\tt Dog} to {\tt Animal}
+          \end{itemize}
+    \item Downcasting: casting to a subtype
+          \begin{itemize}
+            \item E.g.\ cast from {\tt Animal} to {\tt Dog}
+          \end{itemize}
+    \item Upcasts are always safe
+    \item Downcasts can go wrong
+  \end{itemize}
+  \code[font=\small,width=.9\linewidth]{wrong-downcast.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Casts in Java}
+  \begin{itemize}
+    \item Only one way to cast: {\tt (T) x}
+    \item Java objects keep track of their ``real type'' (dynamic type)
+    \item Casts are checked at runtime
+    \item Wrong casts: {\tt IllegalCastException}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Casts in \cpp}
+  \begin{itemize}
+    \item \cpp~has a few more casts
+          \begin{itemize}
+            \item C-style cast: {\tt (T) x}
+            \item {\tt static\_cast<T>(x)}
+            \item {\tt dynamic\_cast<T>(x)}
+            \item {\tt reinterpret\_cast<T>(x)}
+            \item {\tt const\_cast<T>(x)}
+          \end{itemize}
+          \vskip5mm
+    \item Standard Library adds a few more
+          \begin{itemize}
+            \item {\tt std::static\_pointer\_cast<T>(x)}
+            \item {\tt std::dynamic\_pointer\_cast<T>(x)}
+          \end{itemize}
+          \vskip5mm
+    \item Most important for us: {\tt dynamic\_pointer\_cast<T>(x)}
+  \end{itemize}
+\end{frame}
+
+\section{C-style casts}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{C-style Casts}
+  \structure{Syntax}
+  \begin{center} \ttfamily
+    (T) x
+  \end{center}
+  \vskip5mm
+  \structure{Usage}
+  \begin{itemize}
+    \item Just don't use them
+  \end{itemize}
+\end{frame}
+
+\section{Static and Dynamic Casts}
+
+\frame{\tableofcontents[currentsection]}
+
+
+\begin{frame}
+  \frametitle{\texttt{static\_cast} and \texttt{dynamic\_cast}}
+  \structure{\texttt{static\_cast<T>(x)}}
+  \begin{itemize}
+    \item Only checked at compile time
+    \item Wrong casts lead to undefined results at runtime
+  \end{itemize}
+  \vskip5mm
+  \structure{{\tt dynamic\_cast<T>(x)}}
+  \begin{itemize}
+    \item Checked at compile \emph{and} runtime
+    \item Wrong casts give \texttt{nullptr}
+    \item Is a bit slower due to runtime checks
+    \item Only works on classes with 1+ virtual member functions
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Examples}
+  \code[font=\small]{static-vs-dynamic-casts1.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Examples}
+  \code[font=\small]{static-vs-dynamic-casts2.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Examples}
+  \code[font=\small]{static-vs-dynamic-casts3.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Examples}
+  \code[font=\small]{static-vs-dynamic-casts4.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Smart Pointers}
+  \begin{itemize}
+    \item We said not to use regular pointers {\tt T*}
+    \item Use {\tt std::unique\_ptr} and {\tt std::shared\_ptr} instead
+    \item Library offers specialised cast operators for {\tt std::shared\_ptr}
+    \item \emph{No} specialised casts for {\tt std::unique\_ptr} (AFAICT)
+  \end{itemize}
+  \code[font=\small,width=.9\linewidth]{shared-ptr-casts.cpp}
+\end{frame}
+
+\section{{\tt reinterpret\_cast}}
+
+\frame{\tableofcontents[currentsection]}
+
+
+\begin{frame}
+  \frametitle{{\tt reinterpret\_cast}}
+  \begin{itemize}
+    \item Anything goes
+    \item No compile time checks
+    \item No runtime checks
+    \item Bad casts lead to undefined behaviour
+  \end{itemize}
+  \code[font=\small]{reinterpret_cast.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\tt reinterpret\_cast}}
+  \begin{itemize}
+    \item Allows you to probe memory
+    \item Breaks encapsulation
+  \end{itemize}
+  \begin{overprint}
+    \onslide<handout:0|1>
+    \code[font=\small]{find-password1.cpp}
+    \onslide<handout:0|2>
+    \code[font=\tiny,width=.9\linewidth]{find-password2.cpp}
+    \onslide<handout:0|3>
+    \code[font=\tiny,width=.8\linewidth]{find-password3.cpp}
+  \end{overprint}
+\end{frame}
+
+{
+  \newcommand{\HEX}[1]{\texttt{0x#1}}
+  \newcommand{\fatentry}[3]{\HEX{#1} & #2 & #3 \\}
+
+  \begin{frame}
+    \frametitle{\texttt{reinterpret\_cast<T>(x)}: What's It Good For?}
+    \begin{center} \Large
+      Remember this?
+    \end{center}
+    \begin{center}
+      \small
+      \begin{tabular}{ccl}
+        \textbf{Offset} & \textbf{Length} & \textbf{Description} \\
+        \toprule
+        \fatentry{00}{3}{Instructions to jump to the bootstrap code}
+        \fatentry{03}{8}{Name of the formatting OS}
+        \fatentry{0B}{2}{Bytes per sector}
+        \fatentry{0D}{1}{Sectors per cluster}
+        \fatentry{0E}{2}{Reserved sectors from the start of the volume}
+        \fatentry{10}{1}{Number of FAT copies}
+        \fatentry{11}{2}{Number of possible root entries}
+        \fatentry{13}{2}{Small number of sectors}
+        % \fatentry{15}{1}{Media descriptor}
+        % \fatentry{16}{2}{Sectors per FAT}
+        % \fatentry{18}{2}{Sectors per track}
+        % \fatentry{1A}{2}{Number of heads}
+        % \fatentry{1C}{4}{Hidden sectors}
+        % \fatentry{20}{4}{Large number of sectors}
+        % \fatentry{24}{1}{Drive number}
+        % \fatentry{25}{1}{Reserved}
+        % \fatentry{26}{1}{Extended boot signature}
+        % \fatentry{27}{4}{Volume serial number}
+        % \fatentry{2B}{11}{Volume label}
+        % \fatentry{36}{8}{File system type --- should be \texttt{FAT12}}
+        % \fatentry{3E}{448}{Bootstrap code}
+        % \fatentry{1FE}{2}{Boot sector signature --- should be \HEX{AA55}}
+        $\vdots$ & $\vdots$ & $\;\vdots$ \\
+        \bottomrule
+      \end{tabular}
+    \end{center}
+  \end{frame}
+}
+
+\begin{frame}
+  \frametitle{FAT12}
+  \code{fat12.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{FAT12}
+  \code[font=\small,width=\linewidth]{read-data.cpp}
+\end{frame}
+
+\begin{frame}
+  \frametitle{{\tt reinterpret\_cast}}
+   \begin{itemize}
+    \item If you read raw bytes from
+          \begin{itemize}
+            \item Disk
+            \item Network
+            \item \dots
+          \end{itemize}
+    \item You can interpret raw data for what they represent
+          \begin{itemize}
+            \item FAT data tables
+            \item IP address
+            \item TCP/IP packets
+            \item \dots
+          \end{itemize}
+  \end{itemize}
+  \code[font=\small]{reinterpret.cpp}
+\end{frame}
+
+\section{{\tt const\_cast}}
+
+\frame{\tableofcontents[currentsection]}
+
+\begin{frame}
+  \frametitle{{\tt const\_cast}}
+  \begin{itemize}
+    \item Used to remove {\tt const} qualified
+    \item Only used for old C libraries
+    \item Just don't use it
+  \end{itemize}
+  \code[font=\scriptsize,width=.95\linewidth]{const-cast.cpp}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "casts"
+%%% End:
