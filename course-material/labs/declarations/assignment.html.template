@@ -139,7 +139,8 @@
             <<-END
               <ul>
                 <li>
-                  Open to the directory <code>labs/declarations/missing-declarations</code>.
+                  In case you haven't done so yet, go clone the course's git repository.
+                  Go to the directory <code>labs/declarations/missing-declarations</code>.
                 </li>
                 <li>
                   Double click on the solution file <code>missing-declarations.sln</code>.
