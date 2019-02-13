@@ -312,7 +312,7 @@ class SharedContext
         file = file + '.js'
       end
 
-      url = Environment2.relative_path_from_cwd_to "www/#{file}"
+      url = Environment2.relative_path_from_cwd_to "course-material/#{file}"
     end
 
     %{<script src="#{url}" type="text/javascript" charset="utf-8"></script>}
@@ -330,7 +330,7 @@ class SharedContext
   end
 
   def css_link(basename = 'ucll')
-    url = Environment2.relative_path_from_cwd_to "www/#{basename}.css"
+    url = Environment2.relative_path_from_cwd_to "course-material/#{basename}.css"
     
     %{<link rel="stylesheet" href="#{url}">}
   end
