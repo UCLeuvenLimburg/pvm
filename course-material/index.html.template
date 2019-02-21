@@ -74,11 +74,6 @@
           </tr>
           <tr>
             <td>2</td>
-            <td><%= topic('pvm', 'Course Introduction') %></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>2</td>
             <td><%= topic('cpp-intro', 'C++ Introduction', handouts: true) %></td>
             <td></td>
           </tr>
@@ -199,8 +194,8 @@
           </tr>
           <tr>
             <td>9</td>
-            <td><%= topic('performance', 'Performance', handouts: true) %></td>
-            <td><%= lab('performance', 'Performance') %></td>
+            <td><%= topic('performance', 'Performance (optional)', handouts: true) %></td>
+            <td><%= lab('performance', 'Performance (optional)') %></td>
           </tr> 
          <tr>
             <td>9</td>
