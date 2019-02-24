@@ -167,7 +167,9 @@
                 to <code>std::cout</code>.
               </p>
               <p>
-                Tests are provided: run them with CTRL + F5.
+                Tests are provided: run them with CTRL + F5. Make sure you're running
+                the tests on your own code, not on the solution!
+                Right-click on your own project and pick "Set as StartUp Project".
               </p>
             END
           end
