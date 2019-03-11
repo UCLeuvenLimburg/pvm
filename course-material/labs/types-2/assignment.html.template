@@ -108,8 +108,8 @@
              <p>What are the types of the following expressions?</p>
              #{ask_type_of_table( [ 'foo',        'const Foo' ],
                                   [ 'p',          'const Foo*' ],
-                                  [ 'foo->x',     'const int' ],
-                                  [ '&(foo->x)',  'const int*' ] )}
+                                  [ 'p->x',     'const int' ],
+                                  [ '&(p->x)',  'const int*' ] )}
            END
          end
       %>
