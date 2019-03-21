@@ -155,6 +155,7 @@
                 All code has been grouped within a single file named <code>app.cpp</code>.
                 Split it up so that each function receives its own <code>.cpp</code> file.
                 Also create the necessary header files and add the appropriate <code>#include</code>s.
+                DO NOT RUN the project: it's dummy code and it will simply crash.
               </p>
           END
         end
