@@ -3,7 +3,7 @@ Duration operator "" _s(long double x) {
 }
 
 Duration operator "" _minutes(long double x) {
-    return Duration::from_seconds((double) x);
+    return Duration::from_minutes((double) x);
 }
 
 Duration operator "" _hours(long double x) {
