@@ -32,27 +32,27 @@
   \vskip5mm
   \code[frame=lines,language=c++14]{example1.cpp}
   \begin{overprint}
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       \texttt{x} is allocated somewhere in memory \\
       (we ignore the static/stack/heap stuff)
     \end{center}
     \codeunderlinex{example 1 line 1}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       \texttt{p} is allocated somewhere in memory \\
       It is initialised with \texttt{x}'s address \texttt{0x3ef}
     \end{center}
     \codeunderlinex{example 1 line 2}
 
-    \onslide<4>
+    \onslide<4|handout:4>
     \begin{center}
       We increment \texttt{x}
     \end{center}
     \codeunderlinex{example 1 line 3}
 
-    \onslide<5>
+    \onslide<5|handout:5>
     \begin{center}
       We print the value that \texttt{p} points at, i.e.~we
       read \texttt{p}, get an address, and then read what lies at this address
@@ -64,7 +64,7 @@
       \draw[-latex,thick] (p.west) -- (x.east);
     \end{tikzpicture}
 
-    \onslide<6>
+    \onslide<6|handout:6>
     \begin{center}
       Output: 6
     \end{center}
@@ -105,24 +105,24 @@
   \vskip5mm
   \code[frame=lines,language=c++14]{example2.cpp}
   \begin{overprint}
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       \texttt{x} is allocated somewhere in memory \\
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       \texttt{p} is allocated somewhere in memory \\
       It is initialised with \texttt{x}'s address \texttt{0x847}
     \end{center}
 
-    \onslide<4>
+    \onslide<4|handout:4>
     \begin{center}
       We double the value pointed to by \texttt{p}, i.e.~we read \texttt{p},
       find out it points to \texttt{x}, and double \texttt{x}
     \end{center}
 
-    \onslide<5>
+    \onslide<5|handout:5>
     \begin{center}
       Output: 36
     \end{center}
@@ -171,7 +171,7 @@
       \draw[fill=red!50,opacity=.9] (1,0) rectangle ++(4,1);
       \node (x) at (3,0.5) {5};
       \draw[|-|] (1,-0.5) -- ++(4,0) node[midway,below] {x};
-      
+
       \draw[fill=red!50,opacity=.9] (7,0) rectangle ++(4,1);
       \node (p) at (9,0.5) {\texttt{0x1195}};
       \draw[|-|] (7,-0.5) -- ++(4,0) node[midway,below] {p};

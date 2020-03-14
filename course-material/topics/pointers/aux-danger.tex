@@ -53,47 +53,47 @@
     \end{center}
   \end{columns}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center}
       \texttt{q} is allocated on the stack
     \end{center}
     \codeunderlinex{dangling q}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       \texttt{foo} is called
     \end{center}
     \codeunderlinex{dangling call}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       \texttt{x} and \texttt{p} are allocated on the stack
     \end{center}
 
-    \onslide<4>
+    \onslide<4|handout:4>
     \begin{center}
       \texttt{x} is initialized
     \end{center}
     \codeunderlinex{dangling x}
 
-    \onslide<5>
+    \onslide<5|handout:5>
     \begin{center}
       \texttt{p} is initialized to point to \texttt{x}
     \end{center}
     \codeunderlinex{dangling p}
 
-    \onslide<6>
+    \onslide<6|handout:6>
     \begin{center}
       \texttt{q} receives the result of calling \texttt{foo} \\
       It too points to \texttt{x}
     \end{center}
 
-    \onslide<7>
+    \onslide<7|handout:7>
     \begin{center}
       \texttt{foo}'s stack frame is popped off the stack
     \end{center}
 
-    \onslide<8>
+    \onslide<8|handout:8>
     \begin{center}
       \texttt{q} points to freed memory \\
       It is now a \emph{dangling pointer}
