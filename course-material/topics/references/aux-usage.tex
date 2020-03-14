@@ -7,25 +7,25 @@
 \begin{frame}
   \frametitle{Parameter Passing}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \code[width=.5\linewidth,language=c++14]{by-value.cpp}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \code[width=.5\linewidth,language=c++14]{by-pointer.cpp}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \code[width=.5\linewidth,language=c++14]{by-reference.cpp}
   \end{overprint}
   \vskip5mm
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{itemize}
       \item {\tt foo} receives \emph{copy} of {\tt x}
       \item {\tt foo} only has access to the {\tt value} of the variable
       \item {\tt foo} cannot modify {\tt x} in any way
     \end{itemize}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{itemize}
       \item \texttt{foo} receives the \emph{address} of \texttt{x}
       \item \texttt{foo} has access to the {\tt value} of \texttt{x}
@@ -38,7 +38,7 @@
             \end{itemize}
     \end{itemize}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{itemize}
       \item {\tt foo} receives a \emph{reference} to {\tt x}
       \item Gives same access as when using pointer
@@ -71,10 +71,10 @@
   \end{itemize}
   \vskip5mm
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \code[language=c++14,font=\small]{aliasing1.cpp}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \code[language=c++14,font=\small]{aliasing2.cpp}
   \end{overprint}
 \end{frame}
