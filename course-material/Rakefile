@@ -35,18 +35,22 @@ def topic_task(topic)
 
         FileUtils.cp "topics/#{topic}/handouts.pdf", "dist/topics/#{topic}-handouts.pdf"
     end
+
+    namespace :topic do
+        desc "Builds topic #{topic}"
+        task topic => [ "dist/topics/#{topic}.pdf", "dist/topics/#{topic}-handouts.pdf" ]
+    end
 end
 
 TOPICS.each do |topic|
     topic_task topic
 end
 
+namespace :topic do
+    desc "Builds all topics"
+    task :all => TOPICS.map { |topic| "topic:#{topic}" }
+end
+
 task :topics => TOPICS.flat_map { |topic| [ "dist/topics/#{topic}.pdf", "dist/topics/#{topic}-handouts.pdf" ] }
 
-# # TOPIC_DIRECTORIES.each do |topic|
-# #     slide_task topic
-# # end
-
-# slide_task('allocation-methods')
-
-# task :default => [ 'dist/topics/allocation-methods.pdf' ]
+task :default => [ :topics ]
