@@ -44,32 +44,32 @@
   \end{center}
   \vskip2mm
   \begin{overprint}
-    \onslide<1-3>
+    \onslide<1-3|handout:1-3>
     \begin{center}
       Creation of {\tt bar} on stack \\
       Default constructor does the job
     \end{center}
 
-    \onslide<4-5>
+    \onslide<4-5|handout:4-5>
     \begin{center}
       Calling {\tt foo}: {\tt bar} is passed by pointer \\
       $\Rightarrow$ no copy is made \\
       $\Rightarrow$ no constructor gets called
     \end{center}
 
-    \onslide<6-7>
+    \onslide<6-7|handout:6-7>
     \begin{center}
       Incrementing {\tt p->x} operates on original
     \end{center}
 
-    \onslide<8-9>
+    \onslide<8-9|handout:8-9>
     \begin{center}
       Returning from {\tt foo}: all locals are cleaned up \\
       Only local variable is {\tt p}, a pointer \\
       A pointer's destructor does nothing
     \end{center}
 
-    \onslide<10>
+    \onslide<10|handout:10>
     \begin{center}
       Note how {\tt bar} has changed since before the call to {\tt foo}
     \end{center}

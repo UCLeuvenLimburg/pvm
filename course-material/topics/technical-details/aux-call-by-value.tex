@@ -39,31 +39,31 @@
   \end{center}
   \vskip2mm
   \begin{overprint}
-    \onslide<1-3>
+    \onslide<1-3|handout:1-3>
     \begin{center}
       Creation of {\tt bar} on stack \\
       Default constructor is used
     \end{center}
 
-    \onslide<4-6>
+    \onslide<4-6|handout:4-6>
     \begin{center}
       Calling {\tt foo}: {\tt bar} is passed by value \\
       $\Rightarrow$ a copy is made \\
       $\Rightarrow$ copy constructor is called
     \end{center}
 
-    \onslide<7-8>
+    \onslide<7-8|handout:7-8>
     \begin{center}
       Incrementing {\tt b.x} operates on copy
     \end{center}
 
-    \onslide<9-11>
+    \onslide<9-11|handout:9-11>
     \begin{center}
       Returning from {\tt foo}: all locals are cleaned up \\
       $\Rightarrow$ {\tt b}'s destructor is called \\
     \end{center}
 
-    \onslide<12>
+    \onslide<12|handout:12>
     \begin{center}
       Note how {\tt bar} is still in its original state
     \end{center}

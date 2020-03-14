@@ -18,7 +18,7 @@
       \column{4cm}
       \begin{tikzpicture}
         \memorylayout
-        
+
         \only<2-10>{
           \stackframe[start=0,contents={p = ?}]
         }
@@ -41,38 +41,38 @@
   \end{center}
   \vskip2mm
   \begin{overprint}
-    \onslide<1-2>
+    \onslide<1-2|handout:1-2>
     \begin{center}
       Space gets allocated (but not initialised) for {\tt p}
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       {\tt foo} gets called.
     \end{center}
 
-    \onslide<4-5>
+    \onslide<4-5|handout:4-5>
     \begin{center}
       {\tt q} gets allocated on the stack
     \end{center}
 
-    \onslide<6-7>
+    \onslide<6-7|handout:6-7>
     \begin{center}
       {\tt b} gets created on the heap.
     \end{center}
 
-    \onslide<8-9>
+    \onslide<8-9|handout:8-9>
     \begin{center}
       {\tt q} points to the newly created heap-object
     \end{center}
 
-    \onslide<10-11>
+    \onslide<10-11|handout:10-11>
     \begin{center}
       {\tt foo} returns {\tt q} \\
       The address it contains gets copied to {\tt p}
     \end{center}
 
-    \onslide<12-13>
+    \onslide<12-13|handout:12-13>
     \begin{center}
       {\tt foo}'s locals get cleaned up \\
       {\tt q} is the only local, and since it is a {\tt Bar*}, nothing happens (i.e.~no destructors)

@@ -31,7 +31,7 @@
         }
         \only<6-9>{
           \stackframe[start=2,contents={b.y = 2}]
-        }        
+        }
         \only<8->{
           \stackframe[start=0,contents={p},id=p]
           \draw[-latex] (p.east) to [bend left=30] (b.east);
@@ -41,33 +41,33 @@
   \end{center}
   \vskip2mm
   \begin{overprint}
-    \onslide<1-2>
+    \onslide<1-2|handout:1-2>
     \begin{center}
       Space gets allocated (but not initialised, that's for later) for {\tt p}
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       {\tt foo} gets called.
     \end{center}
 
-    \onslide<4-6>
+    \onslide<4-6|handout:4-6>
     \begin{center}
       {\tt b} gets created on the stack.
     \end{center}
 
-    \onslide<7-8>
+    \onslide<7-8|handout:7-8>
     \begin{center}
       {\tt foo} returns the address of {\tt b}
     \end{center}
 
-    \onslide<9-11>
+    \onslide<9-11|handout:9-11>
     \begin{center}
       {\tt foo}'s locals get cleaned up \\
       {\tt b}'s destructor gets called
     \end{center}
 
-    \onslide<12>
+    \onslide<12|handout:12>
     \begin{center}
       {\tt p} points to no-man's-land \\
       {\tt p->x++} is undefined

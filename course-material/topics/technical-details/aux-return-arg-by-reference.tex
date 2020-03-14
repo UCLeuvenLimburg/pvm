@@ -18,7 +18,7 @@
       \column{4cm}
       \begin{tikzpicture}
         \memorylayout
-        
+
         \only<2->{
           \stackframe[start=0,contents={bar.x = 1},id=bar]
         }
@@ -41,32 +41,32 @@
   \end{center}
   \vskip2mm
   \begin{overprint}
-    \onslide<1-3>
+    \onslide<1-3|handout:1-3>
     \begin{center}
       {\tt bar} gets created on stack (default constructor)
     \end{center}
 
-    \onslide<4-5>
+    \onslide<4-5|handout:4-5>
     \begin{center}
       {\tt p} gets allocated on the stack (uninitialised)
     \end{center}
 
-    \onslide<6-7>
+    \onslide<6-7|handout:6-7>
     \begin{center}
       {\tt foo} gets called, argument {\tt b} resides on heap
     \end{center}
 
-    \onslide<8-9>
+    \onslide<8-9|handout:8-9>
     \begin{center}
       {\tt foo} returns address of what {\tt b} refers to, which is {\tt bar} \\
       {\tt p} is overwritten with this address
     \end{center}
 
-    \onslide<10-11>
+    \onslide<10-11|handout:10-11>
     \begin{center}
       {\tt foo} is done, cleanup time
     \end{center}
-    
+
   \end{overprint}
 \end{frame}
 
