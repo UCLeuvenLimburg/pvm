@@ -1,4 +1,4 @@
-\usepackage{ucll-code}
+
 \usetikzlibrary{shadows,shapes.multipart}
 
 \title{Preprocessor}
@@ -83,11 +83,11 @@
       \visible<4>{
         \draw[compile] (c cpp) -- (c obj) node[compile arc] {compile};
       }
-      
+
       \visible<5->{
         \node[exe] (exe) at (8,2) {app.exe};
       }
-      
+
       \visible<5>{
         \node[exe] (exe) at (8,2) {app.exe};
         \draw[link] (a obj) -- (exe) node[link arc] {link};
@@ -362,7 +362,7 @@
     \item If header file gets extra dependencies, all including {cpp} files
           would need to be updated
     \item Again, engineering nightmare
-  \end{itemize}  
+  \end{itemize}
 \end{frame}
 
 \begin{frame}

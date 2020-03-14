@@ -24,7 +24,7 @@
 \begin{frame}
   \frametitle{Initialiser List}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \code[language=c++14]{initialiser-list.cpp}
     \begin{tikzpicture}[remember picture,overlay,link/.style={-latex,red,thick}]
       \codeunderlinex{constructor field a}
@@ -38,16 +38,16 @@
       \draw[link] (constructor parameter c) -- ++(0,0.75) -| (constructor field c);
     \end{tikzpicture}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \code[language=c++14]{initialiser-list2.cpp}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \code[language=c++14]{initialiser-list3.cpp}
 
-    \onslide<4>
+    \onslide<4|handout:4>
     \code[language=c++14]{initialiser-list4.cpp}
 
-    \onslide<5>
+    \onslide<5|handout:5>
     \code[language=c++14]{initialiser-list5.cpp}
     \begin{tikzpicture}[remember picture,overlay,link/.style={red,thick}]
       \codeunderlinex{ilnaming field a}
@@ -63,7 +63,7 @@
       \draw[link] (ilnaming init c) -- ++(0,0.75) -| (ilnaming field c);
     \end{tikzpicture}
 
-    \onslide<6>
+    \onslide<6|handout:6>
     \code[language=c++14]{initialiser-list5.cpp}
     \begin{tikzpicture}[remember picture,overlay,link/.style={red,thick}]
       \codeunderlinex{ilnaming parameter a}
@@ -79,40 +79,40 @@
       \draw[link] (ilnaming value c) -- (ilnaming parameter c);
     \end{tikzpicture}
 
-    \onslide<7>
+    \onslide<7|handout:7>
     \code[language=c++14]{initialiser-list7.cpp}
   \end{overprint}
 
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center}
       Initialiser list gets executed first \\
       Sets \texttt{a = 1}, \texttt{b = 2}, \texttt{c = 3}
     \end{center}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       Initialiser list is series of constructor calls
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       Compiler completes list with default constructor calls
     \end{center}
 
-    \onslide<4>
+    \onslide<4|handout:4>
     \begin{center}
       Omitting field initialisation is error if no default constructor \\
       In example: \texttt{foo2} requires explicit initialisation
     \end{center}
 
-    \onslide<5-6>
+    \onslide<5-6|handout:5-6>
     \begin{center}
       \cpp\ is smart enough to know whether you refer to the member
       variable or the parameter value
     \end{center}
 
-    \onslide<7>
+    \onslide<7|handout:7>
     \begin{center}
       Warning: default constructors of primitive types do nothing! \\
       \texttt{x}, \texttt{y} and \texttt{z} will have random values!

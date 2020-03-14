@@ -1,4 +1,4 @@
-\usepackage{ucll-code}
+
 
 \usetikzlibrary{shadows,shapes.multipart}
 
@@ -231,7 +231,7 @@
   \begin{itemize}
     \item When copying smart pointers, they point to the same object
     \item When one smart pointer dies, it will {\tt delete} the object.
-    \item All other pointers become invalidated.      
+    \item All other pointers become invalidated.
   \end{itemize}
 \end{frame}
 
@@ -334,7 +334,7 @@
     \begin{tikzpicture}[utensil/.style={draw,fill=red!50,circle},
                         cook/.style={draw,fill=blue!50,circle,font=\tiny}]
       \node[utensil] (utensil) at (0,0) {oven};
-      
+
       \foreach \x in {-4,...,4} {
         \node[cook] (cook) at (\x, -2) {cook};
         \draw[-latex] (cook) -- (utensil);
