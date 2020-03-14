@@ -148,75 +148,75 @@
   \end{columns}
   \vskip2mm
   \begin{overprint}
-    \onslide<2-3>
+    \onslide<2-3|handout:2-3>
       \begin{center}
         \textbf{At compile time} \\
         Compiler assigns memory locations to globals \\
         (static allocation)
       \end{center}
 
-    \onslide<4>
+    \onslide<4|handout:4>
       \begin{center}
         Remaining memory used as stack
       \end{center}
 
-    \onslide<5>
+    \onslide<5|handout:5>
       \begin{center}
         \textbf{At runtime} \\
         Say user enters 3
       \end{center}
 
-    \onslide<6>
+    \onslide<6|handout:6>
       \begin{center}
         \textbf{At runtime} \\
         \texttt{sum} gets called with \texttt{n=3} \\
         Parameter \texttt{n} gets its own spot on the stack
       \end{center}
 
-    \onslide<7>
+    \onslide<7|handout:7>
       \begin{center}
         \textbf{At runtime} \\
         Local variable \texttt{r} also gets stack space \\
         The function's body execution starts
       \end{center}
 
-    \onslide<8>
+    \onslide<8|handout:8>
       \begin{center}
         \textbf{At runtime} \\
         \texttt{sum} gets called recursively
       \end{center}
 
-    \onslide<9>
+    \onslide<9|handout:9>
       \begin{center}
         \textbf{At runtime} \\
         A second instance of \texttt{n} equal to \texttt{2} gets pushed onto the stack
       \end{center}
 
-    \onslide<10>
+    \onslide<10|handout:10>
       \begin{center}
         \textbf{At runtime} \\
         A second instance of \texttt{r} gets pushed onto the stack
       \end{center}
 
-    \onslide<11>
+    \onslide<11|handout:11>
       \begin{center}
         \textbf{At runtime} \\
         A third \texttt{n = 1}
       \end{center}
 
-    \onslide<12>
+    \onslide<12|handout:12>
       \begin{center}
         \textbf{At runtime} \\
         A third \texttt{r}
       \end{center}
 
-    \onslide<13>
+    \onslide<13|handout:13>
       \begin{center}
         \textbf{At runtime} \\
         A final \texttt{n = 0} and \texttt{r}
       \end{center}
 
-    \onslide<14-17>
+    \onslide<14-17|handout:14-17>
       \begin{center}
         \textbf{At runtime} \\
         \texttt{sum} has finished recursion \\
