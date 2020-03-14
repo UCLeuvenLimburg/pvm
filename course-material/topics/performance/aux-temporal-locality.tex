@@ -46,7 +46,7 @@
       \begin{pgfonlayer}{background}
         \draw[fill=green!25] let \p1=(cache line 1.north west),
                                  \p2=(cache line 4.south east)
-                             in                             
+                             in
                              ($ (\x1,\y1) + (-0.25,0.25) $) coordinate (cache upper left)
                              rectangle
                              ($ (\x2,\y2) + (0.25,-0.25) $) coordinate (cache lower right);
@@ -146,71 +146,71 @@
     \end{tikzpicture}
   \end{center}
   \begin{overprint}
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       Say cache can contain 4 lines
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       CPU wants to read RAM location A
     \end{center}
 
-    \onslide<4>
+    \onslide<4|handout:4>
     \begin{center}
       Cache is empty at this point \\ We need to wait for RAM to answer
     \end{center}
 
-    \onslide<5>
+    \onslide<5|handout:5>
     \begin{center}
       After a few cycles, RAM answers \\
       Result is copied to cache
     \end{center}
 
-    \onslide<6>
+    \onslide<6|handout:6>
     \begin{center}
       CPU wants to read A again \\
     \end{center}
 
-    \onslide<7>
+    \onslide<7|handout:7>
     \begin{center}
       A is already in cache; CPU receives answer quickly \\
       All subsequent reads to A will be fast
     \end{center}
 
-    \onslide<8>
+    \onslide<8|handout:8>
     \begin{center}
       Say CPU reads B, C, D, then cache will look like this
     \end{center}
 
-    \onslide<9>
+    \onslide<9|handout:9>
     \begin{center}
       If CPU keeps working on A, B, C, D, everything will go fast
     \end{center}
 
-    \onslide<10>
+    \onslide<10|handout:10>
     \begin{center}
       What if the CPU now wants to read E?
     \end{center}
 
-    \onslide<11>
+    \onslide<11|handout:11>
     \begin{center}
       Cache is full so one of its lines needs to be recycled \\
       Let's say the oldest one (A) is sacrificed
     \end{center}
 
-    \onslide<12>
+    \onslide<12|handout:12>
     \begin{center}
       As long as CPU restricts itself to B, C, D, E, \\
       everything will be fine
     \end{center}
 
-    \onslide<13-20>
+    \onslide<13-20|handout:13-20>
     \begin{center}
       What if the CPU now starts reading A, B, C, D, E cyclically?
     \end{center}
 
-    \onslide<21>
+    \onslide<21|handout:21>
     \begin{center}
       This is disastrous as all reads will be slow
     \end{center}
@@ -257,7 +257,7 @@
       \foreach[evaluate={\i/\xdiv} as \x,
                evaluate={\j/\ydiv} as \y,
                remember=\x as \lastx (initially 0),
-               remember=\y as \lasty (initially 0)] \i/\j in 
+               remember=\y as \lasty (initially 0)] \i/\j in
                {1/796,
                 2/1001,
                 3/1016,
@@ -285,7 +285,7 @@
       \foreach[evaluate={\i/\xdiv} as \x,
                evaluate={\j/\ydiv} as \y,
                remember=\x as \lastx (initially 0),
-               remember=\y as \lasty (initially 0)] \i/\j in 
+               remember=\y as \lasty (initially 0)] \i/\j in
                {1/744,
                 2/848,
                 3/865,
@@ -313,7 +313,7 @@
       \foreach[evaluate={\i/\xdiv} as \x,
                evaluate={\j/\ydiv} as \y,
                remember=\x as \lastx (initially 0),
-               remember=\y as \lasty (initially 0)] \i/\j in 
+               remember=\y as \lasty (initially 0)] \i/\j in
                {1/729,
                 2/793,
                 3/783,
@@ -341,7 +341,7 @@
       \foreach[evaluate={\i/\xdiv} as \x,
       evaluate={\j/\ydiv} as \y,
                remember=\x as \lastx (initially 0),
-               remember=\y as \lasty (initially 0)] \i/\j in 
+               remember=\y as \lasty (initially 0)] \i/\j in
                {1/728,
                 2/754,
                 3/745,

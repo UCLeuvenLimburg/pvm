@@ -163,7 +163,7 @@
       \draw[fill=blue!50] (2.5,0) rectangle ++(0.5,0.5);
       \draw[fill=yellow!50] (3,0) rectangle ++(2,0.5);
       \draw[thin] (0,0) grid[xstep=0.5cm,ystep=0.5cm] ++(5,0.5);
-     
+
       \begin{scope}[yshift=-2mm]
         \draw[|-|] (0,0) -- ++(0.5,0) node[midway,below,font=\tiny\ttfamily] {a};
         \draw[|-|] (0.5,0) -- ++(2,0) node[midway,below,font=\tiny\ttfamily] {b};
@@ -272,7 +272,7 @@
   \begin{itemize}
     \item To ensure that all members are aligned, even in arrays, add extra padding at end
     \item General rule:
-          \begin{center} 
+          \begin{center}
             \alert{Total size must be a multiple of the largest member}
           \end{center}
     \item Largest member is \texttt{uint16\_t} $\rightarrow$ total size \% 2 = 0
@@ -284,7 +284,7 @@
   \frametitle{Example 1}
   \code[language=c++14,font=\ttfamily\small]{memalign-example1.cpp}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center}
       \begin{tikzpicture}
         \draw[fill=red!50] (0,0) rectangle ++(0.5,0.5);
@@ -304,7 +304,7 @@
       \end{tikzpicture}
     \end{center}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       \begin{tikzpicture}
         \draw[fill=gray!50] (0,0) rectangle ++(4.5,0.5);
@@ -325,7 +325,7 @@
       \end{tikzpicture}
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       \begin{tikzpicture}
         \draw[fill=gray!50] (0,0) rectangle ++(6,0.5);
@@ -347,20 +347,20 @@
     \end{center}
   \end{overprint}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center}
       Unaligned
     \end{center}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       Padding added to align members of single object
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       Adding padding to make total size a multiple of 4 \\
-      This is final memory layout: \texttt{sizeof(Foo) == 12} 
+      This is final memory layout: \texttt{sizeof(Foo) == 12}
     \end{center}
   \end{overprint}
 \end{frame}
@@ -369,7 +369,7 @@
   \frametitle{Example 2}
   \code[language=c++14,font=\ttfamily\small]{memalign-example2.cpp}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center}
       \begin{tikzpicture}
         \draw[fill=red!50] (0,0) rectangle ++(2,0.5);
@@ -391,7 +391,7 @@
       \end{tikzpicture}
     \end{center}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       \begin{tikzpicture}
         \draw[fill=gray!50] (0,0) rectangle ++(10,0.5);
@@ -414,7 +414,7 @@
       \end{tikzpicture}
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       \begin{tikzpicture}[scale=.8,transform shape]
         \draw[fill=gray!50] (0,0) rectangle ++(12,0.5);
@@ -438,20 +438,20 @@
     \end{center}
   \end{overprint}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center}
       Unaligned
     \end{center}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       Padding added to align members of single object
     \end{center}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       Adding padding to make total size a multiple of 8 \\
-      This is final memory layout: \texttt{sizeof(Foo) == 24} 
+      This is final memory layout: \texttt{sizeof(Foo) == 24}
     \end{center}
   \end{overprint}
 \end{frame}
