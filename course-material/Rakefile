@@ -1,0 +1,52 @@
+require 'fileutils'
+require 'rake'
+require 'set'
+
+
+TOPIC_DIRECTORIES = Dir['topics/*'].select do |entry|
+    File.directory? entry
+end
+
+TOPICS = TOPIC_DIRECTORIES.map do |directory|
+    directory.split(%r{/}).last
+end
+
+def topic_dependencies(topic)
+    `git ls-files topics/#{topic}`.lines.map(&:strip) + [ 'topics/ucll-slides.cls', 'topics/ucll-code.sty' ]
+end
+
+directory 'dist/topics'
+
+def topic_task(topic)
+    file "dist/topics/#{topic}.pdf" => topic_dependencies(topic) do |task|
+        Dir.chdir "topics/#{topic}" do
+            sh "pdflatex slides.tex"
+            sh "pdflatex slides.tex"
+        end
+
+        FileUtils.cp "topics/#{topic}/slides.pdf", "dist/topics/#{topic}.pdf"
+    end
+
+    file "dist/topics/#{topic}-handouts.pdf" => topic_dependencies(topic) do |task|
+        Dir.chdir "topics/#{topic}" do
+            sh "pdflatex handouts.tex"
+            sh "pdflatex handouts.tex"
+        end
+
+        FileUtils.cp "topics/#{topic}/handouts.pdf", "dist/topics/#{topic}-handouts.pdf"
+    end
+end
+
+TOPICS.each do |topic|
+    topic_task topic
+end
+
+task :topics => TOPICS.flat_map { |topic| [ "dist/topics/#{topic}.pdf", "dist/topics/#{topic}-handouts.pdf" ] }
+
+# # TOPIC_DIRECTORIES.each do |topic|
+# #     slide_task topic
+# # end
+
+# slide_task('allocation-methods')
+
+# task :default => [ 'dist/topics/allocation-methods.pdf' ]
