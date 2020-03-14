@@ -53,6 +53,7 @@
 % \setbeamertemplate{background canvas}[vertical shading][top=blue!10,bottom=blue!30]
 
 \institute[UCLL]{UC Leuven Limburg}
+\author{Fr\'ed\'eric Vogels}
 % \logo{\includegraphics[height=0.5cm]{../ucll-logo.png}}
 
 
