@@ -1,6 +1,6 @@
 \usepackage{fourier}
 \usepackage{bbding}
-\usepackage{ucll-code}
+
 
 \usetikzlibrary{shadows,shapes.multipart}
 
@@ -38,18 +38,18 @@
 \begin{frame}
   \frametitle{Allocation}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center} \Large
       Java
     \end{center}
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center} \Large
       \cpp
     \end{center}
   \end{overprint}
   \vskip5mm
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center}
       \begin{tikzpicture}[static allocation/.style={fill=red!50},
                           stack allocation/.style={fill=blue!50},
@@ -88,7 +88,7 @@
         };
       \end{tikzpicture}
     \end{center}
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       \begin{tikzpicture}[static allocation/.style={fill=red!50},
                           stack allocation/.style={fill=blue!50},
@@ -130,11 +130,11 @@
   \end{overprint}
   \vskip5mm
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{itemize}
       \item Primitives: \texttt{int}, \texttt{boolean}, references, \dots
     \end{itemize}
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{itemize}
       \item Anything can be put anywhere
             \begin{itemize}
