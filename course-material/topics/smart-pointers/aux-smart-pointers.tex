@@ -111,52 +111,52 @@
   \frametitle{Example}
   \code[font=\small,width=.9\linewidth]{arrow-operator.cpp}
   \begin{overprint}
-    \onslide<1>
+    \onslide<1|handout:1>
     \begin{center}
       A \texttt{Qux} is created
     \end{center}
     \codeunderlinex{qux creation}
 
-    \onslide<2>
+    \onslide<2|handout:2>
     \begin{center}
       We call \texttt{->} on \texttt{Qux}
     \end{center}
     \codeunderlinex{qux arrow}
 
-    \onslide<3>
+    \onslide<3|handout:3>
     \begin{center}
       \texttt{->} return a \texttt{Baz}
     \end{center}
     \codeunderlinex{qux arrow return type}
 
-    \onslide<4>
+    \onslide<4|handout:4>
     \begin{center}
       \texttt{Baz} is no pointer, so \texttt{->} is called again
     \end{center}
 
-    \onslide<5>
+    \onslide<5|handout:5>
     \begin{center}
       \texttt{->} on \texttt{Baz} returns a \texttt{Bar}
     \end{center}
     \codeunderlinex{baz arrow return type}
 
-    \onslide<6>
+    \onslide<6|handout:6>
     \begin{center}
       \texttt{Bar} is not a pointer, the process must be repeated once more
     \end{center}
 
-    \onslide<7>
+    \onslide<7|handout:7>
     \begin{center}
       \texttt{->} is called on \texttt{Bar}, it returns \texttt{Foo*}
     \end{center}
     \codeunderlinex{bar arrow return type}
 
-    \onslide<8>
+    \onslide<8|handout:8>
     \begin{center}
       \texttt{Foo*} is a pointer, so the \texttt{->} chaining stops
     \end{center}
 
-    \onslide<9>
+    \onslide<9|handout:9>
     \begin{center}
       \texttt{Foo::hello} is called, and \texttt{Hello} is printed
       \codeunderlinex{foo hello}
