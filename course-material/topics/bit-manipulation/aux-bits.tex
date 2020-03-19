@@ -86,11 +86,13 @@
   \begin{center}
     \begin{tikzpicture}
       \draw (0,0) grid (8,1);
+      \node[anchor=east,font=\ttfamily] at (0,0.5) {a = };
       \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {0,1,0,0,1,1,0,1} {
         \node at (\x, 0.5) {\v};
       }
       \begin{scope}[yshift=-1.25cm]
         \draw (0,0) grid (8,1);
+      \node[anchor=east,font=\ttfamily] at (0,0.5) {b = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {1,1,0,0,1,0,1,1} {
           \node at (\x, 0.5) {\v};
         }
@@ -104,6 +106,7 @@
 
       \begin{scope}[yshift=-3cm]
         \draw (0,0) grid (8,1);
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {a \& b = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {0,1,0,0,1,0,0,1} {
           \node at (\x, 0.5) {\v};
         }
@@ -168,11 +171,13 @@
   \begin{center}
     \begin{tikzpicture}
       \draw (0,0) grid (8,1);
+      \node[anchor=east,font=\ttfamily] at (0,0.5) {a = };
       \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {0,1,0,0,1,1,0,1} {
         \node at (\x, 0.5) {\v};
       }
       \begin{scope}[yshift=-1.25cm]
         \draw (0,0) grid (8,1);
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {b = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {1,1,0,0,1,0,1,1} {
           \node at (\x, 0.5) {\v};
         }
@@ -186,6 +191,7 @@
 
       \begin{scope}[yshift=-3cm]
         \draw (0,0) grid (8,1);
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {a | b = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {1,1,0,0,1,1,1,1} {
           \node at (\x, 0.5) {\v};
         }
@@ -246,6 +252,7 @@
   \begin{center}
     \begin{tikzpicture}
       \draw (0,0) grid (8,1);
+      \node[anchor=east,font=\ttfamily] at (0,0.5) {a = };
       \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {0,1,0,0,1,1,0,1} {
         \node at (\x, 0.5) {\v};
       }
@@ -256,6 +263,7 @@
 
       \begin{scope}[yshift=-1.75cm]
         \draw (0,0) grid (8,1);
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {\NOT a = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {1,0,1,1,0,0,1,0} {
           \node at (\x, 0.5) {\v};
         }
@@ -267,3 +275,86 @@
     \NOT 0b01001101 == 0b10110010
   \end{center}
 \end{frame}
+
+\subsubsection{Xor}
+\frame{\tableofcontents[currentsubsection]}
+
+\begin{frame}
+  \frametitle{Logical XOR}
+  \begin{itemize}
+    \item Consider inequality \texttt{a != b} on \texttt{bool}s
+    \item Yields \texttt{true} only if \texttt{a} and \texttt{b} are different
+    \item Corresponds to XOR (exclusive OR)
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{ccc}
+      \toprule
+      \texttt{a} & \texttt{b} & \texttt{a != b} \\
+      \midrule
+      \texttt{false} & \texttt{false} & \texttt{false} \\
+      \texttt{false} & \texttt{true} & \texttt{true} \\
+      \texttt{true} & \texttt{false} & \texttt{true} \\
+      \texttt{true} & \texttt{true} & \texttt{false} \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bitwise XOR}
+  \begin{itemize}
+    \item Bitwise exclusive OR is denoted \texttt{a \XOR\ b}
+    \item Yields \texttt{1} is bits are unequal, otherwise \texttt{0}
+  \end{itemize}
+  \begin{center}
+    \begin{tabular}{ccc}
+      \toprule
+      \texttt{a} & \texttt{b} & \texttt{a \XOR b} \\
+      \midrule
+      \texttt{0} & \texttt{0} & \texttt{0} \\
+      \texttt{0} & \texttt{1} & \texttt{1} \\
+      \texttt{1} & \texttt{0} & \texttt{1} \\
+      \texttt{1} & \texttt{1} & \texttt{0} \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bitwise XOR}
+  \begin{center}
+    \begin{tikzpicture}
+      \draw (0,0) grid (8,1);
+      \node[anchor=east,font=\ttfamily] at (0,0.5) {a = };
+      \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {0,1,0,0,1,1,0,1} {
+        \node at (\x, 0.5) {\v};
+      }
+      \begin{scope}[yshift=-1.25cm]
+        \draw (0,0) grid (8,1);
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {b = };
+        \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {1,1,0,0,1,0,1,1} {
+          \node at (\x, 0.5) {\v};
+        }
+      \end{scope}
+
+      \begin{scope}[yshift=-1.25cm]
+        \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {1,...,8} {
+          \draw[-latex] (\x,0) -- ++(0,-0.75);
+        }
+      \end{scope}
+
+      \begin{scope}[yshift=-3cm]
+        \draw (0,0) grid (8,1);
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {a \XOR\ b = };
+        \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {1,0,0,0,0,1,1,0} {
+          \node at (\x, 0.5) {\v};
+        }
+      \end{scope}
+    \end{tikzpicture}
+  \end{center}
+  \vskip2mm
+  \begin{center} \ttfamily
+    0b01001101 \XOR\ 0b11001011 == 0b10000110
+  \end{center}
+\end{frame}
+
