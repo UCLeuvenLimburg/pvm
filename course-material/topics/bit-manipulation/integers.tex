@@ -1,17 +1,17 @@
-\section{Integers}
-\frame{\tableofcontents[currentsection]}
+\subsection{Integers}
+\frame{\tableofcontents[currentsubsection]}
 
 \begin{frame}
-  \frametitle{Recap: Integers}
+  \frametitle{Integers}
   \begin{itemize}
     \item \cpp\ offers both signed and unsigned integers
-    \item For clarity's sake, examples assume 8-bit integers
+    \item For clarity's sake, examples will use 8-bit integers
     \item But same is applicable on 16, 32, 64, \dots bit integers
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Recap: Signed Integers}
+  \frametitle{Signed Integers}
   \begin{itemize}
     \item MSB is used to represent sign
     \item If MSB = \texttt{0}, then number is positive ($\geq 0$)
@@ -33,22 +33,22 @@
     \end{tikzpicture}
   \end{center}
   \begin{center}
-    \begin{tabular}{ccc}
+    \begin{tabular}{cccc}
       \toprule
-      \textbf{\# Bits} & \textbf{Lowest} & \textbf{Highest} \\
+      \textbf{Type} & \textbf{\# Bits} & \textbf{Lowest} & \textbf{Highest} \\
       \midrule
-      8 & $-128$ & $127$ \\
-      16 & \num{-32768} & \num{32767} \\
-      32 & $-2^{31}$ & $2^{31}-1$ \\
-      64 & $-2^{63}$ & $2^{63}-1$ \\
-      $N$ & $-2^{N-1}$ & $2^{N-1}-1$ \\
+      \texttt{int8\_t} & 8 & $-128$ & $127$ \\
+      \texttt{int16\_t} & 16 & \num{-32768} & \num{32767} \\
+      \texttt{int32\_t} & 32 & $-2^{31}$ & $2^{31}-1$ \\
+      \texttt{int64\_t} & 64 & $-2^{63}$ & $2^{63}-1$ \\
+      & $N$ & $-2^{N-1}$ & $2^{N-1}-1$ \\
       \bottomrule
     \end{tabular}
   \end{center}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Recap: Unsigned Integers}
+  \frametitle{Unsigned Integers}
   \begin{itemize}
     \item All bits are used to represent value
   \end{itemize}
@@ -66,15 +66,15 @@
     \end{tikzpicture}
   \end{center}
   \begin{center}
-    \begin{tabular}{ccc}
+    \begin{tabular}{cccc}
       \toprule
-      \textbf{\# Bits} & \textbf{Lowest} & \textbf{Highest} \\
+      \textbf{Type} & \textbf{\# Bits} & \textbf{Lowest} & \textbf{Highest} \\
       \midrule
-      8 & $0$ & $255$ \\
-      16 & \num{0} & \num{65535} \\
-      32 & $0$ & $2^{32}-1$ \\
-      64 & $0$ & $2^{64}-1$ \\
-      $N$ & $0$ & $2^{N}-1$ \\
+      \texttt{uint8\_t} & 8 & $0$ & $255$ \\
+      \texttt{uint16\_t} & 16 & \num{0} & \num{65535} \\
+      \texttt{uint32\_t} & 32 & $0$ & $2^{32}-1$ \\
+      \texttt{uint64\_t} & 64 & $0$ & $2^{64}-1$ \\
+      & $N$ & $0$ & $2^{N}-1$ \\
       \bottomrule
     \end{tabular}
   \end{center}

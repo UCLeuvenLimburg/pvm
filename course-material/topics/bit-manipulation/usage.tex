@@ -24,9 +24,61 @@
 \begin{frame}
   \frametitle{Example: Taking a union of bits}
   \begin{itemize}
-    \item \texttt{a = 0x100}, \texttt{b = 0x020}, \texttt{c = 0x003}
-    \item Goal: Combine \texttt{a}, \texttt{b} and \texttt{c} into one number \texttt{0x123}
+    \item \texttt{a = 0x1000}, \texttt{b = 0x0200}, \texttt{c = 0x0030}, \texttt{d = 0x0004}
+    \item Goal: Combine \texttt{a}, \texttt{b}, \texttt{c} and \texttt{d} into one number \texttt{0x1234}
   \end{itemize}
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{scope}
+        \foreach[count=\i,evaluate={\i/4-0.125} as \x] \v in {1,...,32} {
+          \draw[-latex,thick,gray] (\x,0) -- ++(0,-2.25);
+        }
+      \end{scope}
+
+      \begin{scope}[scale=0.25,transform shape]
+        \draw[fill=white,opacity=0.25] (0,0) rectangle (32,1);
+        \draw (0,0) grid (32,1);
+        \draw[color=red,thick] (0,0) grid ++(8,1);
+        \foreach[evaluate={\i-0.5} as \x] \i in {9,...,32} {
+          \node[anchor=base] at (\x, 0.4) {0};
+        }
+      \end{scope}
+
+      \begin{scope}[yshift=-0.5cm,scale=0.25,transform shape]
+        \draw[fill=white,opacity=0.8] (0,0) rectangle (32,1);
+        \draw (0,0) grid (32,1);
+        \draw[color=green,thick] (8,0) grid ++(8,1);
+        \foreach[evaluate={\i-0.5} as \x] \i in {1,...,8,17,18,...,32} {
+          \node[anchor=base] at (\x, 0.4) {0};
+        }
+      \end{scope}
+
+      \begin{scope}[yshift=-1cm,scale=0.25,transform shape]
+        \draw[fill=white,opacity=0.8] (0,0) rectangle (32,1);
+        \draw (0,0) grid (32,1);
+        \draw[color=blue,thick] (16,0) grid ++(8,1);
+        \foreach[evaluate={\i-0.5} as \x] \i in {1,...,16,25,26,...,32} {
+          \node[anchor=base] at (\x, 0.4) {0};
+        }
+      \end{scope}
+
+      \begin{scope}[yshift=-1.5cm,scale=0.25,transform shape]
+        \draw[fill=white,opacity=0.8] (0,0) rectangle (32,1);
+        \draw (0,0) grid (32,1);
+        \draw[color=magenta,thick] (24,0) grid ++(8,1);
+        \foreach[evaluate={\i-0.5} as \x] \i in {1,...,24} {
+          \node[anchor=base] at (\x, 0.4) {0};
+        }
+      \end{scope}
+
+      \begin{scope}[yshift=-2.5cm,scale=0.25,transform shape]
+        \draw[color=red,thick] (0,0) grid ++(8,1);
+        \draw[color=green,thick] (8,0) grid ++(8,1);
+        \draw[color=blue,thick] (16,0) grid ++(8,1);
+        \draw[color=magenta,thick] (24,0) grid ++(8,1);
+      \end{scope}
+    \end{tikzpicture}
+  \end{center}
 \end{frame}
 
 \begin{frame}
@@ -34,13 +86,13 @@
   \structure{First Possibility}
   \begin{itemize}
     \item Addition
-    \item \texttt{a + b + c} yields \texttt{0x123}
+    \item \texttt{a + b + c + d} yields \texttt{0x1234}
   \end{itemize}
   \vskip4mm
   \structure{Second Possibility}
   \begin{itemize}
     \item Bitwise or
-    \item \texttt{a | b | c} also yields \texttt{0x123}
+    \item \texttt{a | b | c | d} also yields \texttt{0x1234}
   \end{itemize}
   \vskip4mm
   \structure{Important}
@@ -121,7 +173,7 @@
       \end{scope}
       \begin{scope}[yshift=-1cm,scale=0.5,transform shape]
         \draw (0,0) grid (16,1);
-        \node[anchor=east,font=\ttfamily] at (0,0.5) {uint16\_t x2 = x = };
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {uint16\_t(x) = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {0,0,0,0,0,0,0,0,a,b,c,d,e,f,g,h} {
           \node[anchor=base] at (\x, 0.4) {\v};
         }
@@ -137,14 +189,14 @@
     \begin{tikzpicture}
       \begin{scope}[scale=0.5,transform shape]
         \draw (0,0) grid (16,1);
-        \node[anchor=east,font=\ttfamily] at (0,0.5) {x2 = };
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {uint16\_t(x) = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {0,0,0,0,0,0,0,0,a,b,c,d,e,f,g,h} {
           \node[anchor=base] at (\x, 0.4) {\v};
         }
       \end{scope}
       \begin{scope}[yshift=-1cm,scale=0.5,transform shape]
         \draw (0,0) grid (16,1);
-        \node[anchor=east,font=\ttfamily] at (0,0.5) {x2 << 8 = };
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {uint16\_t(x) << 8 = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {a,b,c,d,e,f,g,h,0,0,0,0,0,0,0,0} {
           \node[anchor=base] at (\x, 0.4) {\v};
         }
@@ -160,7 +212,7 @@
     \begin{tikzpicture}
       \begin{scope}[scale=0.5,transform shape]
         \draw (0,0) grid (16,1);
-        \node[anchor=east,font=\ttfamily] at (0,0.5) {x2 << 8 = };
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {uint16\_t(x) << 8 = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {a,b,c,d,e,f,g,h,0,0,0,0,0,0,0,0} {
           \node[anchor=base] at (\x, 0.4) {\v};
         }
@@ -176,7 +228,7 @@
       \end{scope}
       \begin{scope}[yshift=-2cm,scale=0.5,transform shape]
         \draw (0,0) grid (16,1);
-        \node[anchor=east,font=\ttfamily] at (0,0.5) {(x2 << 8) | y = };
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {(uint16\_t(x) << 8) | y = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p} {
           \node[anchor=base] at (\x, 0.4) {\v};
         }
@@ -189,10 +241,12 @@
   \frametitle{Example: Putting 2 \texttt{uint8\_t}s In One \texttt{uint16\_t}}
   \begin{itemize}
     \item Step 1 is actually redundant
-    \item When shifting, values are automatically upgraded
+    \item Shifting automatically promotes left operand to larger type
   \end{itemize}
-  \begin{center} \ttfamily
-    (x << 8) | y
+  \begin{center}
+    \texttt{((uint16\_t(x) << 8) | y} \\[4mm]
+    can be simplified to \\[4mm]
+    \texttt{(x << 8) | y}
   \end{center}
 \end{frame}
 
