@@ -242,12 +242,16 @@
   \begin{itemize}
     \item Step 1 is actually redundant
     \item Shifting automatically promotes left operand to larger type
+          \begin{center}
+            \texttt{((uint16\_t(x) << 8) | y} \\[4mm]
+            can be simplified to \\[4mm]
+            \texttt{(x << 8) | y}
+          \end{center}
+    \item Add parentheses for safety
+          \begin{itemize}
+            \item Precedence of shift operators may be surprising to you
+          \end{itemize}
   \end{itemize}
-  \begin{center}
-    \texttt{((uint16\_t(x) << 8) | y} \\[4mm]
-    can be simplified to \\[4mm]
-    \texttt{(x << 8) | y}
-  \end{center}
 \end{frame}
 
 \subsection{Merging 4 Bytes}
@@ -273,7 +277,7 @@
 \begin{frame}
   \frametitle{Example: Masking}
   \begin{itemize}
-    \item Say we have \texttt{uint32\_t a = 0x12345678}
+    \item Say we have \texttt{uint32\_t x = 0x12345678}
     \item Goal: we wish to drop cut off the first 3 bytes
     \item In other words: we want \texttt{0x00000078}
   \end{itemize}
@@ -283,14 +287,14 @@
   \frametitle{Example: Masking}
   \structure{Approach}
   \begin{itemize}
-    \item The bitwise and allows us to filter out bits
+    \item The bitwise AND allows us to filter out bits
     \item Put differently, the \texttt{\&} can be used to "turn off" bits
   \end{itemize}
   \begin{center}
     \begin{tikzpicture}
       \begin{scope}[scale=0.5,transform shape]
         \draw (0,0) grid (8,1);
-        \node[anchor=east,font=\ttfamily] at (0,0.5) {a = };
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {x = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {a,b,c,d,e,f,g,h} {
           \node[anchor=base] at (\x, 0.4) {\v};
         }
@@ -304,7 +308,7 @@
       \end{scope}
       \begin{scope}[yshift=-2cm,scale=0.5,transform shape]
         \draw (0,0) grid (8,1);
-        \node[anchor=east,font=\ttfamily] at (0,0.5) {a \& mask = };
+        \node[anchor=east,font=\ttfamily] at (0,0.5) {x \& mask = };
         \foreach[count=\i,evaluate={\i-0.5} as \x] \v in {0,0,0,0,e,f,g,h} {
           \node[anchor=base] at (\x, 0.4) {\v};
         }
@@ -314,6 +318,19 @@
   \begin{itemize}
     \item The \texttt{0}s in the mask specify which bits to turn off
     \item The \texttt{1}s in the mask specify which bits to keep intact
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Masking}
+  \structure{Approach}
+  \begin{center}
+    \texttt{x \& 0xFF}
+  \end{center}
+  \begin{itemize}
+    \item Remember: \texttt{0xFF} equals \texttt{0b11111111}
+    \item \texttt{0xFF} equals \texttt{0x000000FF}
+    \item "\texttt{\& 0xFF}" means "set all bits to 0 except the last 8"
   \end{itemize}
 \end{frame}
 
