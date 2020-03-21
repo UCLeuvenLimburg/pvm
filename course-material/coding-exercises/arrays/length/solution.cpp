@@ -1,7 +1,7 @@
 #include "solution.h"
 
 
-unsigned length1(int* start, int* end)
+unsigned length(int* start, int* end)
 {
     // Using pointer arithmetic: subtracting pointers T* returns the number of T's that fit in between them
     return end - start;
