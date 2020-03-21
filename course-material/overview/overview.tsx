@@ -156,6 +156,7 @@ export class Overview extends React.Component<IProps, IState>
         weeks[8] = [
             theory('Performance (optional)', 'performance'),
             lab('Performance (optional)', 'performance'),
+            theory('Bit Manipulation'),
             theory('Technical Details'),
         ];
 
