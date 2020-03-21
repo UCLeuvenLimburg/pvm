@@ -33,7 +33,7 @@ const WeekHeader = styled(Header)`
 
 const Week = styled.td`
     text-align: center;
-    background: #444;
+    background: black;
     color: white;
     font-size: 200%;
     font-weight: bold;
