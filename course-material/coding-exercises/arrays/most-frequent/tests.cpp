@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include "catch.h"
 #include "most-frequent.h"
+#include "catch.h"
 
 
 TEST_CASE("Most frequent in {1}")
