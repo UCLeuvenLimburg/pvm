@@ -1,4 +1,4 @@
-#include "solution.h"
+#include "most-frequent.h"
 
 
 int most_frequent(int* ns, unsigned size)
