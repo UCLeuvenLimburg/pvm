@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#include "solution.h"
+#include "veryquicksort.h"
 #include "catch.h"
 
 
