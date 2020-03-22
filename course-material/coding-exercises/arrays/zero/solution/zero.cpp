@@ -1,4 +1,4 @@
-#include "solution.h"
+#include "zero.h"
 
 void zero(int* ns, unsigned size)
 {
