@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include "catch.h"
 #include "lone-wolf.h"
+#include "catch.h"
 
 
 void test(int* ns, int size, int expected)
