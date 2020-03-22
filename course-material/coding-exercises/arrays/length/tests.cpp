@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include "catch.h"
 #include "length.h"
+#include "catch.h"
 
 
 TEST_CASE("Length of {}")
