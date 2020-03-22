@@ -1,5 +1,5 @@
-#ifndef SOLUTION_H
-#define SOLUTION_H
+#ifndef LENGTH_H
+#define LENGTH_H
 
 unsigned length(int* start, int* end);
 
