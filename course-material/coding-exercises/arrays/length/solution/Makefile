@@ -1,7 +1,7 @@
 all: compile test
 
 compile:
-	ls *.cpp | grep -v solution.cpp | xargs g++ -o run-tests
+	g++ -o run-tests *.cpp
 
 test:
 	./run-tests
