@@ -473,7 +473,7 @@
           <<-END
             <p>
               Write the function <code>void split(int* ns, unsigned size, int** odds, unsigned* n_odds, int** evens, unsigned* n_evens)</code> that splits
-              the array <code>ns</code> into two arrays <code>odds</code> and <code>evens</code>, which contains the odd and even value from <code>ns</code>, respectively.
+              the array <code>ns</code> into two arrays <code>odds</code> and <code>evens</code>, which contain the odd and even values from <code>ns</code>, respectively.
               Order is preserved. <code>n_odds</code> and <code>n_evens</code> must receive the size of the arrays <code>odds</code> and <code>evens</code>, respectively.
             </p>
             <p>
