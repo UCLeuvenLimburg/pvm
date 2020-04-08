@@ -110,3 +110,8 @@ bool equal(linked_list* xs, linked_list* ys)
 
     return xs == ys;
 }
+
+bool same(linked_list* xs, linked_list* ys)
+{
+    return xs == ys;
+}

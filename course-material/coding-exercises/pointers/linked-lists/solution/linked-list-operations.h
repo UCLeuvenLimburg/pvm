@@ -12,5 +12,6 @@ linked_list* penultimate(linked_list* first);
 void zero(linked_list* first);
 void cumulative(linked_list* first);
 bool equal(linked_list* xs, linked_list* ys);
+bool same(linked_list* xs, linked_list* ys);
 
 #endif

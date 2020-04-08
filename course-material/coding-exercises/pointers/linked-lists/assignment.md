@@ -52,3 +52,4 @@ You are tasked with writing the following functions that operate on `linked_list
 * `zero(p)` overwrites all values in the list with `0`s.
 * `cumulative(p)` overwrites all values in the list with the sum of the values up until then. Look at the tests for examples.
 * `equal(p, q)` checks whether the two given lists are equal.
+* `same(p, q)` checks whether `p` and `q` share memory, i.e., the lists are consist of exactly the same nodes in memory.

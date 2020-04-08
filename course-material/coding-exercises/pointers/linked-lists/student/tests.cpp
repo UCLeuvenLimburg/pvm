@@ -20,7 +20,7 @@
 #define TEST_ZERO
 #define TEST_CUMULATIVE
 #define TEST_EQUAL
-
+#define TEST_SAME
 
 
 
@@ -29,7 +29,9 @@
 
 #define LLP(...)         create_linked_list(std::vector<int> { __VA_ARGS__ })
 #define LL(...)          LLP(__VA_ARGS__).get()
-#define DEFLL(var, ...)  auto _lst##__LINE__ = LLP(__VA_ARGS__); auto var = _lst##__LINE__.get()
+#define CAT(a, b)        CAT2(a, b)
+#define CAT2(a, b)       a ## b
+#define DEFLL(var, ...)  auto CAT(_lst, __LINE__) = LLP(__VA_ARGS__); auto var = CAT(_lst, __LINE__).get()
 
 void check_equal(const std::vector<int>& ns, const linked_list* start)
 {
@@ -379,6 +381,47 @@ TEST_CASE("equal({5, 3, 4, 2, 1, 9}, {5, 3, 4, 2, 1})")
 TEST_CASE("equal({5, 3, 4, 2, 1}, {5, 3, 2, 4, 1})")
 {
     CHECK(!equal(LL(5, 3, 4, 2, 1), LL(5, 3, 2, 4, 1)));
+}
+
+#endif
+
+#ifdef TEST_SAME
+
+TEST_CASE("same({}, {})")
+{
+    DEFLL(list);
+
+    CHECK(same(list, list));
+}
+
+TEST_CASE("same({1}, {1})")
+{
+    DEFLL(list, 1);
+
+    CHECK(same(list, list));
+}
+
+TEST_CASE("same({1, 2, 3, 4, 5}, {1, 2, 3, 4, 5})")
+{
+    DEFLL(list, 1, 2, 3, 4, 5);
+
+    CHECK(same(list, list));
+}
+
+TEST_CASE("same({1}, {2}')")
+{
+    DEFLL(list1, 1);
+    DEFLL(list2, 2);
+
+    CHECK(!same(list1, list2));
+}
+
+TEST_CASE("same({1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}')")
+{
+    DEFLL(list1, 1, 2, 3, 4, 5);
+    DEFLL(list2, 1, 2, 3, 4, 5);
+
+    CHECK(!same(list1, list2));
 }
 
 #endif
