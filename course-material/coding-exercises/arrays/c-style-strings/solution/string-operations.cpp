@@ -38,3 +38,29 @@ char* concatenate(char* s1, char* s2)
 
     return result;
 }
+
+void reverse(char* string)
+{
+    const auto len = length(string);
+
+    for (unsigned i = 0; i < len / 2; ++i)
+    {
+        unsigned j = len - i - 1;
+        char temp = string[i];
+        string[i] = string[j];
+        string[j] = temp;
+    }
+}
+
+unsigned parse(char* string)
+{
+    unsigned total = 0;
+
+    while (*string != 0)
+    {
+        total = (total * 10) + (*string - '0');
+        ++string;
+    }
+
+    return total;
+}

@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#include "string.h"
+#include "string-operations.h"
 #include "catch.h"
 #include <memory>
 #include <string>
@@ -14,6 +14,8 @@
 #define TEST_LENGTH
 #define TEST_OVERWRITE
 #define TEST_CONCATENATE
+#define TEST_REVERSE
+#define TEST_PARSE
 
 
 
@@ -138,6 +140,81 @@ TEST_CASE("concatenate(\"abcde\", \"xyz\")")
     auto actual = concatenate(s1.get(), s2.get());
 
     CHECK(std::string(actual) == "abcdexyz");
+}
+
+#endif
+
+#ifdef TEST_REVERSE
+
+TEST_CASE("reverse(\"\")")
+{
+    auto str = STR("");
+    reverse(str.get());
+    CHECK(std::string(str.get()) == "");
+}
+
+TEST_CASE("reverse(\"a\")")
+{
+    auto str = STR("a");
+    reverse(str.get());
+    CHECK(std::string(str.get()) == "a");
+}
+
+TEST_CASE("reverse(\"ab\")")
+{
+    auto str = STR("ab");
+    reverse(str.get());
+    CHECK(std::string(str.get()) == "ba");
+}
+
+TEST_CASE("reverse(\"abc\")")
+{
+    auto str = STR("abc");
+    reverse(str.get());
+    CHECK(std::string(str.get()) == "cba");
+}
+
+TEST_CASE("reverse(\"123456\")")
+{
+    auto str = STR("123456");
+    reverse(str.get());
+    CHECK(std::string(str.get()) == "654321");
+}
+
+TEST_CASE("reverse(\"1234567\")")
+{
+    auto str = STR("1234567");
+    reverse(str.get());
+    CHECK(std::string(str.get()) == "7654321");
+}
+
+#endif
+
+#ifdef TEST_PARSE
+
+TEST_CASE("parse(\"0\")")
+{
+    CHECK(parse(ISTR("0")) == 0);
+}
+
+TEST_CASE("parse(\"1\")")
+{
+    CHECK(parse(ISTR("1")) == 1);
+}
+
+TEST_CASE("parse(\"10\")")
+{
+    CHECK(parse(ISTR("10")) == 10);
+}
+
+TEST_CASE("parse(\"251\")")
+{
+    CHECK(parse(ISTR("251")) == 251);
+}
+
+TEST_CASE("parse(\"123456798\")")
+{
+    CHECK(parse(ISTR("123456798")) == 123456798);
 }
 
 #endif
