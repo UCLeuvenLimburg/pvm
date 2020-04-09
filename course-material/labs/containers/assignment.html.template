@@ -429,7 +429,7 @@
               that returns a list equal to <code>ns</code> but with <code>n</code> elements from the beginning and end of <code>ns</code>.              
             </p>
             <p>
-              Rely on iterators to implemented this.
+              Rely on iterators to implement this.
             </p>
           END
         end
