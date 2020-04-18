@@ -51,7 +51,7 @@ void make_cyclic(linked_list* lst)
   data structure for this (i.e. no arrays,
   lists, sets, ... are necessary).
   If you need inspiration for how to do this,
-  look up hares and turtoises.
+  look up hares and tortoises.
 */
 bool has_cycle(linked_list* lst)
 {

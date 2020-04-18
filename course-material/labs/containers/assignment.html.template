@@ -258,7 +258,7 @@
           <<-END
             <p>
               Write a function <code>void uniq(std::vector<int>* ns)</code> that
-              removes all duplicates from <code>ns</code>. The order is the remaining elements is unimportant.
+              removes all duplicates from <code>ns</code>. The order of the remaining elements is unimportant.
             </p>
           END
         end
@@ -429,7 +429,7 @@
               that returns a list equal to <code>ns</code> but with <code>n</code> elements from the beginning and end of <code>ns</code>.              
             </p>
             <p>
-              Rely on iterators to implemented this.
+              Rely on iterators to implement this.
             </p>
           END
         end

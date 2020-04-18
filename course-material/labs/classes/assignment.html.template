@@ -130,7 +130,7 @@
                <p>
                  The above code creates a <code>Foo</code>-pointer named <code>f</code>.
                  It does <em>not</em> create an object <code>Foo</code>. The pointer
-                 points no random memory.
+                 points to random memory.
                </p>
              </div>
            END
