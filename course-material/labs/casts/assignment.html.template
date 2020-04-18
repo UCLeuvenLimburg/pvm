@@ -533,7 +533,7 @@
               </li>
             </ul>
             <p>
-              The rests expects to find this extra functionality in <code>square.h</code> and <code>square.cpp</code>; therefore, no need to create new files.
+              The tests expects to find this extra functionality in <code>square.h</code> and <code>square.cpp</code>; therefore, no need to create new files.
             <p>
           END
         end
