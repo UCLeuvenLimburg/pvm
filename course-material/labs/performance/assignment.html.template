@@ -223,7 +223,7 @@
             <p>
               Find a way to measure the effect of branch prediction:
               this will involve writing two loops that execute an <code>if</code> millions
-              of time. One loop will try to maximise the effect of branch prediction,
+              of times. One loop will try to maximise the effect of branch prediction,
               the other needs to sabotage it.
             <p>
             <p>
