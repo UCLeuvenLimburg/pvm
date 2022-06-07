@@ -1,3 +1,4 @@
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -7,7 +8,7 @@ if ( !("LAB" in process.env) )
 }
 
 const lab_id = process.env['LAB'];
-const inputPath = path.join("src", lab_id);
+const inputPath = path.join("src", "labs", lab_id);
 const outputPath = path.join("dist", lab_id);
 
 
@@ -43,12 +44,15 @@ function chapter()
                     use: { loader: 'ts-loader' },
                     exclude: /node_modules/,
                     include: [
-                        path.resolve('.', inputPath)
+                        /src/,
                     ]
                 },
              ]
         },
-        resolve: { extensions: ['.ts', '.tsx', '.js'] },
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js'],
+            plugins: [ new TsconfigPathsPlugin() ],
+        },        
     };
 }
 

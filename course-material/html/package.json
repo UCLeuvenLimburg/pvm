@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run clean && npm run build:dev && npm run --silent beep",
+    "start": "npm run clean && npm run build:development && npm run --silent beep",
     "build:development": "node --max-old-space-size=16384 ./node_modules/webpack/bin/webpack.js --mode development",
     "build:production": "node --max-old-space-size=4096 ./node_modules/webpack/bin/webpack.js --mode production",
     "clean": "rimraf dist",
@@ -17,12 +17,19 @@
     "@types/react": "^18.0.12",
     "@types/react-dom": "^18.0.5",
     "file-loader": "^6.2.0",
+    "rimraf": "^3.0.2",
     "ts-loader": "^9.3.0",
+    "tsconfig-paths": "^4.0.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "^4.7.3",
     "webpack": "^5.73.0",
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.8.2",
+    "@mui/material": "^5.8.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0"
   }

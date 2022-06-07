@@ -2,72 +2,13 @@ require 'fileutils'
 require 'pathname'
 
 
-Rake::FileList.new("src/*").each do |directory|
+Rake::FileList.new("src/labs/*").each do |directory|
     lab_id = Pathname.new(directory).basename.to_s
+    mode = "development"
 
     desc "Build lab #{lab_id}"
     task lab_id do
         puts "Building #{lab_id}"
+        system({ 'LAB' => lab_id }, "npm run build:#{mode}") or abort "Failed to build #{lab_id}"
     end
 end
-
-# def build(lab, devmode = true)
-#     mode = devmode ? "development" : "production"
-#     input_directory = 'temp-input'
-#     output_directory = "dist/chapters/#{lab}"
-
-#     if devmode
-#         puts "Building #{lab} in DEVELOPMENT mode"
-#     else
-#         puts "Building #{lab} in production mode"
-#     end
-
-#     puts "Removing #{dist_lab_directory}"
-#     FileUtils.rm_rf dist_lab_directory
-
-#     puts "Creating dist/labs directory"
-#     FileUtils.mkdir_p 'dist/labs'
-
-#     sleep 1
-#     puts "Creating #{input_directory}"
-#     FileUtils.mkdir input_directory
-
-#     files = Dir["./src/#{lab}/*" ]
-
-#     puts "Compiling"
-#     system({ 'INPUT' => input_directory, 'OUTPUT' => output_directory }, "npm run build:#{mode}") or abort "Failed to build #{lab}"
-
-#     puts "Moving #{output_directory} to #{dist_lab_directory}"
-#     FileUtils.mv output_directory, dist_lab_directory
-
-#     puts "Removing #{input_directory}"
-#     FileUtils.rm_r input_directory
-# end
-
-
-# labs = Dir.chdir('src') do
-#     Dir['*'].select do |entry|
-#         File.directory? entry
-#     end
-# end.map(&:to_sym)
-
-
-# labs.each do |lab|
-#     desc "#{lab}"
-#     task lab do
-#         build lab, true
-#     end
-
-#     desc "#{lab} (production build)"
-#     task "+#{lab}" do
-#         build lab, false
-#     end
-# end
-
-# desc 'Removes dist'
-# task :clean do
-#     FileUtils.rm_rf 'dist'
-# end
-
-# desc 'Cleans and builds all labs'
-# task :full => [ 'clean' ] + labs.map { |task| "+#{task}" }
